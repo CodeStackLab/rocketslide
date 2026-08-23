@@ -601,22 +601,43 @@
    IMAGE CARDS GRID — Modern Compact Cards
    ============================================================ */
 
-/* Add Form Inline Row */
-.rocketslide-add-form-grid {
+/* Add Form Container & Responsive Rows */
+.rocketslide-add-form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: #f8fafc;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+}
+
+.rocketslide-add-form-row {
     display: grid;
-    grid-template-columns: 1fr 1fr 110px auto;
-    gap: 12px;
+    grid-template-columns: 1fr 130px auto;
+    gap: 14px;
     align-items: end;
 }
 
-@media (max-width: 860px) {
-    .rocketslide-add-form-grid {
-        grid-template-columns: 1fr 1fr;
+.rocketslide-field-submit {
+    display: flex;
+    align-items: flex-end;
+}
+
+@media (max-width: 768px) {
+    .rocketslide-add-form-row {
+        grid-template-columns: 1fr 120px;
+    }
+    .rocketslide-field-submit {
+        grid-column: 1 / -1;
+    }
+    .rocketslide-field-submit .rocketslide-btn {
+        width: 100%;
     }
 }
 
-@media (max-width: 540px) {
-    .rocketslide-add-form-grid {
+@media (max-width: 520px) {
+    .rocketslide-add-form-row {
         grid-template-columns: 1fr;
     }
 }

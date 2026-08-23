@@ -221,31 +221,35 @@ class RocketSlide_Admin {
                     <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
                     
                     <form id="rocketslide-add-image-form">
-                        <div class="rocketslide-add-form-grid">
+                        <div class="rocketslide-add-form-container">
+                            <!-- Row 1: Image Selector -->
                             <div class="rocketslide-field">
-                                <label class="rocketslide-label">Image Source <span class="req">*</span></label>
+                                <label class="rocketslide-label">Image File (WebP 540×960 Auto-Crop) <span class="req">*</span></label>
                                 <div class="rocketslide-file-picker">
                                     <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
                                     <input type="hidden" id="rocketslide-media-id" value="">
-                                    <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Upload File / Media Library</button>
+                                    <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Choose Image / WP Media Library</button>
                                     <span id="rocketslide-file-name" class="rocketslide-file-name">No file selected</span>
                                 </div>
                             </div>
 
-                            <div class="rocketslide-field">
-                                <label class="rocketslide-label">Target Redirect URL <span class="req">*</span></label>
-                                <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" required class="rocketslide-input">
-                            </div>
+                            <!-- Row 2: Target Link + Timer + Submit -->
+                            <div class="rocketslide-add-form-row">
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">Target Redirect URL <span class="req">*</span></label>
+                                    <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" required class="rocketslide-input">
+                                </div>
 
-                            <div class="rocketslide-field">
-                                <label class="rocketslide-label">Timer (Seconds)</label>
-                                <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
-                            </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">Timer (Seconds)</label>
+                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
+                                </div>
 
-                            <div class="rocketslide-field">
-                                <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary">
-                                    🚀 Upload & Add
-                                </button>
+                                <div class="rocketslide-field rocketslide-field-submit">
+                                    <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary">
+                                        🚀 Upload & Add Reel
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </form>
