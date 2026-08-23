@@ -555,6 +555,13 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    cursor: pointer;
+    transition: color 0.15s ease;
+}
+
+.rocketslide-file-name:hover {
+    color: var(--blue);
+    text-decoration: underline;
 }
 
 /* ============================================================

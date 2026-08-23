@@ -17,19 +17,18 @@
             $('#' + targetTab).addClass('active');
         });
 
-        // 2. WP Media Library Selector
+        // 2. WP Media Library Selector & Local Computer Uploader Modal
         var mediaUploader;
-        $('#rocketslide-select-media-btn').on('click', function (e) {
-            e.preventDefault();
-            
+
+        function openMediaModal() {
             if (mediaUploader) {
                 mediaUploader.open();
                 return;
             }
 
             mediaUploader = wp.media({
-                title: 'Select 9:16 Reel Image',
-                button: { text: 'Use Selected Image' },
+                title: '📁 Select or Upload 9:16 Reel Image (Local File or Media Gallery)',
+                button: { text: 'Select & Auto-Crop to 9:16 WebP' },
                 multiple: false
             });
 
@@ -37,10 +36,15 @@
                 var attachment = mediaUploader.state().get('selection').first().toJSON();
                 $('#rocketslide-media-id').val(attachment.id);
                 $('#rocketslide-file-input').val('');
-                $('#rocketslide-file-name').text('Selected: ' + attachment.filename);
+                $('#rocketslide-file-name').html('✅ <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
             });
 
             mediaUploader.open();
+        }
+
+        $('#rocketslide-select-media-btn, #rocketslide-file-name').on('click', function (e) {
+            e.preventDefault();
+            openMediaModal();
         });
 
         // File input change listener
@@ -48,7 +52,7 @@
             var file = this.files[0];
             if (file) {
                 $('#rocketslide-media-id').val('');
-                $('#rocketslide-file-name').text('Selected: ' + file.name);
+                $('#rocketslide-file-name').html('✅ <strong style="color:var(--blue);">' + file.name + '</strong>');
             }
         });
 
@@ -119,23 +123,22 @@
         // Trigger initial verification on load if tracking snippet exists
         if ($('#rocketslide-tracking-script').val().trim() !== '') {
             checkTrackingVerification();
-        } else {
-            $('#rocketslide-publytics-status').removeClass('checking verified').addClass('inactive').html('🔴 Status: No Code Configured');
         }
 
-        // 5. Test & Fire Traffic Event Button
+        // 5. Fire Live Test Traffic Analytics Event
         $('#rocketslide-test-traffic-btn').on('click', function (e) {
             e.preventDefault();
-            var snippet = $('#rocketslide-tracking-script').val().trim();
-            if (!snippet) {
-                showNotice('Please paste your tracking snippet first!', true);
+            var scriptVal = $('#rocketslide-tracking-script').val().trim();
+            if (!scriptVal) {
+                showNotice('Please enter a tracking script first', true);
                 return;
             }
 
             try {
-                var div = document.createElement('div');
-                div.innerHTML = snippet;
-                var scriptEl = div.querySelector('script');
+                var parser = new DOMParser();
+                var doc = parser.parseFromString(scriptVal, 'text/html');
+                var scriptEl = doc.querySelector('script');
+
                 if (scriptEl) {
                     var newScript = document.createElement('script');
                     Array.from(scriptEl.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
@@ -165,8 +168,15 @@
             var targetUrl = $('#rocketslide-new-target-url').val();
             var timer     = $('#rocketslide-new-timer').val();
 
+            if (!targetUrl || targetUrl.trim() === '') {
+                showNotice('Please enter Target Redirect URL.', true);
+                $('#rocketslide-new-target-url').focus();
+                return;
+            }
+
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
-                showNotice('Please choose an image file or select from Media Library.', true);
+                showNotice('Opening File Manager: Select an image file or upload from computer...', false);
+                openMediaModal();
                 return;
             }
 
