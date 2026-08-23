@@ -160,7 +160,13 @@ class RocketSlide_Admin {
             <!-- Header Banner -->
             <div class="rocketslide-header">
                 <div class="rocketslide-header-brand">
-                    <div class="rocketslide-header-icon">📱</div>
+                    <div class="rocketslide-header-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L7 16l.5-.5c.74.59 1.84.51 2.55-.2l5-5c2.61-2.61 3.5-7.5 3.5-7.5s-4.89.89-7.5 3.5l-5 5c-.71.71-.79 1.81-.2 2.55L5.5 14.5 5 14c-.59.74-.51 1.84.2 2.55z"></path>
+                            <path d="M15 9l-3 3"></path>
+                            <path d="M9 15l-3 3"></path>
+                        </svg>
+                    </div>
                     <div class="rocketslide-header-text">
                         <h1>ROCKETSLIDE 9:16 ENGINE</h1>
                         <p>High-Performance Vertical Landing Page & Social Traffic Cloaker</p>
