@@ -52,13 +52,29 @@
     color: var(--text);
     background: #000000;
     min-height: 100vh;
-    padding: 24px 24px 100px 24px;
-    max-width: 1200px;
+    padding: 20px 20px 100px 20px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box;
 }
 
-/* Force black background on WP admin page */
-#wpbody, #wpbody-content, .wrap {
+/* Force full black background — remove ALL WP admin borders/lines */
+#wpbody,
+#wpbody-content,
+#wpbody-content .wrap,
+.wp-admin #wpcontent,
+.wp-admin #wpbody {
     background: #000000 !important;
+    border: none !important;
+    box-shadow: none !important;
+    padding-left: 0 !important;
+}
+
+/* Remove the thin left border/line that WP admin adds */
+#wpcontent,
+#wpfooter {
+    border-left: none !important;
+    margin-left: 0 !important;
 }
 
 /* ============================================================

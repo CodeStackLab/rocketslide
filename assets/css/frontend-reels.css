@@ -37,7 +37,7 @@ html, body {
     transition: width 0.1s linear;
 }
 
-/* Main Outer Centered Layout */
+/* Main Outer Layout — full screen black */
 .reels-main-wrapper {
     width: 100%;
     height: 100vh;
@@ -46,24 +46,33 @@ html, body {
     justify-content: center;
     align-items: center;
     background-color: #000000;
+    overflow: hidden;
 }
 
-/* 9:16 Centered Reels Container */
+/* 9:16 Full Width Reels Container — no max-width cap on mobile */
 .reels-container {
     width: 100%;
-    max-width: 500px;
+    max-width: 430px; /* natural phone width cap for desktop */
     height: 100vh;
     height: 100dvh;
     background-color: #000000;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; /* Firefox */
+    scrollbar-width: none;
     position: relative;
 }
 
+/* On actual mobile devices — force true 100% width */
+@media (max-width: 480px) {
+    .reels-container {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
 .reels-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera */
+    display: none;
 }
 
 /* Individual Reel Card Item */
@@ -82,17 +91,20 @@ html, body {
     overflow: hidden;
 }
 
-/* 9:16 Aspect Ratio Image */
+/* 9:16 Full Screen Image — covers entire card with no gaps */
 .reel-img {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    aspect-ratio: 9 / 16;
     object-fit: cover;
+    object-position: center;
     display: block;
     pointer-events: none;
 }
 
-/* Fallback / Overlay elements */
+/* Play Overlay */
 .reel-play-overlay {
     position: absolute;
     top: 50%;
@@ -111,6 +123,7 @@ html, body {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     border: 1px solid rgba(255, 255, 255, 0.2);
     animation: pulseGlow 2s infinite alternate;
+    z-index: 2;
 }
 
 .reel-play-overlay svg {
@@ -125,7 +138,7 @@ html, body {
     to { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
 }
 
-/* Sound / CTA Floating Pill */
+/* CTA Floating Pill */
 .reel-cta-pill {
     position: absolute;
     bottom: 30px;
@@ -133,9 +146,9 @@ html, body {
     transform: translateX(-50%);
     background: linear-gradient(135deg, rgba(255,0,80,0.9), rgba(0,242,254,0.9));
     color: #ffffff;
-    padding: 12px 24px;
+    padding: 12px 28px;
     border-radius: 30px;
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.5px;
     box-shadow: 0 8px 25px rgba(255, 0, 80, 0.5);
@@ -144,6 +157,8 @@ html, body {
     align-items: center;
     gap: 8px;
     animation: bounceCta 1.5s infinite;
+    z-index: 3;
+    white-space: nowrap;
 }
 
 @keyframes bounceCta {
