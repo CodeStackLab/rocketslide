@@ -857,6 +857,47 @@
     color: var(--text-muted);
 }
 
+/* Load More Reels Container */
+.rocketslide-loadmore-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 24px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    width: 100%;
+}
+
+.rocketslide-loadmore-btn {
+    padding: 12px 28px;
+    font-size: 13.5px;
+    font-weight: 700;
+    border-radius: 30px;
+    background: linear-gradient(135deg, var(--blue), var(--purple)) !important;
+    color: #ffffff !important;
+    border: none !important;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    cursor: pointer;
+    max-width: 320px;
+    width: 100%;
+    margin: 0 auto;
+}
+
+.rocketslide-loadmore-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(37,99,235,0.35);
+}
+
+.rocketslide-loadmore-info {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-align: center;
+}
+
 /* ============================================================
    MOBILE FIXED BOTTOM NAV
    ============================================================ */
@@ -864,46 +905,52 @@
     display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 782px) {
     .rocketslide-tabs-nav {
-        display: none;
+        display: none !important;
     }
 
     .rocketslide-mobile-nav {
-        display: flex;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        right: 0;
-        background: rgba(255, 255, 255, .96);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        border-top: 1px solid var(--border);
-        padding: 6px 0 env(safe-area-inset-bottom, 6px);
-        z-index: 100000;
-        justify-content: space-around;
-        box-shadow: 0 -2px 10px rgba(0,0,0,.05);
+        display: flex !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        width: 100% !important;
+        width: 100vw !important;
+        background: #ffffff !important;
+        border-top: 1px solid var(--border) !important;
+        padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)) 0 !important;
+        z-index: 999999 !important;
+        justify-content: space-around !important;
+        align-items: center !important;
+        box-shadow: 0 -4px 16px rgba(0,0,0,.08) !important;
+        box-sizing: border-box !important;
+        margin: 0 !important;
     }
 
     .rocketslide-mobile-nav-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        gap: 2px;
-        padding: 4px 8px;
-        background: none;
-        border: none;
-        color: var(--text-muted);
-        font-size: 10px;
-        font-weight: 600;
-        font-family: 'Inter', sans-serif;
-        cursor: pointer;
-        text-decoration: none;
-        transition: color .15s;
+        flex: 1 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 2px !important;
+        padding: 4px 2px !important;
+        background: none !important;
+        border: none !important;
+        color: var(--text-muted) !important;
+        font-size: 10.5px !important;
+        font-weight: 600 !important;
+        font-family: 'Inter', sans-serif !important;
+        cursor: pointer !important;
+        text-decoration: none !important;
+        transition: color .15s !important;
+        min-width: 0 !important;
     }
 
-    .rocketslide-mobile-nav-item .nav-icon { font-size: 18px; }
-    .rocketslide-mobile-nav-item.active    { color: var(--blue); }
+    .rocketslide-mobile-nav-item .nav-icon { font-size: 18px !important; }
+    .rocketslide-mobile-nav-item.active    { color: var(--blue) !important; font-weight: 700 !important; }
 }
 
 /* ============================================================

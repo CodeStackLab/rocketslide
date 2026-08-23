@@ -294,82 +294,54 @@
             });
         });
 
-        // 9. Client-Side Pagination System (4 Cards / Row, 8 Cards / Page)
-        var currentPage = 1;
-        var itemsPerPage = 8;
+        // 9. Load More Reels System (8 Cards Default, 8 Per Load)
+        var visibleCount = 8;
+        var stepCount = 8;
 
-        function updatePagination() {
+        function updateLoadMore() {
             var $cards = $('#rocketslide-images-container .rocketslide-img-card');
             var totalCards = $cards.length;
 
-            if (totalCards <= itemsPerPage) {
-                $cards.css('display', 'flex');
-                $('#rocketslide-pagination-wrapper').hide();
+            if (totalCards === 0) {
+                $('#rocketslide-loadmore-wrapper').hide();
                 return;
             }
 
-            var totalPages = Math.ceil(totalCards / itemsPerPage);
-            if (currentPage > totalPages) currentPage = totalPages;
-            if (currentPage < 1) currentPage = 1;
+            $cards.each(function (index) {
+                if (index < visibleCount) {
+                    $(this).css('display', 'flex');
+                } else {
+                    $(this).css('display', 'none');
+                }
+            });
 
-            var startIndex = (currentPage - 1) * itemsPerPage;
-            var endIndex = Math.min(startIndex + itemsPerPage, totalCards);
+            var showingCount = Math.min(visibleCount, totalCards);
+            var remainingCount = totalCards - showingCount;
 
-            $cards.hide();
-            $cards.slice(startIndex, endIndex).css('display', 'flex');
-
-            $('#rocketslide-pagination-wrapper').show();
-            $('#rocketslide-pagination-info').text(
-                'Showing ' + (startIndex + 1) + '–' + endIndex + ' of ' + totalCards + ' Reel Cards'
+            $('#rocketslide-loadmore-info').text(
+                'Showing ' + showingCount + ' of ' + totalCards + ' Reel Cards'
             );
 
-            var $controls = $('#rocketslide-pagination-controls');
-            $controls.empty();
-
-            if (totalPages <= 1) {
-                return;
+            if (remainingCount > 0) {
+                $('#rocketslide-loadmore-btn').show().html(
+                    '⬇️ Load More Reels (' + remainingCount + ' Remaining)'
+                );
+                $('#rocketslide-loadmore-wrapper').show();
+            } else if (totalCards > stepCount) {
+                $('#rocketslide-loadmore-btn').hide();
+                $('#rocketslide-loadmore-wrapper').show();
+            } else {
+                $('#rocketslide-loadmore-wrapper').hide();
             }
-
-            // Prev Button
-            var $prevBtn = $('<button type="button" class="rocketslide-page-btn">◀ Prev</button>');
-            $prevBtn.prop('disabled', currentPage === 1);
-            $prevBtn.on('click', function () {
-                if (currentPage > 1) {
-                    currentPage--;
-                    updatePagination();
-                }
-            });
-            $controls.append($prevBtn);
-
-            // Page Buttons
-            for (var i = 1; i <= totalPages; i++) {
-                (function (pageNum) {
-                    var $pageBtn = $('<button type="button" class="rocketslide-page-btn">' + pageNum + '</button>');
-                    if (pageNum === currentPage) {
-                        $pageBtn.addClass('active');
-                    }
-                    $pageBtn.on('click', function () {
-                        currentPage = pageNum;
-                        updatePagination();
-                    });
-                    $controls.append($pageBtn);
-                })(i);
-            }
-
-            // Next Button
-            var $nextBtn = $('<button type="button" class="rocketslide-page-btn">Next ▶</button>');
-            $nextBtn.prop('disabled', currentPage === totalPages);
-            $nextBtn.on('click', function () {
-                if (currentPage < totalPages) {
-                    currentPage++;
-                    updatePagination();
-                }
-            });
-            $controls.append($nextBtn);
         }
 
-        // Initialize Pagination on Page Load
-        updatePagination();
+        $(document).on('click', '#rocketslide-loadmore-btn', function () {
+            visibleCount += stepCount;
+            updateLoadMore();
+        });
+
+        // Initialize Load More on Page Load
+        updateLoadMore();
 
     });
 
