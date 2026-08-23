@@ -290,6 +290,7 @@ class RocketSlide_Admin {
                                     </div>
                                 </div>
                             <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
 
                     <!-- Pagination Controls Bar -->
