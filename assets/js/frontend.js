@@ -69,14 +69,8 @@
         playOverlay.className = 'reel-play-overlay';
         playOverlay.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 
-        // CTA Pill
-        var ctaPill = document.createElement('div');
-        ctaPill.className = 'reel-cta-pill';
-        ctaPill.innerHTML = '<span>Tap To Watch Full Video</span> ➔';
-
         card.appendChild(img);
         card.appendChild(playOverlay);
-        card.appendChild(ctaPill);
 
         // Click Handler -> Immediate Redirect with Parameter Preservation
         card.addEventListener('click', function () {
