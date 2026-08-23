@@ -50,9 +50,11 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text);
     background: transparent;
-    padding: 16px 20px 80px 0;
+    padding: 16px 16px 90px 16px;
     max-width: 1100px;
+    width: 100%;
     box-sizing: border-box;
+    overflow-x: hidden;
 }
 
 /* ============================================================
@@ -919,36 +921,104 @@
 .rocketslide-toast.error   { background: var(--red); }
 
 /* ============================================================
-   RESPONSIVE — General
+   RESPONSIVE — Comprehensive Mobile & Tablet Layout Engine
    ============================================================ */
-@media (max-width: 768px) {
+@media (max-width: 782px) {
     .rocketslide-wrap {
-        padding: 12px 12px 90px;
+        padding: 10px 8px 100px 8px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .rocketslide-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 12px;
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 14px !important;
+        padding: 16px 14px !important;
+    }
+
+    .rocketslide-header-brand {
+        width: 100% !important;
+    }
+
+    .rocketslide-header-meta {
+        width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-header-meta .rocketslide-btn,
+    .rocketslide-header-meta .rocketslide-live-url {
+        width: 100% !important;
+        justify-content: center !important;
+        text-align: center !important;
     }
 
     .rocketslide-card {
-        padding: 14px;
+        padding: 14px 12px !important;
+        margin-bottom: 16px !important;
+        border-radius: var(--radius) !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .rocketslide-btn {
+        white-space: normal !important;
+        text-align: center !important;
+        max-width: 100% !important;
+    }
+
+    .rocketslide-file-picker {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-file-picker .rocketslide-btn {
+        width: 100% !important;
+        justify-content: center !important;
+    }
+
+    .rocketslide-file-name {
+        width: 100% !important;
+        text-align: center !important;
+        min-width: 0 !important;
     }
 
     .rocketslide-img-grid {
-        grid-template-columns: repeat(auto-fill, minmax(120px, 160px));
-        gap: 10px;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
     }
 }
 
 @media (max-width: 480px) {
-    .rocketslide-img-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+    .rocketslide-stats-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
     }
 
-    .rocketslide-add-form-grid {
-        grid-template-columns: 1fr;
+    .rocketslide-stat-card {
+        padding: 12px 10px !important;
+    }
+
+    .rocketslide-stat-val {
+        font-size: 16px !important;
+    }
+
+    .rocketslide-stat-lbl {
+        font-size: 9.5px !important;
+    }
+
+    .rocketslide-img-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-img-card-actions {
+        flex-direction: column !important;
+        gap: 4px !important;
     }
 }
