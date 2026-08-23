@@ -235,7 +235,8 @@ class RocketSlide_Admin {
                                     <div class="rocketslide-file-picker">
                                         <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
                                         <input type="hidden" id="rocketslide-media-id" value="">
-                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Select Image / WP Media Library</button>
+                                        <button type="button" id="rocketslide-upload-computer-btn" class="rocketslide-btn rocketslide-btn-primary">💻 Upload from Computer</button>
+                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Choose from WP Gallery</button>
                                         <span id="rocketslide-file-name" class="rocketslide-file-name">No file chosen</span>
                                     </div>
                                 </div>

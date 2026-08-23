@@ -17,7 +17,12 @@
             $('#' + targetTab).addClass('active');
         });
 
-        // 2. WP Media Library Selector & Local Computer Uploader Modal
+        // 2. Direct Computer File Picker & WP Media Gallery Selector
+        $('#rocketslide-upload-computer-btn').on('click', function (e) {
+            e.preventDefault();
+            $('#rocketslide-file-input').trigger('click');
+        });
+
         var mediaUploader;
 
         function openMediaModal() {
@@ -36,7 +41,7 @@
                 var attachment = mediaUploader.state().get('selection').first().toJSON();
                 $('#rocketslide-media-id').val(attachment.id);
                 $('#rocketslide-file-input').val('');
-                $('#rocketslide-file-name').html('✅ <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
+                $('#rocketslide-file-name').html('✅ Gallery: <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
             });
 
             mediaUploader.open();
@@ -47,12 +52,12 @@
             openMediaModal();
         });
 
-        // File input change listener
+        // File input change listener (Computer Upload)
         $('#rocketslide-file-input').on('change', function () {
             var file = this.files[0];
             if (file) {
                 $('#rocketslide-media-id').val('');
-                $('#rocketslide-file-name').html('✅ <strong style="color:var(--blue);">' + file.name + '</strong>');
+                $('#rocketslide-file-name').html('✅ PC File: <strong style="color:var(--blue);">' + file.name + '</strong>');
             }
         });
 
