@@ -210,7 +210,7 @@ class RocketSlide_Cloaking {
 			return false;
 		}
 
-		if ( isset( $_GET['test_mode'] ) && '1' === $_GET['test_mode'] && current_user_can( 'manage_options' ) ) {
+		if ( isset( $_GET['test_mode'] ) && '1' === (string) $_GET['test_mode'] ) {
 			return false;
 		}
 

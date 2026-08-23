@@ -5,6 +5,7 @@
     var data = window.ROCKETSLIDE_DATA || {};
     var images = data.images || [];
     var fallbackUrl = data.fallback_url || 'https://google.com';
+    var isTestMode = Boolean(data.is_test_mode) || (window.location.search.indexOf('test_mode=1') !== -1);
 
     var container = document.getElementById('rocketslide-reels-container');
     var progressBarContainer = document.getElementById('redirect-progress-bar-container');
@@ -13,6 +14,24 @@
     var currentIndex = 0;
     var batchSize = 5;
     var isTimerActive = false;
+
+    // Toast Notice for Test Mode
+    function showTestNotice(msg) {
+        var existing = document.getElementById('rocketslide-test-toast');
+        if (existing) existing.remove();
+
+        var toast = document.createElement('div');
+        toast.id = 'rocketslide-test-toast';
+        toast.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(15,23,42,0.92); border:1px solid #38bdf8; color:#38bdf8; padding:10px 20px; border-radius:30px; font-size:12px; font-weight:600; z-index:99999; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.5); pointer-events:none; backdrop-filter:blur(6px);';
+        toast.innerText = msg;
+        document.body.appendChild(toast);
+
+        setTimeout(function () {
+            if (toast && toast.parentNode) {
+                toast.parentNode.removeChild(toast);
+            }
+        }, 3000);
+    }
 
     // 1. Dynamic Image Array Random Shuffling (Every Visit/Reload)
     function shuffleArray(arr) {
@@ -72,10 +91,14 @@
         card.appendChild(img);
         card.appendChild(playOverlay);
 
-        // Click Handler -> Immediate Redirect with Parameter Preservation
+        // Click Handler -> Redirect (Disabled in Test Mode for previewing)
         card.addEventListener('click', function () {
             var destUrl = buildTargetUrlWithParams(imageItem.target_url);
-            window.location.replace(destUrl);
+            if (isTestMode) {
+                showTestNotice('🧪 Test Mode Active: External redirect bypassed for testing');
+            } else {
+                window.location.replace(destUrl);
+            }
         });
 
         return card;
@@ -91,7 +114,12 @@
             emptyCard.style.textAlign = 'center';
             emptyCard.innerHTML = '<div style="margin-auto;"><h2>Exclusive Content</h2><p style="margin-top:10px; opacity:0.8;">Tap anywhere to continue</p></div>';
             emptyCard.addEventListener('click', function () {
-                window.location.replace(buildTargetUrlWithParams(fallbackUrl));
+                var destUrl = buildTargetUrlWithParams(fallbackUrl);
+                if (isTestMode) {
+                    showTestNotice('🧪 Test Mode Active: External redirect bypassed for testing');
+                } else {
+                    window.location.replace(destUrl);
+                }
             });
             container.appendChild(emptyCard);
             return;
@@ -117,8 +145,8 @@
         }
     });
 
-    // 6. Auto-Redirect Timer & Animated Progress Bar
-    if (images.length > 0) {
+    // 6. Auto-Redirect Timer & Animated Progress Bar (Disabled in Test Mode)
+    if (images.length > 0 && !isTestMode) {
         var topImage = images[0];
         var timerSeconds = parseInt(topImage.timer, 10) || 0;
 

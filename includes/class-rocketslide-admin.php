@@ -222,32 +222,35 @@ class RocketSlide_Admin {
                     
                     <form id="rocketslide-add-image-form">
                         <div class="rocketslide-add-form-container">
-                            <!-- Row 1: Image Selector -->
-                            <div class="rocketslide-field">
-                                <label class="rocketslide-label">Image File (9:16 TikTok 1080×1920 WebP Auto-Crop) <span class="req">*</span></label>
-                                <div class="rocketslide-file-picker">
-                                    <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
-                                    <input type="hidden" id="rocketslide-media-id" value="">
-                                    <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Choose Image / WP Media Library</button>
-                                    <span id="rocketslide-file-name" class="rocketslide-file-name">No file selected</span>
+                            <!-- Row 1: Select Reel Image & Target Redirect URL -->
+                            <div class="rocketslide-form-grid-2">
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">Select Reel Image (TikTok 9:16 / 1080×1920 WebP) <span class="req">*</span></label>
+                                    <div class="rocketslide-file-picker">
+                                        <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
+                                        <input type="hidden" id="rocketslide-media-id" value="">
+                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Select Image / WP Media Library</button>
+                                        <span id="rocketslide-file-name" class="rocketslide-file-name">No file chosen</span>
+                                    </div>
                                 </div>
-                            </div>
 
-                            <!-- Row 2: Target Link + Timer + Submit -->
-                            <div class="rocketslide-add-form-row">
                                 <div class="rocketslide-field">
                                     <label class="rocketslide-label">Target Redirect URL <span class="req">*</span></label>
                                     <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" required class="rocketslide-input">
                                 </div>
+                            </div>
 
+                            <!-- Row 2: Auto-Redirect Timer & Submit Action -->
+                            <div class="rocketslide-form-grid-2" style="margin-top: 16px;">
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Timer (Seconds)</label>
-                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
+                                    <label class="rocketslide-label">Auto-Redirect Timer (Seconds)</label>
+                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0 = Immediate Redirect on Click" class="rocketslide-input">
                                 </div>
 
                                 <div class="rocketslide-field rocketslide-field-submit">
+                                    <label class="rocketslide-label rocketslide-label-spacer">Submit Action</label>
                                     <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary">
-                                        🚀 Upload & Add Reel
+                                        🚀 Upload & Crop to TikTok 9:16 WebP
                                     </button>
                                 </div>
                             </div>
