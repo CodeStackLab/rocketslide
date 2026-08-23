@@ -1,6 +1,6 @@
 <?php
 /**
- * class-reelflow-frontend.php
+ * class-rocketslide-frontend.php
  *
  * FRONTEND ROUTING ENGINE — Isolated 9:16 Landing Page Loader
  * ============================================================
@@ -15,7 +15,7 @@
  *       • Other    → HTTP 302 redirect to Fallback URL (with param forwarding)
  *  4. Serve the fully isolated HTML template (no wp_head / wp_footer calls).
  *
- * @package ReelFlow_Landing_Page
+ * @package RocketSlide_Landing_Page
  * @since   2.0.0
  */
 
@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class ReelFlow_Frontend {
+class RocketSlide_Frontend {
 
 	/** @var string  Name of the custom WP query variable */
-	const QUERY_VAR = 'reelflow_landing';
+	const QUERY_VAR = 'rocketslide_landing';
 
 	/**
 	 * Constructor — register all WordPress hooks needed for routing.
@@ -67,7 +67,7 @@ class ReelFlow_Frontend {
 		$slug = self::get_slug();
 
 		// Regex: matches /v/ or /v (with or without trailing slash)
-		// Maps to: ?reelflow_landing=1
+		// Maps to: ?rocketslide_landing=1
 		add_rewrite_rule(
 			'^' . preg_quote( $slug, '/' ) . '/?$',
 			'index.php?' . self::QUERY_VAR . '=1',
@@ -106,7 +106,7 @@ class ReelFlow_Frontend {
 		// BRANCH A: Known bot/crawler
 		//   → Render the landing page template (which includes OG tags)
 		//   → Do NOT redirect — bots need to see clean OG meta for link previews
-		if ( ReelFlow_Cloaking::is_bot() ) {
+		if ( RocketSlide_Cloaking::is_bot() ) {
 			$this->render_landing_page();
 			exit;
 		}
@@ -114,8 +114,8 @@ class ReelFlow_Frontend {
 		// BRANCH B: Non-Facebook/Instagram traffic (direct, Google, other)
 		//   → Immediately 302-redirect to the Custom Fallback URL
 		//   → Preserve & forward all incoming query parameters (fbclid, utm_*, gclid…)
-		if ( ReelFlow_Cloaking::should_redirect_to_fallback() ) {
-			$fallback_url = get_option( 'reelflow_fallback_url', 'https://google.com' );
+		if ( RocketSlide_Cloaking::should_redirect_to_fallback() ) {
+			$fallback_url = get_option( 'rocketslide_fallback_url', 'https://google.com' );
 
 			// Forward all incoming GET parameters to the fallback destination
 			if ( ! empty( $_GET ) ) {
@@ -145,7 +145,7 @@ class ReelFlow_Frontend {
 	 * Determine whether the current request is for our landing page.
 	 *
 	 * Two matching strategies (belt-and-suspenders):
-	 *  1. WP query var 'reelflow_landing' is set to '1'  (rewrite rule matched)
+	 *  1. WP query var 'rocketslide_landing' is set to '1'  (rewrite rule matched)
 	 *  2. Raw REQUEST_URI path exactly equals our slug  (safety fallback)
 	 *
 	 * @return bool
@@ -178,10 +178,10 @@ class ReelFlow_Frontend {
 		header( 'Cache-Control: no-store, no-cache, must-revalidate' );
 		header( 'Pragma: no-cache' );
 
-		$template = REELFLOW_PLUGIN_DIR . 'templates/landing-page-template.php';
+		$template = ROCKETSLIDE_PLUGIN_DIR . 'templates/landing-page-template.php';
 
 		if ( ! file_exists( $template ) ) {
-			wp_die( 'ReelFlow: Landing page template file is missing. Please reinstall the plugin.' );
+			wp_die( 'RocketSlide: Landing page template file is missing. Please reinstall the plugin.' );
 		}
 
 		include $template;
@@ -193,7 +193,7 @@ class ReelFlow_Frontend {
 	 * @return string  e.g. 'v'
 	 */
 	public static function get_slug() {
-		$slug = get_option( 'reelflow_slug', 'v' );
+		$slug = get_option( 'rocketslide_slug', 'v' );
 		$slug = sanitize_title( trim( $slug, '/' ) );
 		return empty( $slug ) ? 'v' : $slug;
 	}

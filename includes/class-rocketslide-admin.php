@@ -1,6 +1,6 @@
 <?php
 /**
- * class-reelflow-admin.php
+ * class-rocketslide-admin.php
  *
  * MODERN DARK-MODE ADMIN DASHBOARD & PLUGIN SETTINGS MANAGER
  * ==========================================================
@@ -12,7 +12,7 @@
  *   4. Advanced Dual-Layer FB/IG Traffic Cloaking & Fallback Destination Manager
  *   5. Dynamic Browser Tab Title & Custom URL Slug Configuration
  *
- * @package ReelFlow_Landing_Page
+ * @package RocketSlide_Landing_Page
  * @since   2.0.0
  */
 
@@ -20,25 +20,25 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class ReelFlow_Admin {
+class RocketSlide_Admin {
 
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
 
         // Direct Settings Link on Plugins Page
-        add_filter('plugin_action_links_' . plugin_basename(REELFLOW_PLUGIN_FILE), array($this, 'add_action_links'));
+        add_filter('plugin_action_links_' . plugin_basename(ROCKETSLIDE_PLUGIN_FILE), array($this, 'add_action_links'));
         add_action('admin_head-plugins.php', array($this, 'fix_plugins_page_action_links_css'));
 
         // Quick Settings Link in Admin Bar
         add_action('admin_bar_menu', array($this, 'add_admin_bar_menu'), 90);
 
         // AJAX Handlers
-        add_action('wp_ajax_reelflow_save_settings', array($this, 'ajax_save_settings'));
-        add_action('wp_ajax_reelflow_verify_publytics', array($this, 'ajax_verify_publytics'));
-        add_action('wp_ajax_reelflow_upload_image', array($this, 'ajax_upload_image'));
-        add_action('wp_ajax_reelflow_update_image', array($this, 'ajax_update_image'));
-        add_action('wp_ajax_reelflow_delete_image', array($this, 'ajax_delete_image'));
+        add_action('wp_ajax_rocketslide_save_settings', array($this, 'ajax_save_settings'));
+        add_action('wp_ajax_rocketslide_verify_publytics', array($this, 'ajax_verify_publytics'));
+        add_action('wp_ajax_rocketslide_upload_image', array($this, 'ajax_upload_image'));
+        add_action('wp_ajax_rocketslide_update_image', array($this, 'ajax_update_image'));
+        add_action('wp_ajax_rocketslide_delete_image', array($this, 'ajax_delete_image'));
     }
 
     /**
@@ -46,7 +46,7 @@ class ReelFlow_Admin {
      */
     public function fix_plugins_page_action_links_css() {
         ?>
-        <style id="reelflow-plugins-actions-fix">
+        <style id="rocketslide-plugins-actions-fix">
             .plugins .row-actions {
                 display: block !important;
                 margin-top: 4px !important;
@@ -68,7 +68,7 @@ class ReelFlow_Admin {
      */
     public function add_action_links($links) {
         $settings_link = array(
-            'settings' => '<a href="' . esc_url(admin_url('admin.php?page=reelflow-mobile-funnel')) . '">' . __('Settings', 'reelflow-lp') . '</a>'
+            'settings' => '<a href="' . esc_url(admin_url('admin.php?page=rocketslide')) . '">' . __('Settings', 'rocketslide-lp') . '</a>'
         );
         return array_merge($settings_link, $links);
     }
@@ -82,9 +82,9 @@ class ReelFlow_Admin {
         }
 
         $wp_admin_bar->add_node(array(
-            'id'    => 'reelflow-settings',
-            'title' => '📱 ReelFlow 9:16 Settings',
-            'href'  => admin_url('admin.php?page=reelflow-mobile-funnel'),
+            'id'    => 'rocketslide-settings',
+            'title' => '📱 RocketSlide 9:16 Settings',
+            'href'  => admin_url('admin.php?page=rocketslide'),
         ));
     }
 
@@ -93,10 +93,10 @@ class ReelFlow_Admin {
      */
     public function add_admin_menu() {
         add_menu_page(
-            'ReelFlow 9:16 Manager',
-            'ReelFlow 9:16',
+            'RocketSlide 9:16 Manager',
+            'RocketSlide 9:16',
             'manage_options',
-            'reelflow-mobile-funnel',
+            'rocketslide',
             array($this, 'render_admin_page'),
             'dashicons-smartphone',
             30
@@ -107,30 +107,30 @@ class ReelFlow_Admin {
      * Enqueue Admin Styles and Scripts
      */
     public function enqueue_admin_assets($hook) {
-        if ($hook !== 'toplevel_page_reelflow-mobile-funnel') {
+        if ($hook !== 'toplevel_page_rocketslide') {
             return;
         }
 
         wp_enqueue_media();
 
         wp_enqueue_style(
-            'reelflow-admin-dark-css',
-            REELFLOW_PLUGIN_URL . 'assets/css/admin-dark.css',
+            'rocketslide-admin-dark-css',
+            ROCKETSLIDE_PLUGIN_URL . 'assets/css/admin-dark.css',
             array(),
-            REELFLOW_VERSION
+            ROCKETSLIDE_VERSION
         );
 
         wp_enqueue_script(
-            'reelflow-admin-js',
-            REELFLOW_PLUGIN_URL . 'assets/js/admin.js',
+            'rocketslide-admin-js',
+            ROCKETSLIDE_PLUGIN_URL . 'assets/js/admin.js',
             array('jquery'),
-            REELFLOW_VERSION,
+            ROCKETSLIDE_VERSION,
             true
         );
 
-        wp_localize_script('reelflow-admin-js', 'reelflow_admin_vars', array(
+        wp_localize_script('rocketslide-admin-js', 'rocketslide_admin_vars', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('reelflow_admin_nonce')
+            'nonce'    => wp_create_nonce('rocketslide_admin_nonce')
         ));
     }
 
@@ -142,64 +142,64 @@ class ReelFlow_Admin {
             wp_die('Unauthorized access');
         }
 
-        $fallback_url    = get_option('reelflow_fallback_url', 'https://google.com');
-        $tab_title       = get_option('reelflow_tab_title', 'Exclusive Video Content');
-        $slug            = get_option('reelflow_slug', 'v');
-        $tracking_script = get_option('reelflow_tracking_script', '');
-        $test_mode       = get_option('reelflow_test_mode', '0');
-        $images = get_option('reelflow_images', array());
+        $fallback_url    = get_option('rocketslide_fallback_url', 'https://google.com');
+        $tab_title       = get_option('rocketslide_tab_title', 'Exclusive Video Content');
+        $slug            = get_option('rocketslide_slug', 'v');
+        $tracking_script = get_option('rocketslide_tracking_script', '');
+        $test_mode       = get_option('rocketslide_test_mode', '0');
+        $images = get_option('rocketslide_images', array());
         if (empty($images) || !is_array($images)) {
-            $images = reelflow_get_default_images();
-            update_option('reelflow_images', $images);
+            $images = rocketslide_get_default_images();
+            update_option('rocketslide_images', $images);
         }
 
         $landing_page_url = home_url('/' . trim($slug, '/') . '/');
         $test_preview_url = add_query_arg('test_mode', '1', $landing_page_url);
         ?>
-        <div class="reelflow-wrap">
+        <div class="rocketslide-wrap">
             <!-- Header Banner -->
-            <div class="reelflow-header">
-                <div class="reelflow-header-brand">
-                    <div class="reelflow-header-icon">📱</div>
-                    <div class="reelflow-header-text">
-                        <h1>REELFLOW 9:16 REELS ENGINE</h1>
+            <div class="rocketslide-header">
+                <div class="rocketslide-header-brand">
+                    <div class="rocketslide-header-icon">📱</div>
+                    <div class="rocketslide-header-text">
+                        <h1>ROCKETSLIDE 9:16 ENGINE</h1>
                         <p>High-Performance Vertical Landing Page & Social Traffic Cloaker</p>
                     </div>
                 </div>
-                <div class="reelflow-header-meta">
-                    <div class="reelflow-live-url">
+                <div class="rocketslide-header-meta">
+                    <div class="rocketslide-live-url">
                         <span>🔗 Target Slug:</span>
                         <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code>
                     </div>
-                    <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="reelflow-btn reelflow-btn-secondary">
+                    <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="rocketslide-btn rocketslide-btn-secondary">
                         🧪 Test Preview Page
                     </a>
-                    <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="reelflow-btn reelflow-btn-live">
+                    <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="rocketslide-btn rocketslide-btn-live">
                         ⚡ Live Landing Page 🚀
                     </a>
                 </div>
             </div>
 
             <!-- Stats Bar -->
-            <div class="reelflow-stats-row">
-                <div class="reelflow-stat-card">
+            <div class="rocketslide-stats-row">
+                <div class="rocketslide-stat-card">
                     <span class="stat-icon">🎬</span>
-                    <span class="stat-value" id="reelflow-stat-images-count"><?php echo count($images); ?></span>
+                    <span class="stat-value" id="rocketslide-stat-images-count"><?php echo count($images); ?></span>
                     <span class="stat-label">Active Reels</span>
                 </div>
-                <div class="reelflow-stat-card">
+                <div class="rocketslide-stat-card">
                     <span class="stat-icon"><?php echo ($test_mode === '1') ? '🧪' : '🛡️'; ?></span>
                     <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#d29922' : '#3fb950'; ?>;">
                         <?php echo ($test_mode === '1') ? 'Testing' : 'Active'; ?>
                     </span>
                     <span class="stat-label"><?php echo ($test_mode === '1') ? 'Bypass Active' : 'FB/IG Cloaking'; ?></span>
                 </div>
-                <div class="reelflow-stat-card">
+                <div class="rocketslide-stat-card">
                     <span class="stat-icon">📊</span>
                     <span class="stat-value"><?php echo !empty($tracking_script) ? 'Connected' : 'None'; ?></span>
                     <span class="stat-label">Tracking Engine</span>
                 </div>
-                <div class="reelflow-stat-card">
+                <div class="rocketslide-stat-card">
                     <span class="stat-icon">⚡</span>
                     <span class="stat-value">540x960</span>
                     <span class="stat-label">WebP Auto-Crop</span>
@@ -207,43 +207,43 @@ class ReelFlow_Admin {
             </div>
 
             <!-- Desktop Navigation Tabs -->
-            <nav class="reelflow-tabs-nav">
-                <button class="reelflow-tab-btn active" data-tab="tab-images">🖼️ Reels & Link Manager</button>
-                <button class="reelflow-tab-btn" data-tab="tab-tracking">📊 Publytics & Analytics</button>
-                <button class="reelflow-tab-btn" data-tab="tab-fallback">🛡️ Dual-Layer Cloaking</button>
-                <button class="reelflow-tab-btn" data-tab="tab-settings">⚙️ Plugin Settings</button>
+            <nav class="rocketslide-tabs-nav">
+                <button class="rocketslide-tab-btn active" data-tab="tab-images">🖼️ Reels & Link Manager</button>
+                <button class="rocketslide-tab-btn" data-tab="tab-tracking">📊 Publytics & Analytics</button>
+                <button class="rocketslide-tab-btn" data-tab="tab-fallback">🛡️ Dual-Layer Cloaking</button>
+                <button class="rocketslide-tab-btn" data-tab="tab-settings">⚙️ Plugin Settings</button>
             </nav>
 
             <!-- Tab 1: Image & Target Link Manager -->
-            <div class="reelflow-tab-panel active" id="tab-images">
-                <div class="reelflow-card">
-                    <h3 class="reelflow-card-title">✨ Add New 9:16 Reel Image</h3>
-                    <p class="reelflow-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
+            <div class="rocketslide-tab-panel active" id="tab-images">
+                <div class="rocketslide-card">
+                    <h3 class="rocketslide-card-title">✨ Add New 9:16 Reel Image</h3>
+                    <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
                     
-                    <form id="reelflow-add-image-form">
-                        <div class="reelflow-add-form-grid">
-                            <div class="reelflow-field">
-                                <label class="reelflow-label">Image Source <span class="req">*</span></label>
-                                <div class="reelflow-file-picker">
-                                    <input type="file" id="reelflow-file-input" accept="image/*" class="reelflow-file-hidden">
-                                    <input type="hidden" id="reelflow-media-id" value="">
-                                    <button type="button" id="reelflow-select-media-btn" class="reelflow-btn reelflow-btn-secondary">📁 Upload File / Media Library</button>
-                                    <span id="reelflow-file-name" class="reelflow-file-name">No file selected</span>
+                    <form id="rocketslide-add-image-form">
+                        <div class="rocketslide-add-form-grid">
+                            <div class="rocketslide-field">
+                                <label class="rocketslide-label">Image Source <span class="req">*</span></label>
+                                <div class="rocketslide-file-picker">
+                                    <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
+                                    <input type="hidden" id="rocketslide-media-id" value="">
+                                    <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Upload File / Media Library</button>
+                                    <span id="rocketslide-file-name" class="rocketslide-file-name">No file selected</span>
                                 </div>
                             </div>
 
-                            <div class="reelflow-field">
-                                <label class="reelflow-label">Target Redirect URL <span class="req">*</span></label>
-                                <input type="url" id="reelflow-new-target-url" placeholder="https://your-affiliate-offer.com" required class="reelflow-input">
+                            <div class="rocketslide-field">
+                                <label class="rocketslide-label">Target Redirect URL <span class="req">*</span></label>
+                                <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" required class="rocketslide-input">
                             </div>
 
-                            <div class="reelflow-field">
-                                <label class="reelflow-label">Timer (Seconds)</label>
-                                <input type="number" id="reelflow-new-timer" value="0" min="0" placeholder="0" class="reelflow-input">
+                            <div class="rocketslide-field">
+                                <label class="rocketslide-label">Timer (Seconds)</label>
+                                <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
                             </div>
 
-                            <div class="reelflow-field">
-                                <button type="submit" id="reelflow-add-image-btn" class="reelflow-btn reelflow-btn-primary">
+                            <div class="rocketslide-field">
+                                <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary">
                                     🚀 Upload & Add
                                 </button>
                             </div>
@@ -252,36 +252,36 @@ class ReelFlow_Admin {
                 </div>
 
                 <!-- Grid List of Uploaded Images -->
-                <div class="reelflow-card">
-                    <h3 class="reelflow-card-title">🎬 Managed Reel Cards (<span id="reelflow-images-count"><?php echo count($images); ?></span>)</h3>
-                    <p class="reelflow-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
+                <div class="rocketslide-card">
+                    <h3 class="rocketslide-card-title">🎬 Managed Reel Cards (<span id="rocketslide-images-count"><?php echo count($images); ?></span>)</h3>
+                    <p class="rocketslide-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
 
-                    <div class="reelflow-img-grid" id="reelflow-images-container">
+                    <div class="rocketslide-img-grid" id="rocketslide-images-container">
                         <?php if (empty($images)) : ?>
-                            <div class="reelflow-empty-state" id="reelflow-empty-state">
+                            <div class="rocketslide-empty-state" id="rocketslide-empty-state">
                                 <div class="empty-icon">🖼️</div>
                                 <p>No 9:16 reel images added yet. Upload your first image above to launch your landing page!</p>
                             </div>
                         <?php else : ?>
                             <?php foreach ($images as $index => $img) : ?>
-                                <div class="reelflow-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
-                                    <div class="reelflow-img-thumb">
+                                <div class="rocketslide-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
+                                    <div class="rocketslide-img-thumb">
                                         <img src="<?php echo esc_url($img['url']); ?>" alt="Reel Card">
-                                        <span class="reelflow-img-index">#<?php echo $index + 1; ?></span>
-                                        <span class="reelflow-img-format-badge">WebP</span>
+                                        <span class="rocketslide-img-index">#<?php echo $index + 1; ?></span>
+                                        <span class="rocketslide-img-format-badge">WebP</span>
                                     </div>
-                                    <div class="reelflow-img-body">
+                                    <div class="rocketslide-img-body">
                                         <div>
-                                            <label class="reelflow-label">Target URL:</label>
-                                            <input type="url" class="reelflow-input reelflow-card-target" value="<?php echo esc_url($img['target_url']); ?>">
+                                            <label class="rocketslide-label">Target URL:</label>
+                                            <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>">
                                         </div>
                                         <div>
-                                            <label class="reelflow-label">Redirect Timer (s):</label>
-                                            <input type="number" class="reelflow-input reelflow-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
+                                            <label class="rocketslide-label">Redirect Timer (s):</label>
+                                            <input type="number" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
                                         </div>
-                                        <div class="reelflow-img-card-actions">
-                                            <button type="button" class="reelflow-btn reelflow-btn-success reelflow-save-card-btn">💾 Save</button>
-                                            <button type="button" class="reelflow-btn reelflow-btn-danger reelflow-delete-card-btn">🗑️ Delete</button>
+                                        <div class="rocketslide-img-card-actions">
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn">💾 Save</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn">🗑️ Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -292,63 +292,63 @@ class ReelFlow_Admin {
             </div>
 
             <!-- Tab 2: Publytics & Tracking -->
-            <div class="reelflow-tab-panel" id="tab-tracking">
-                <div class="reelflow-card">
+            <div class="rocketslide-tab-panel" id="tab-tracking">
+                <div class="rocketslide-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-                        <h3 class="reelflow-card-title" style="margin:0;">📊 Publytics & Analytics Integration</h3>
-                        <div id="reelflow-publytics-status" class="reelflow-badge checking">
+                        <h3 class="rocketslide-card-title" style="margin:0;">📊 Publytics & Analytics Integration</h3>
+                        <div id="rocketslide-publytics-status" class="rocketslide-badge checking">
                             🟡 Checking Status...
                         </div>
                     </div>
-                    <p class="reelflow-card-subtitle">Paste custom tracking snippet (Publytics, GA4, TikTok Pixel, Facebook Pixel). It injects directly into the <code>&lt;head&gt;</code> of the 9:16 template.</p>
+                    <p class="rocketslide-card-subtitle">Paste custom tracking snippet (Publytics, GA4, TikTok Pixel, Facebook Pixel). It injects directly into the <code>&lt;head&gt;</code> of the 9:16 template.</p>
 
-                    <div class="reelflow-field">
-                        <label class="reelflow-label">Tracking Code Snippet Tag:</label>
-                        <textarea id="reelflow-tracking-script" class="reelflow-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
-                        <span class="reelflow-input-hint">Make sure to include full <code>&lt;script&gt;...&lt;/script&gt;</code> tags.</span>
+                    <div class="rocketslide-field">
+                        <label class="rocketslide-label">Tracking Code Snippet Tag:</label>
+                        <textarea id="rocketslide-tracking-script" class="rocketslide-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
+                        <span class="rocketslide-input-hint">Make sure to include full <code>&lt;script&gt;...&lt;/script&gt;</code> tags.</span>
                     </div>
 
-                    <div class="reelflow-actions">
-                        <button type="button" id="reelflow-save-tracking-btn" class="reelflow-btn reelflow-btn-primary">
+                    <div class="rocketslide-actions">
+                        <button type="button" id="rocketslide-save-tracking-btn" class="rocketslide-btn rocketslide-btn-primary">
                             💾 Save Tracking Code
                         </button>
-                        <button type="button" id="reelflow-verify-tracking-btn" class="reelflow-btn reelflow-btn-secondary">
+                        <button type="button" id="rocketslide-verify-tracking-btn" class="rocketslide-btn rocketslide-btn-secondary">
                             🔍 Test & Verify Connection
                         </button>
-                        <button type="button" id="reelflow-test-traffic-btn" class="reelflow-btn reelflow-btn-accent">
+                        <button type="button" id="rocketslide-test-traffic-btn" class="rocketslide-btn rocketslide-btn-accent">
                             🚀 Fire Live Test Event
                         </button>
                     </div>
 
-                    <div id="reelflow-verification-output" class="reelflow-output-box" style="display:none;"></div>
+                    <div id="rocketslide-verification-output" class="rocketslide-output-box" style="display:none;"></div>
                 </div>
             </div>
 
             <!-- Tab 3: Cloaking & Fallback -->
-            <div class="reelflow-tab-panel" id="tab-fallback">
-                <div class="reelflow-card">
-                    <h3 class="reelflow-card-title">🛡️ Advanced Dual-Layer Traffic Cloaking Engine</h3>
-                    <p class="reelflow-card-subtitle">Genuine Facebook & Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
+            <div class="rocketslide-tab-panel" id="tab-fallback">
+                <div class="rocketslide-card">
+                    <h3 class="rocketslide-card-title">🛡️ Advanced Dual-Layer Traffic Cloaking Engine</h3>
+                    <p class="rocketslide-card-subtitle">Genuine Facebook & Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
 
-                    <div class="reelflow-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
-                        <label class="reelflow-label" style="font-size:14px; font-weight:700; color:var(--text);">🧪 Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
-                        <select id="reelflow-test-mode" class="reelflow-select" style="max-width:550px;">
+                    <div class="rocketslide-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
+                        <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text);">🧪 Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
+                        <select id="rocketslide-test-mode" class="rocketslide-select" style="max-width:550px;">
                             <option value="0" <?php selected($test_mode, '0'); ?>>🔴 Disabled (Live Production Mode — Only Facebook/Instagram Traffic Sees Landing Page)</option>
                             <option value="1" <?php selected($test_mode, '1'); ?>>🟢 Enabled (Testing Mode — Open Landing Page Directly Without FB Post)</option>
                         </select>
-                        <span class="reelflow-input-hint" style="margin-top:8px;">
+                        <span class="rocketslide-input-hint" style="margin-top:8px;">
                             • <strong>Enabled (Testing):</strong> Anyone can open <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code> directly in browser to test the landing page without posting on Facebook.<br>
                             • <strong>Disabled (Live):</strong> Live protection mode. Direct visits are redirected to your Fallback URL, and only FB/IG clicks see the landing page.
                         </span>
                     </div>
 
-                    <div class="reelflow-field">
-                        <label class="reelflow-label">Custom Fallback Redirect URL <span class="req">*</span></label>
-                        <input type="url" id="reelflow-fallback-url" class="reelflow-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
-                        <span class="reelflow-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
+                    <div class="rocketslide-field">
+                        <label class="rocketslide-label">Custom Fallback Redirect URL <span class="req">*</span></label>
+                        <input type="url" id="rocketslide-fallback-url" class="rocketslide-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
+                        <span class="rocketslide-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
                     </div>
 
-                    <div class="reelflow-cloaking-box">
+                    <div class="rocketslide-cloaking-box">
                         <h4>Active Filter Signals:</h4>
                         <ul>
                             <li><span class="check">✓</span> Referrer Verification: <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
@@ -358,8 +358,8 @@ class ReelFlow_Admin {
                         </ul>
                     </div>
 
-                    <div class="reelflow-actions">
-                        <button type="button" id="reelflow-save-fallback-btn" class="reelflow-btn reelflow-btn-primary">
+                    <div class="rocketslide-actions">
+                        <button type="button" id="rocketslide-save-fallback-btn" class="rocketslide-btn rocketslide-btn-primary">
                             💾 Save Cloaking & Test Settings
                         </button>
                     </div>
@@ -367,29 +367,29 @@ class ReelFlow_Admin {
             </div>
 
             <!-- Tab 4: Site Settings -->
-            <div class="reelflow-tab-panel" id="tab-settings">
-                <div class="reelflow-card">
-                    <h3 class="reelflow-card-title">⚙️ General Landing Page Configuration</h3>
-                    <p class="reelflow-card-subtitle">Customize the landing page permalink route and browser title.</p>
+            <div class="rocketslide-tab-panel" id="tab-settings">
+                <div class="rocketslide-card">
+                    <h3 class="rocketslide-card-title">⚙️ General Landing Page Configuration</h3>
+                    <p class="rocketslide-card-subtitle">Customize the landing page permalink route and browser title.</p>
                     
-                    <div class="reelflow-field">
-                        <label class="reelflow-label">Browser Tab Title</label>
-                        <input type="text" id="reelflow-tab-title" class="reelflow-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Exclusive Video Content">
-                        <span class="reelflow-input-hint">Title shown in the browser title bar when visitors view the 9:16 reels template.</span>
+                    <div class="rocketslide-field">
+                        <label class="rocketslide-label">Browser Tab Title</label>
+                        <input type="text" id="rocketslide-tab-title" class="rocketslide-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Exclusive Video Content">
+                        <span class="rocketslide-input-hint">Title shown in the browser title bar when visitors view the 9:16 reels template.</span>
                     </div>
 
-                    <div class="reelflow-field">
-                        <label class="reelflow-label">Custom Landing Page Slug / Route</label>
-                        <div class="reelflow-slug-row">
-                            <span class="reelflow-slug-prefix"><?php echo esc_url(home_url('/')); ?></span>
-                            <input type="text" id="reelflow-slug" class="reelflow-input" value="<?php echo esc_attr($slug); ?>" placeholder="v">
-                            <span class="reelflow-slug-suffix">/</span>
+                    <div class="rocketslide-field">
+                        <label class="rocketslide-label">Custom Landing Page Slug / Route</label>
+                        <div class="rocketslide-slug-row">
+                            <span class="rocketslide-slug-prefix"><?php echo esc_url(home_url('/')); ?></span>
+                            <input type="text" id="rocketslide-slug" class="rocketslide-input" value="<?php echo esc_attr($slug); ?>" placeholder="v">
+                            <span class="rocketslide-slug-suffix">/</span>
                         </div>
-                        <span class="reelflow-input-hint">Default slug is <code>v</code> (e.g., <code>yoursite.com/v/</code>). Changing this automatically updates WordPress rewrite rules.</span>
+                        <span class="rocketslide-input-hint">Default slug is <code>v</code> (e.g., <code>yoursite.com/v/</code>). Changing this automatically updates WordPress rewrite rules.</span>
                     </div>
 
-                    <div class="reelflow-actions">
-                        <button type="button" id="reelflow-save-settings-btn" class="reelflow-btn reelflow-btn-primary">
+                    <div class="rocketslide-actions">
+                        <button type="button" id="rocketslide-save-settings-btn" class="rocketslide-btn rocketslide-btn-primary">
                             💾 Save All Settings
                         </button>
                     </div>
@@ -397,24 +397,24 @@ class ReelFlow_Admin {
             </div>
 
             <!-- Mobile Bottom Navigation (<768px) -->
-            <nav class="reelflow-mobile-nav">
-                <button class="reelflow-mobile-nav-item active" data-tab="tab-images">
+            <nav class="rocketslide-mobile-nav">
+                <button class="rocketslide-mobile-nav-item active" data-tab="tab-images">
                     <span class="nav-icon">🖼️</span>
                     <span>Reels</span>
                 </button>
-                <button class="reelflow-mobile-nav-item" data-tab="tab-tracking">
+                <button class="rocketslide-mobile-nav-item" data-tab="tab-tracking">
                     <span class="nav-icon">📊</span>
                     <span>Tracking</span>
                 </button>
-                <button class="reelflow-mobile-nav-item" data-tab="tab-fallback">
+                <button class="rocketslide-mobile-nav-item" data-tab="tab-fallback">
                     <span class="nav-icon">🛡️</span>
                     <span>Cloaking</span>
                 </button>
-                <button class="reelflow-mobile-nav-item" data-tab="tab-settings">
+                <button class="rocketslide-mobile-nav-item" data-tab="tab-settings">
                     <span class="nav-icon">⚙️</span>
                     <span>Settings</span>
                 </button>
-                <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="reelflow-mobile-nav-item">
+                <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="rocketslide-mobile-nav-item">
                     <span class="nav-icon">🧪</span>
                     <span>Test</span>
                 </a>
@@ -428,31 +428,31 @@ class ReelFlow_Admin {
      * AJAX Save Plugin Settings
      */
     public function ajax_save_settings() {
-        check_ajax_referer('reelflow_admin_nonce', 'nonce');
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized access');
         }
 
         if (isset($_POST['fallback_url'])) {
-            update_option('reelflow_fallback_url', esc_url_raw($_POST['fallback_url']));
+            update_option('rocketslide_fallback_url', esc_url_raw($_POST['fallback_url']));
         }
         if (isset($_POST['test_mode'])) {
-            update_option('reelflow_test_mode', sanitize_text_field($_POST['test_mode']));
+            update_option('rocketslide_test_mode', sanitize_text_field($_POST['test_mode']));
         }
         if (isset($_POST['tab_title'])) {
-            update_option('reelflow_tab_title', sanitize_text_field($_POST['tab_title']));
+            update_option('rocketslide_tab_title', sanitize_text_field($_POST['tab_title']));
         }
         if (isset($_POST['slug'])) {
             $new_slug = sanitize_title($_POST['slug']);
             if (!empty($new_slug)) {
-                update_option('reelflow_slug', $new_slug);
-                ReelFlow_Frontend::register_rewrite_rules();
+                update_option('rocketslide_slug', $new_slug);
+                RocketSlide_Frontend::register_rewrite_rules();
                 flush_rewrite_rules();
             }
         }
         if (isset($_POST['tracking_script'])) {
-            update_option('reelflow_tracking_script', wp_unslash($_POST['tracking_script']));
+            update_option('rocketslide_tracking_script', wp_unslash($_POST['tracking_script']));
         }
 
         wp_send_json_success(array('message' => 'Settings saved successfully!'));
@@ -462,13 +462,13 @@ class ReelFlow_Admin {
      * AJAX Verification Engine for Publytics
      */
     public function ajax_verify_publytics() {
-        check_ajax_referer('reelflow_admin_nonce', 'nonce');
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
         }
 
-        $tracking_code = get_option('reelflow_tracking_script', '');
+        $tracking_code = get_option('rocketslide_tracking_script', '');
         if (empty($tracking_code)) {
             wp_send_json_error('No tracking script found. Please paste your script tag and save first.');
         }
@@ -508,7 +508,7 @@ class ReelFlow_Admin {
      * AJAX Upload Image & Convert to WebP 540x960
      */
     public function ajax_upload_image() {
-        check_ajax_referer('reelflow_admin_nonce', 'nonce');
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -521,10 +521,10 @@ class ReelFlow_Admin {
         $processed_result = null;
 
         if ($media_id > 0) {
-            $processed_result = ReelFlow_Image_Processor::process_from_attachment_id($media_id);
+            $processed_result = RocketSlide_Image_Processor::process_from_attachment_id($media_id);
         } elseif (!empty($_FILES['image_file']['tmp_name'])) {
             $tmp_path = $_FILES['image_file']['tmp_name'];
-            $processed_result = ReelFlow_Image_Processor::process_image($tmp_path);
+            $processed_result = RocketSlide_Image_Processor::process_image($tmp_path);
         }
 
         if (!$processed_result || is_wp_error($processed_result)) {
@@ -532,7 +532,7 @@ class ReelFlow_Admin {
             wp_send_json_error($err_msg);
         }
 
-        $images = get_option('reelflow_images', array());
+        $images = get_option('rocketslide_images', array());
         if (!is_array($images)) {
             $images = array();
         }
@@ -547,7 +547,7 @@ class ReelFlow_Admin {
         );
 
         array_unshift($images, $new_item);
-        update_option('reelflow_images', $images);
+        update_option('rocketslide_images', $images);
 
         wp_send_json_success(array(
             'message' => 'Image processed (540x960 WebP) and added successfully!',
@@ -560,7 +560,7 @@ class ReelFlow_Admin {
      * AJAX Update Existing Image Details
      */
     public function ajax_update_image() {
-        check_ajax_referer('reelflow_admin_nonce', 'nonce');
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -574,7 +574,7 @@ class ReelFlow_Admin {
             wp_send_json_error('Invalid image ID.');
         }
 
-        $images = get_option('reelflow_images', array());
+        $images = get_option('rocketslide_images', array());
         $updated = false;
 
         foreach ($images as &$img) {
@@ -587,7 +587,7 @@ class ReelFlow_Admin {
         }
 
         if ($updated) {
-            update_option('reelflow_images', $images);
+            update_option('rocketslide_images', $images);
             wp_send_json_success(array('message' => 'Image details updated successfully!'));
         } else {
             wp_send_json_error('Image not found.');
@@ -598,7 +598,7 @@ class ReelFlow_Admin {
      * AJAX Delete Image
      */
     public function ajax_delete_image() {
-        check_ajax_referer('reelflow_admin_nonce', 'nonce');
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -609,20 +609,20 @@ class ReelFlow_Admin {
             wp_send_json_error('Invalid image ID.');
         }
 
-        $images = get_option('reelflow_images', array());
+        $images = get_option('rocketslide_images', array());
         $filtered = array();
 
         foreach ($images as $img) {
             if ($img['id'] === $id) {
                 if (!empty($img['path'])) {
-                    ReelFlow_Image_Processor::delete_image($img['path']);
+                    RocketSlide_Image_Processor::delete_image($img['path']);
                 }
             } else {
                 $filtered[] = $img;
             }
         }
 
-        update_option('reelflow_images', $filtered);
+        update_option('rocketslide_images', $filtered);
 
         wp_send_json_success(array(
             'message' => 'Image deleted successfully!',

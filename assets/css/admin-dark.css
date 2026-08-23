@@ -39,15 +39,15 @@
 }
 
 /* ---- Reset scoped to plugin wrapper ---- */
-.reelflow-wrap *,
-.reelflow-wrap *::before,
-.reelflow-wrap *::after {
+.rocketslide-wrap *,
+.rocketslide-wrap *::before,
+.rocketslide-wrap *::after {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
 }
 
-.reelflow-wrap {
+.rocketslide-wrap {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text);
     background: var(--bg);
@@ -59,7 +59,7 @@
 /* ============================================================
    HEADER BANNER
    ============================================================ */
-.reelflow-header {
+.rocketslide-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -73,13 +73,13 @@
     flex-wrap: wrap;
 }
 
-.reelflow-header-brand {
+.rocketslide-header-brand {
     display: flex;
     align-items: center;
     gap: 14px;
 }
 
-.reelflow-header-icon {
+.rocketslide-header-icon {
     width: 48px;
     height: 48px;
     background: linear-gradient(135deg, var(--blue), var(--purple));
@@ -92,7 +92,7 @@
     box-shadow: 0 4px 14px rgba(56,139,253,.3);
 }
 
-.reelflow-header-text h1 {
+.rocketslide-header-text h1 {
     font-size: 20px;
     font-weight: 800;
     color: var(--text);
@@ -100,20 +100,20 @@
     line-height: 1.2;
 }
 
-.reelflow-header-text p {
+.rocketslide-header-text p {
     font-size: 13px;
     color: var(--text-muted);
     margin-top: 2px;
 }
 
-.reelflow-header-meta {
+.rocketslide-header-meta {
     display: flex;
     align-items: center;
     gap: 10px;
     flex-wrap: wrap;
 }
 
-.reelflow-live-url {
+.rocketslide-live-url {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -129,7 +129,7 @@
     white-space: nowrap;
 }
 
-.reelflow-live-url code {
+.rocketslide-live-url code {
     color: var(--blue);
     font-size: 13px;
     font-family: 'SFMono-Regular', Consolas, monospace;
@@ -138,14 +138,14 @@
 /* ============================================================
    STATS ROW
    ============================================================ */
-.reelflow-stats-row {
+.rocketslide-stats-row {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 14px;
     margin-bottom: 28px;
 }
 
-.reelflow-stat-card {
+.rocketslide-stat-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -155,18 +155,18 @@
     gap: 6px;
 }
 
-.reelflow-stat-card .stat-icon {
+.rocketslide-stat-card .stat-icon {
     font-size: 22px;
 }
 
-.reelflow-stat-card .stat-value {
+.rocketslide-stat-card .stat-value {
     font-size: 28px;
     font-weight: 800;
     color: var(--text);
     line-height: 1;
 }
 
-.reelflow-stat-card .stat-label {
+.rocketslide-stat-card .stat-label {
     font-size: 12px;
     color: var(--text-muted);
     font-weight: 500;
@@ -177,7 +177,7 @@
 /* ============================================================
    DESKTOP TAB NAVIGATION
    ============================================================ */
-.reelflow-tabs-nav {
+.rocketslide-tabs-nav {
     display: flex;
     gap: 4px;
     border-bottom: 1px solid var(--border);
@@ -187,11 +187,11 @@
     scrollbar-width: none;
 }
 
-.reelflow-tabs-nav::-webkit-scrollbar {
+.rocketslide-tabs-nav::-webkit-scrollbar {
     display: none;
 }
 
-.reelflow-tab-btn {
+.rocketslide-tab-btn {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -209,11 +209,11 @@
     margin-bottom: -1px;
 }
 
-.reelflow-tab-btn:hover {
+.rocketslide-tab-btn:hover {
     color: var(--text);
 }
 
-.reelflow-tab-btn.active {
+.rocketslide-tab-btn.active {
     color: var(--blue);
     border-bottom-color: var(--blue);
 }
@@ -221,16 +221,16 @@
 /* ============================================================
    TAB PANELS
    ============================================================ */
-.reelflow-tab-panel {
+.rocketslide-tab-panel {
     display: none;
-    animation: reelflow-fadein .25s ease;
+    animation: rocketslide-fadein .25s ease;
 }
 
-.reelflow-tab-panel.active {
+.rocketslide-tab-panel.active {
     display: block;
 }
 
-@keyframes reelflow-fadein {
+@keyframes rocketslide-fadein {
     from { opacity: 0; transform: translateY(6px); }
     to   { opacity: 1; transform: translateY(0); }
 }
@@ -238,7 +238,7 @@
 /* ============================================================
    CARD
    ============================================================ */
-.reelflow-card {
+.rocketslide-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
@@ -247,7 +247,7 @@
     box-shadow: var(--shadow-card);
 }
 
-.reelflow-card-title {
+.rocketslide-card-title {
     font-size: 15px;
     font-weight: 700;
     color: var(--text);
@@ -257,14 +257,14 @@
     gap: 8px;
 }
 
-.reelflow-card-subtitle {
+.rocketslide-card-subtitle {
     font-size: 13px;
     color: var(--text-muted);
     margin-bottom: 20px;
     line-height: 1.6;
 }
 
-.reelflow-divider {
+.rocketslide-divider {
     border: none;
     border-top: 1px solid var(--border);
     margin: 20px 0;
@@ -273,15 +273,15 @@
 /* ============================================================
    FORM CONTROLS
    ============================================================ */
-.reelflow-field {
+.rocketslide-field {
     margin-bottom: 18px;
 }
 
-.reelflow-field:last-child {
+.rocketslide-field:last-child {
     margin-bottom: 0;
 }
 
-.reelflow-label {
+.rocketslide-label {
     display: block;
     font-size: 13px;
     font-weight: 600;
@@ -289,14 +289,14 @@
     margin-bottom: 7px;
 }
 
-.reelflow-label span.req {
+.rocketslide-label span.req {
     color: var(--red);
     margin-left: 2px;
 }
 
-.reelflow-input,
-.reelflow-textarea,
-.reelflow-select {
+.rocketslide-input,
+.rocketslide-textarea,
+.rocketslide-select {
     width: 100%;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -309,19 +309,19 @@
     outline: none;
 }
 
-.reelflow-input:focus,
-.reelflow-textarea:focus,
-.reelflow-select:focus {
+.rocketslide-input:focus,
+.rocketslide-textarea:focus,
+.rocketslide-select:focus {
     border-color: var(--border-focus);
     box-shadow: 0 0 0 3px rgba(56,139,253,.2);
 }
 
-.reelflow-input::placeholder,
-.reelflow-textarea::placeholder {
+.rocketslide-input::placeholder,
+.rocketslide-textarea::placeholder {
     color: var(--text-dim);
 }
 
-.reelflow-textarea {
+.rocketslide-textarea {
     resize: vertical;
     min-height: 110px;
     line-height: 1.5;
@@ -329,7 +329,7 @@
     font-family: 'SFMono-Regular', Consolas, monospace;
 }
 
-.reelflow-input-hint {
+.rocketslide-input-hint {
     font-size: 12px;
     color: var(--text-muted);
     margin-top: 6px;
@@ -337,7 +337,7 @@
     line-height: 1.5;
 }
 
-.reelflow-input-hint code {
+.rocketslide-input-hint code {
     background: var(--surface-2);
     border: 1px solid var(--border);
     padding: 1px 5px;
@@ -348,7 +348,7 @@
 }
 
 /* Inline URL slug builder */
-.reelflow-slug-row {
+.rocketslide-slug-row {
     display: flex;
     align-items: center;
     background: var(--surface-2);
@@ -357,8 +357,8 @@
     overflow: hidden;
 }
 
-.reelflow-slug-prefix,
-.reelflow-slug-suffix {
+.rocketslide-slug-prefix,
+.rocketslide-slug-suffix {
     padding: 10px 12px;
     color: var(--text-muted);
     font-size: 13px;
@@ -367,12 +367,12 @@
     border-right: 1px solid var(--border);
 }
 
-.reelflow-slug-suffix {
+.rocketslide-slug-suffix {
     border-right: none;
     border-left: 1px solid var(--border);
 }
 
-.reelflow-slug-row .reelflow-input {
+.rocketslide-slug-row .rocketslide-input {
     border: none;
     background: transparent;
     border-radius: 0;
@@ -380,20 +380,20 @@
     flex: 1;
 }
 
-.reelflow-slug-row .reelflow-input:focus {
+.rocketslide-slug-row .rocketslide-input:focus {
     box-shadow: none;
     border-color: transparent;
 }
 
 /* Two-column field row */
-.reelflow-fields-row {
+.rocketslide-fields-row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
 @media (max-width: 640px) {
-    .reelflow-fields-row {
+    .rocketslide-fields-row {
         grid-template-columns: 1fr;
     }
 }
@@ -401,7 +401,7 @@
 /* ============================================================
    BUTTONS
    ============================================================ */
-.reelflow-btn {
+.rocketslide-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -419,63 +419,63 @@
     line-height: 1;
 }
 
-.reelflow-btn:active { transform: scale(.97); }
-.reelflow-btn:disabled { opacity: .5; cursor: not-allowed; }
+.rocketslide-btn:active { transform: scale(.97); }
+.rocketslide-btn:disabled { opacity: .5; cursor: not-allowed; }
 
 /* Primary – Blue */
-.reelflow-btn-primary {
+.rocketslide-btn-primary {
     background: var(--blue);
     color: #fff;
     border-color: var(--blue);
 }
-.reelflow-btn-primary:hover { background: var(--blue-dark); }
+.rocketslide-btn-primary:hover { background: var(--blue-dark); }
 
 /* Secondary – Ghost */
-.reelflow-btn-secondary {
+.rocketslide-btn-secondary {
     background: var(--surface-2);
     color: var(--text);
     border-color: var(--border);
 }
-.reelflow-btn-secondary:hover { border-color: var(--text-muted); }
+.rocketslide-btn-secondary:hover { border-color: var(--text-muted); }
 
 /* Success – Green */
-.reelflow-btn-success {
+.rocketslide-btn-success {
     background: rgba(63,185,80,.15);
     color: var(--green);
     border-color: rgba(63,185,80,.4);
 }
-.reelflow-btn-success:hover { background: var(--green); color: #fff; }
+.rocketslide-btn-success:hover { background: var(--green); color: #fff; }
 
 /* Danger – Red */
-.reelflow-btn-danger {
+.rocketslide-btn-danger {
     background: var(--red-dim);
     color: var(--red);
     border-color: rgba(248,81,73,.3);
 }
-.reelflow-btn-danger:hover { background: var(--red); color: #fff; }
+.rocketslide-btn-danger:hover { background: var(--red); color: #fff; }
 
 /* Accent – Purple */
-.reelflow-btn-accent {
+.rocketslide-btn-accent {
     background: rgba(137,87,229,.15);
     color: var(--purple);
     border-color: rgba(137,87,229,.4);
 }
-.reelflow-btn-accent:hover { background: var(--purple); color: #fff; }
+.rocketslide-btn-accent:hover { background: var(--purple); color: #fff; }
 
 /* Live Preview – gradient */
-.reelflow-btn-live {
+.rocketslide-btn-live {
     background: linear-gradient(135deg, var(--blue), var(--purple));
     color: #fff;
     border-color: transparent;
     box-shadow: 0 4px 14px rgba(56,139,253,.35);
 }
-.reelflow-btn-live:hover {
+.rocketslide-btn-live:hover {
     box-shadow: 0 6px 20px rgba(56,139,253,.5);
     color: #fff;
 }
 
 /* Action bar */
-.reelflow-actions {
+.rocketslide-actions {
     display: flex;
     gap: 10px;
     flex-wrap: wrap;
@@ -485,7 +485,7 @@
 /* ============================================================
    STATUS BADGES
    ============================================================ */
-.reelflow-badge {
+.rocketslide-badge {
     display: inline-flex;
     align-items: center;
     gap: 5px;
@@ -495,12 +495,12 @@
     font-weight: 700;
 }
 
-.reelflow-badge.verified  { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
-.reelflow-badge.checking  { background: rgba(210,153,34,.12); color: var(--orange); border: 1px solid rgba(210,153,34,.3); }
-.reelflow-badge.inactive  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+.rocketslide-badge.verified  { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+.rocketslide-badge.checking  { background: rgba(210,153,34,.12); color: var(--orange); border: 1px solid rgba(210,153,34,.3); }
+.rocketslide-badge.inactive  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
 
 /* Verification output box */
-.reelflow-output-box {
+.rocketslide-output-box {
     background: #0d1117;
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
@@ -516,18 +516,18 @@
 /* ============================================================
    FILE PICKER
    ============================================================ */
-.reelflow-file-picker {
+.rocketslide-file-picker {
     display: flex;
     align-items: center;
     gap: 12px;
     flex-wrap: wrap;
 }
 
-.reelflow-file-hidden {
+.rocketslide-file-hidden {
     display: none;
 }
 
-.reelflow-file-name {
+.rocketslide-file-name {
     font-size: 13px;
     color: var(--text-muted);
     font-style: italic;
@@ -541,7 +541,7 @@
 /* ============================================================
    CLOAKING ENGINE STATUS BOX
    ============================================================ */
-.reelflow-cloaking-box {
+.rocketslide-cloaking-box {
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -549,7 +549,7 @@
     margin-top: 16px;
 }
 
-.reelflow-cloaking-box h4 {
+.rocketslide-cloaking-box h4 {
     font-size: 13px;
     font-weight: 700;
     color: var(--text-muted);
@@ -558,7 +558,7 @@
     margin-bottom: 12px;
 }
 
-.reelflow-cloaking-box ul {
+.rocketslide-cloaking-box ul {
     list-style: none;
     padding: 0;
     display: flex;
@@ -566,7 +566,7 @@
     gap: 8px;
 }
 
-.reelflow-cloaking-box li {
+.rocketslide-cloaking-box li {
     display: flex;
     align-items: flex-start;
     gap: 10px;
@@ -575,14 +575,14 @@
     line-height: 1.5;
 }
 
-.reelflow-cloaking-box li .check {
+.rocketslide-cloaking-box li .check {
     color: var(--green);
     font-size: 14px;
     flex-shrink: 0;
     margin-top: 1px;
 }
 
-.reelflow-cloaking-box code {
+.rocketslide-cloaking-box code {
     background: rgba(56,139,253,.12);
     color: var(--blue);
     padding: 1px 5px;
@@ -596,7 +596,7 @@
    ============================================================ */
 
 /* Add Form Inline Row */
-.reelflow-add-form-grid {
+.rocketslide-add-form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr 120px auto;
     gap: 12px;
@@ -604,26 +604,26 @@
 }
 
 @media (max-width: 860px) {
-    .reelflow-add-form-grid {
+    .rocketslide-add-form-grid {
         grid-template-columns: 1fr 1fr;
     }
 }
 
 @media (max-width: 540px) {
-    .reelflow-add-form-grid {
+    .rocketslide-add-form-grid {
         grid-template-columns: 1fr;
     }
 }
 
 /* Grid of 9:16 image cards */
-.reelflow-img-grid {
+.rocketslide-img-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     gap: 18px;
     margin-top: 20px;
 }
 
-.reelflow-img-card {
+.rocketslide-img-card {
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius);
@@ -633,13 +633,13 @@
     flex-direction: column;
 }
 
-.reelflow-img-card:hover {
+.rocketslide-img-card:hover {
     border-color: var(--blue);
     transform: translateY(-3px);
 }
 
 /* 9:16 Aspect Ratio Preview */
-.reelflow-img-thumb {
+.rocketslide-img-thumb {
     position: relative;
     width: 100%;
     aspect-ratio: 9 / 16;
@@ -648,14 +648,14 @@
     max-height: 280px; /* prevent very tall cards on wide screens */
 }
 
-.reelflow-img-thumb img {
+.rocketslide-img-thumb img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     display: block;
 }
 
-.reelflow-img-index {
+.rocketslide-img-index {
     position: absolute;
     top: 8px;
     left: 8px;
@@ -670,7 +670,7 @@
     font-family: monospace;
 }
 
-.reelflow-img-format-badge {
+.rocketslide-img-format-badge {
     position: absolute;
     top: 8px;
     right: 8px;
@@ -684,7 +684,7 @@
 }
 
 /* Card Detail Area */
-.reelflow-img-body {
+.rocketslide-img-body {
     padding: 14px;
     display: flex;
     flex-direction: column;
@@ -692,31 +692,31 @@
     flex: 1;
 }
 
-.reelflow-img-body .reelflow-label {
+.rocketslide-img-body .rocketslide-label {
     font-size: 11px;
     margin-bottom: 4px;
     color: var(--text-muted);
 }
 
-.reelflow-img-body .reelflow-input {
+.rocketslide-img-body .rocketslide-input {
     padding: 7px 10px;
     font-size: 12.5px;
 }
 
-.reelflow-img-card-actions {
+.rocketslide-img-card-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 8px;
     margin-top: 4px;
 }
 
-.reelflow-img-card-actions .reelflow-btn {
+.rocketslide-img-card-actions .rocketslide-btn {
     padding: 7px 8px;
     font-size: 12px;
 }
 
 /* Empty State */
-.reelflow-empty-state {
+.rocketslide-empty-state {
     grid-column: 1 / -1;
     text-align: center;
     padding: 48px 24px;
@@ -725,12 +725,12 @@
     color: var(--text-muted);
 }
 
-.reelflow-empty-state .empty-icon {
+.rocketslide-empty-state .empty-icon {
     font-size: 40px;
     margin-bottom: 12px;
 }
 
-.reelflow-empty-state p {
+.rocketslide-empty-state p {
     font-size: 14px;
     color: var(--text-muted);
 }
@@ -738,16 +738,16 @@
 /* ============================================================
    MOBILE FIXED BOTTOM NAV
    ============================================================ */
-.reelflow-mobile-nav {
+.rocketslide-mobile-nav {
     display: none;
 }
 
 @media (max-width: 768px) {
-    .reelflow-tabs-nav {
+    .rocketslide-tabs-nav {
         display: none;
     }
 
-    .reelflow-mobile-nav {
+    .rocketslide-mobile-nav {
         display: flex;
         position: fixed;
         bottom: 0;
@@ -762,7 +762,7 @@
         justify-content: space-around;
     }
 
-    .reelflow-mobile-nav-item {
+    .rocketslide-mobile-nav-item {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -779,14 +779,14 @@
         transition: color .15s;
     }
 
-    .reelflow-mobile-nav-item .nav-icon { font-size: 20px; }
-    .reelflow-mobile-nav-item.active    { color: var(--blue); }
+    .rocketslide-mobile-nav-item .nav-icon { font-size: 20px; }
+    .rocketslide-mobile-nav-item.active    { color: var(--blue); }
 }
 
 /* ============================================================
    TOAST NOTIFICATION
    ============================================================ */
-.reelflow-toast {
+.rocketslide-toast {
     position: fixed;
     bottom: 28px;
     right: 24px;
@@ -799,36 +799,36 @@
     box-shadow: 0 8px 24px rgba(0,0,0,.5);
     font-family: 'Inter', sans-serif;
     max-width: 340px;
-    animation: reelflow-toast-in .25s ease;
+    animation: rocketslide-toast-in .25s ease;
 }
 
-@keyframes reelflow-toast-in {
+@keyframes rocketslide-toast-in {
     from { opacity: 0; transform: translateY(10px); }
     to   { opacity: 1; transform: translateY(0); }
 }
 
-.reelflow-toast.success { background: var(--green); }
-.reelflow-toast.error   { background: var(--red); }
+.rocketslide-toast.success { background: var(--green); }
+.rocketslide-toast.error   { background: var(--red); }
 
 /* ============================================================
    RESPONSIVE — General
    ============================================================ */
 @media (max-width: 768px) {
-    .reelflow-wrap {
+    .rocketslide-wrap {
         padding: 16px 14px 100px;
     }
 
-    .reelflow-header {
+    .rocketslide-header {
         flex-direction: column;
         align-items: flex-start;
         gap: 14px;
     }
 
-    .reelflow-card {
+    .rocketslide-card {
         padding: 16px;
     }
 
-    .reelflow-img-grid {
+    .rocketslide-img-grid {
         grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     }
 }

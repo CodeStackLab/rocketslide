@@ -2,11 +2,11 @@
     'use strict';
 
     // Retrieve data passed from PHP template
-    var data = window.REELFLOW_DATA || {};
+    var data = window.ROCKETSLIDE_DATA || {};
     var images = data.images || [];
     var fallbackUrl = data.fallback_url || 'https://google.com';
 
-    var container = document.getElementById('reelflow-reels-container');
+    var container = document.getElementById('rocketslide-reels-container');
     var progressBarContainer = document.getElementById('redirect-progress-bar-container');
     var progressBar = document.getElementById('redirect-progress-bar');
 
