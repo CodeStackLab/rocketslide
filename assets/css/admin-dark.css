@@ -937,18 +937,33 @@
    RESPONSIVE — Comprehensive Mobile & Tablet Layout Engine
    ============================================================ */
 @media (max-width: 782px) {
+    /* Reset WordPress Core Admin container padding to prevent right-side clipping */
+    .auto-fold #wpcontent,
+    #wpcontent,
+    #wpbody,
+    #wpbody-content {
+        padding-left: 6px !important;
+        padding-right: 6px !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        overflow-x: hidden !important;
+    }
+
     .rocketslide-wrap {
-        padding: 10px 8px 100px 8px !important;
+        padding: 8px 4px 100px 4px !important;
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
+        overflow-x: hidden !important;
     }
 
     .rocketslide-header {
         flex-direction: column !important;
         align-items: stretch !important;
         gap: 14px !important;
-        padding: 16px 14px !important;
+        padding: 14px 12px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .rocketslide-header-brand {
@@ -967,21 +982,33 @@
         width: 100% !important;
         justify-content: center !important;
         text-align: center !important;
+        box-sizing: border-box !important;
     }
 
     .rocketslide-card {
-        padding: 14px 12px !important;
-        margin-bottom: 16px !important;
+        padding: 14px 10px !important;
+        margin-bottom: 14px !important;
         border-radius: var(--radius) !important;
         width: 100% !important;
         max-width: 100% !important;
         box-sizing: border-box !important;
     }
 
-    .rocketslide-btn {
+    .rocketslide-add-form-container {
+        padding: 14px 10px !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
+    }
+
+    .rocketslide-input,
+    .rocketslide-btn,
+    .rocketslide-file-picker {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important;
         white-space: normal !important;
         text-align: center !important;
-        max-width: 100% !important;
     }
 
     .rocketslide-file-picker {

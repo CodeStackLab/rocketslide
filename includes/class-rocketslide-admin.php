@@ -207,7 +207,7 @@ class RocketSlide_Admin {
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">⚡</span>
-                    <span class="stat-value">9:16 (1080×1920)</span>
+                    <span class="stat-value">9:16 <span class="stat-subval">(1080×1920)</span></span>
                     <span class="stat-label">TikTok WebP Crop</span>
                 </div>
             </div>
