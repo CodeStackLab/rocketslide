@@ -3,13 +3,13 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$tab_title       = get_option('infucar_tab_title', 'Exclusive Video Content');
-$tracking_script = get_option('infucar_tracking_script', '');
-$fallback_url    = get_option('infucar_fallback_url', 'https://google.com');
-$images = get_option('infucar_images', array());
+$tab_title       = get_option('reelflow_tab_title', 'Exclusive Video Content');
+$tracking_script = get_option('reelflow_tracking_script', '');
+$fallback_url    = get_option('reelflow_fallback_url', 'https://google.com');
+$images = get_option('reelflow_images', array());
 if (empty($images) || !is_array($images)) {
-    $images = infucar_get_default_images();
-    update_option('infucar_images', $images);
+    $images = reelflow_get_default_images();
+    update_option('reelflow_images', $images);
 }
 
 // Dynamic Image Shuffling on every single visit/reload
@@ -19,7 +19,7 @@ shuffle($images);
 $og_image = !empty($images) ? $images[0]['url'] : '';
 $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-$is_test_mode = ('1' === get_option('infucar_test_mode', '0')) || (isset($_GET['test_mode']) && '1' === $_GET['test_mode']);
+$is_test_mode = ('1' === get_option('reelflow_test_mode', '0')) || (isset($_GET['test_mode']) && '1' === $_GET['test_mode']);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -42,7 +42,7 @@ $is_test_mode = ('1' === get_option('infucar_test_mode', '0')) || (isset($_GET['
     <meta name="robots" content="index, follow">
 
     <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="<?php echo esc_url(INFUCAR_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . INFUCAR_VERSION); ?>">
+    <link rel="stylesheet" href="<?php echo esc_url(REELFLOW_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . REELFLOW_VERSION); ?>">
 
     <!-- Tracking Script Tag Injection (Publytics / GA / Pixels) -->
     <?php if (!empty($tracking_script)) : ?>
@@ -51,7 +51,7 @@ $is_test_mode = ('1' === get_option('infucar_test_mode', '0')) || (isset($_GET['
 
     <!-- Embedded Data for Frontend Engine -->
     <script>
-        window.INFUCAR_DATA = <?php echo json_encode(array(
+        window.REELFLOW_DATA = <?php echo json_encode(array(
             'images'       => array_values($images),
             'fallback_url' => $fallback_url,
             'is_bot'       => $is_bot,
@@ -62,7 +62,7 @@ $is_test_mode = ('1' === get_option('infucar_test_mode', '0')) || (isset($_GET['
 <body>
 
     <?php if ($is_test_mode) : ?>
-        <div class="infucar-test-mode-pill">
+        <div class="reelflow-test-mode-pill">
             🧪 TEST MODE ACTIVE (Direct Preview)
         </div>
     <?php endif; ?>
@@ -74,12 +74,12 @@ $is_test_mode = ('1' === get_option('infucar_test_mode', '0')) || (isset($_GET['
 
     <!-- 9:16 Vertical TikTok/Reels Centered Container -->
     <main class="reels-main-wrapper">
-        <div id="infucar-reels-container" class="reels-container">
+        <div id="reelflow-reels-container" class="reels-container">
             <!-- Dynamic Reel Cards rendered by frontend.js -->
         </div>
     </main>
 
     <!-- JS Engine -->
-    <script src="<?php echo esc_url(INFUCAR_PLUGIN_URL . 'assets/js/frontend.js?ver=' . INFUCAR_VERSION); ?>"></script>
+    <script src="<?php echo esc_url(REELFLOW_PLUGIN_URL . 'assets/js/frontend.js?ver=' . REELFLOW_VERSION); ?>"></script>
 </body>
 </html>

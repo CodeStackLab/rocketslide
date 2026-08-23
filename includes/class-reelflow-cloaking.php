@@ -1,6 +1,6 @@
 <?php
 /**
- * class-infucar-cloaking.php
+ * class-reelflow-cloaking.php
  *
  * ADVANCED DUAL-LAYER TRAFFIC FILTERING & BOT CLOAKING ENGINE
  * ============================================================
@@ -15,7 +15,7 @@
  *     and URLSearchParams for environments where PHP headers may not be reliable
  *     (e.g. cached pages, CDN edge nodes).
  *
- * @package Infucar_Landing_Page
+ * @package ReelFlow_Landing_Page
  * @since   2.0.0
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Infucar_Cloaking {
+class ReelFlow_Cloaking {
 
 	// -----------------------------------------------------------
 	// BOT / CRAWLER USER-AGENT SIGNATURES
@@ -204,9 +204,9 @@ class Infucar_Cloaking {
 	 */
 	public static function should_redirect_to_fallback() {
 		// TEST / PREVIEW MODE BYPASS:
-		// 1. Admin option 'infucar_test_mode' is enabled ('1')
+		// 1. Admin option 'reelflow_test_mode' is enabled ('1')
 		// 2. OR ?test_mode=1 is passed in the URL (for logged in admin preview)
-		if ( '1' === get_option( 'infucar_test_mode', '0' ) ) {
+		if ( '1' === get_option( 'reelflow_test_mode', '0' ) ) {
 			return false;
 		}
 
@@ -231,7 +231,7 @@ class Infucar_Cloaking {
 
 	/**
 	 * Build the JS-side cloaking config array to be JSON-encoded and
-	 * passed as window.INFUCAR_CLOAK_DATA to the frontend JS engine.
+	 * passed as window.REELFLOW_CLOAK_DATA to the frontend JS engine.
 	 * This enables the client-side (Layer 2) check.
 	 *
 	 * @return array

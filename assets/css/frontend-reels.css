@@ -1,4 +1,4 @@
-/* Infucar 9:16 Reels Vertical Layout Stylesheet */
+/* ReelFlow 9:16 Reels Vertical Layout Stylesheet */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -152,7 +152,7 @@ html, body {
 }
 
 /* Test Mode Top Pill Badge */
-.infucar-test-mode-pill {
+.reelflow-test-mode-pill {
     position: fixed;
     top: 10px;
     left: 50%;

@@ -1,6 +1,6 @@
 <?php
 /**
- * class-infucar-admin.php
+ * class-reelflow-admin.php
  *
  * MODERN DARK-MODE ADMIN DASHBOARD & PLUGIN SETTINGS MANAGER
  * ==========================================================
@@ -12,7 +12,7 @@
  *   4. Advanced Dual-Layer FB/IG Traffic Cloaking & Fallback Destination Manager
  *   5. Dynamic Browser Tab Title & Custom URL Slug Configuration
  *
- * @package Infucar_Landing_Page
+ * @package ReelFlow_Landing_Page
  * @since   2.0.0
  */
 
@@ -20,25 +20,25 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-class Infucar_Admin {
+class ReelFlow_Admin {
 
     public function __construct() {
         add_action('admin_menu', array($this, 'add_admin_menu'));
         add_action('admin_enqueue_scripts', array($this, 'enqueue_admin_assets'));
 
         // Direct Settings Link on Plugins Page
-        add_filter('plugin_action_links_' . plugin_basename(INFUCAR_PLUGIN_FILE), array($this, 'add_action_links'));
+        add_filter('plugin_action_links_' . plugin_basename(REELFLOW_PLUGIN_FILE), array($this, 'add_action_links'));
         add_action('admin_head-plugins.php', array($this, 'fix_plugins_page_action_links_css'));
 
         // Quick Settings Link in Admin Bar
         add_action('admin_bar_menu', array($this, 'add_admin_bar_menu'), 90);
 
         // AJAX Handlers
-        add_action('wp_ajax_infucar_save_settings', array($this, 'ajax_save_settings'));
-        add_action('wp_ajax_infucar_verify_publytics', array($this, 'ajax_verify_publytics'));
-        add_action('wp_ajax_infucar_upload_image', array($this, 'ajax_upload_image'));
-        add_action('wp_ajax_infucar_update_image', array($this, 'ajax_update_image'));
-        add_action('wp_ajax_infucar_delete_image', array($this, 'ajax_delete_image'));
+        add_action('wp_ajax_reelflow_save_settings', array($this, 'ajax_save_settings'));
+        add_action('wp_ajax_reelflow_verify_publytics', array($this, 'ajax_verify_publytics'));
+        add_action('wp_ajax_reelflow_upload_image', array($this, 'ajax_upload_image'));
+        add_action('wp_ajax_reelflow_update_image', array($this, 'ajax_update_image'));
+        add_action('wp_ajax_reelflow_delete_image', array($this, 'ajax_delete_image'));
     }
 
     /**
@@ -46,7 +46,7 @@ class Infucar_Admin {
      */
     public function fix_plugins_page_action_links_css() {
         ?>
-        <style id="infucar-plugins-actions-fix">
+        <style id="reelflow-plugins-actions-fix">
             .plugins .row-actions {
                 display: block !important;
                 margin-top: 4px !important;
@@ -68,7 +68,7 @@ class Infucar_Admin {
      */
     public function add_action_links($links) {
         $settings_link = array(
-            'settings' => '<a href="' . esc_url(admin_url('admin.php?page=infucar-landing-page')) . '">' . __('Settings', 'infucar-lp') . '</a>'
+            'settings' => '<a href="' . esc_url(admin_url('admin.php?page=reelflow-mobile-funnel')) . '">' . __('Settings', 'reelflow-lp') . '</a>'
         );
         return array_merge($settings_link, $links);
     }
@@ -82,9 +82,9 @@ class Infucar_Admin {
         }
 
         $wp_admin_bar->add_node(array(
-            'id'    => 'infucar-settings',
-            'title' => '📱 Infucar 9:16 Settings',
-            'href'  => admin_url('admin.php?page=infucar-landing-page'),
+            'id'    => 'reelflow-settings',
+            'title' => '📱 ReelFlow 9:16 Settings',
+            'href'  => admin_url('admin.php?page=reelflow-mobile-funnel'),
         ));
     }
 
@@ -93,10 +93,10 @@ class Infucar_Admin {
      */
     public function add_admin_menu() {
         add_menu_page(
-            'Infucar 9:16 Manager',
-            'Infucar 9:16',
+            'ReelFlow 9:16 Manager',
+            'ReelFlow 9:16',
             'manage_options',
-            'infucar-landing-page',
+            'reelflow-mobile-funnel',
             array($this, 'render_admin_page'),
             'dashicons-smartphone',
             30
@@ -107,30 +107,30 @@ class Infucar_Admin {
      * Enqueue Admin Styles and Scripts
      */
     public function enqueue_admin_assets($hook) {
-        if ($hook !== 'toplevel_page_infucar-landing-page') {
+        if ($hook !== 'toplevel_page_reelflow-mobile-funnel') {
             return;
         }
 
         wp_enqueue_media();
 
         wp_enqueue_style(
-            'infucar-admin-dark-css',
-            INFUCAR_PLUGIN_URL . 'assets/css/admin-dark.css',
+            'reelflow-admin-dark-css',
+            REELFLOW_PLUGIN_URL . 'assets/css/admin-dark.css',
             array(),
-            INFUCAR_VERSION
+            REELFLOW_VERSION
         );
 
         wp_enqueue_script(
-            'infucar-admin-js',
-            INFUCAR_PLUGIN_URL . 'assets/js/admin.js',
+            'reelflow-admin-js',
+            REELFLOW_PLUGIN_URL . 'assets/js/admin.js',
             array('jquery'),
-            INFUCAR_VERSION,
+            REELFLOW_VERSION,
             true
         );
 
-        wp_localize_script('infucar-admin-js', 'infucar_admin_vars', array(
+        wp_localize_script('reelflow-admin-js', 'reelflow_admin_vars', array(
             'ajax_url' => admin_url('admin-ajax.php'),
-            'nonce'    => wp_create_nonce('infucar_admin_nonce')
+            'nonce'    => wp_create_nonce('reelflow_admin_nonce')
         ));
     }
 
@@ -142,64 +142,64 @@ class Infucar_Admin {
             wp_die('Unauthorized access');
         }
 
-        $fallback_url    = get_option('infucar_fallback_url', 'https://google.com');
-        $tab_title       = get_option('infucar_tab_title', 'Exclusive Video Content');
-        $slug            = get_option('infucar_slug', 'v');
-        $tracking_script = get_option('infucar_tracking_script', '');
-        $test_mode       = get_option('infucar_test_mode', '0');
-        $images = get_option('infucar_images', array());
+        $fallback_url    = get_option('reelflow_fallback_url', 'https://google.com');
+        $tab_title       = get_option('reelflow_tab_title', 'Exclusive Video Content');
+        $slug            = get_option('reelflow_slug', 'v');
+        $tracking_script = get_option('reelflow_tracking_script', '');
+        $test_mode       = get_option('reelflow_test_mode', '0');
+        $images = get_option('reelflow_images', array());
         if (empty($images) || !is_array($images)) {
-            $images = infucar_get_default_images();
-            update_option('infucar_images', $images);
+            $images = reelflow_get_default_images();
+            update_option('reelflow_images', $images);
         }
 
         $landing_page_url = home_url('/' . trim($slug, '/') . '/');
         $test_preview_url = add_query_arg('test_mode', '1', $landing_page_url);
         ?>
-        <div class="infucar-wrap">
+        <div class="reelflow-wrap">
             <!-- Header Banner -->
-            <div class="infucar-header">
-                <div class="infucar-header-brand">
-                    <div class="infucar-header-icon">📱</div>
-                    <div class="infucar-header-text">
-                        <h1>INFUCAR 9:16 REELS ENGINE</h1>
+            <div class="reelflow-header">
+                <div class="reelflow-header-brand">
+                    <div class="reelflow-header-icon">📱</div>
+                    <div class="reelflow-header-text">
+                        <h1>REELFLOW 9:16 REELS ENGINE</h1>
                         <p>High-Performance Vertical Landing Page & Social Traffic Cloaker</p>
                     </div>
                 </div>
-                <div class="infucar-header-meta">
-                    <div class="infucar-live-url">
+                <div class="reelflow-header-meta">
+                    <div class="reelflow-live-url">
                         <span>🔗 Target Slug:</span>
                         <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code>
                     </div>
-                    <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="infucar-btn infucar-btn-secondary">
+                    <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="reelflow-btn reelflow-btn-secondary">
                         🧪 Test Preview Page
                     </a>
-                    <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="infucar-btn infucar-btn-live">
+                    <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="reelflow-btn reelflow-btn-live">
                         ⚡ Live Landing Page 🚀
                     </a>
                 </div>
             </div>
 
             <!-- Stats Bar -->
-            <div class="infucar-stats-row">
-                <div class="infucar-stat-card">
+            <div class="reelflow-stats-row">
+                <div class="reelflow-stat-card">
                     <span class="stat-icon">🎬</span>
-                    <span class="stat-value" id="infucar-stat-images-count"><?php echo count($images); ?></span>
+                    <span class="stat-value" id="reelflow-stat-images-count"><?php echo count($images); ?></span>
                     <span class="stat-label">Active Reels</span>
                 </div>
-                <div class="infucar-stat-card">
+                <div class="reelflow-stat-card">
                     <span class="stat-icon"><?php echo ($test_mode === '1') ? '🧪' : '🛡️'; ?></span>
                     <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#d29922' : '#3fb950'; ?>;">
                         <?php echo ($test_mode === '1') ? 'Testing' : 'Active'; ?>
                     </span>
                     <span class="stat-label"><?php echo ($test_mode === '1') ? 'Bypass Active' : 'FB/IG Cloaking'; ?></span>
                 </div>
-                <div class="infucar-stat-card">
+                <div class="reelflow-stat-card">
                     <span class="stat-icon">📊</span>
                     <span class="stat-value"><?php echo !empty($tracking_script) ? 'Connected' : 'None'; ?></span>
                     <span class="stat-label">Tracking Engine</span>
                 </div>
-                <div class="infucar-stat-card">
+                <div class="reelflow-stat-card">
                     <span class="stat-icon">⚡</span>
                     <span class="stat-value">540x960</span>
                     <span class="stat-label">WebP Auto-Crop</span>
@@ -207,43 +207,43 @@ class Infucar_Admin {
             </div>
 
             <!-- Desktop Navigation Tabs -->
-            <nav class="infucar-tabs-nav">
-                <button class="infucar-tab-btn active" data-tab="tab-images">🖼️ Reels & Link Manager</button>
-                <button class="infucar-tab-btn" data-tab="tab-tracking">📊 Publytics & Analytics</button>
-                <button class="infucar-tab-btn" data-tab="tab-fallback">🛡️ Dual-Layer Cloaking</button>
-                <button class="infucar-tab-btn" data-tab="tab-settings">⚙️ Plugin Settings</button>
+            <nav class="reelflow-tabs-nav">
+                <button class="reelflow-tab-btn active" data-tab="tab-images">🖼️ Reels & Link Manager</button>
+                <button class="reelflow-tab-btn" data-tab="tab-tracking">📊 Publytics & Analytics</button>
+                <button class="reelflow-tab-btn" data-tab="tab-fallback">🛡️ Dual-Layer Cloaking</button>
+                <button class="reelflow-tab-btn" data-tab="tab-settings">⚙️ Plugin Settings</button>
             </nav>
 
             <!-- Tab 1: Image & Target Link Manager -->
-            <div class="infucar-tab-panel active" id="tab-images">
-                <div class="infucar-card">
-                    <h3 class="infucar-card-title">✨ Add New 9:16 Reel Image</h3>
-                    <p class="infucar-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
+            <div class="reelflow-tab-panel active" id="tab-images">
+                <div class="reelflow-card">
+                    <h3 class="reelflow-card-title">✨ Add New 9:16 Reel Image</h3>
+                    <p class="reelflow-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
                     
-                    <form id="infucar-add-image-form">
-                        <div class="infucar-add-form-grid">
-                            <div class="infucar-field">
-                                <label class="infucar-label">Image Source <span class="req">*</span></label>
-                                <div class="infucar-file-picker">
-                                    <input type="file" id="infucar-file-input" accept="image/*" class="infucar-file-hidden">
-                                    <input type="hidden" id="infucar-media-id" value="">
-                                    <button type="button" id="infucar-select-media-btn" class="infucar-btn infucar-btn-secondary">📁 Upload File / Media Library</button>
-                                    <span id="infucar-file-name" class="infucar-file-name">No file selected</span>
+                    <form id="reelflow-add-image-form">
+                        <div class="reelflow-add-form-grid">
+                            <div class="reelflow-field">
+                                <label class="reelflow-label">Image Source <span class="req">*</span></label>
+                                <div class="reelflow-file-picker">
+                                    <input type="file" id="reelflow-file-input" accept="image/*" class="reelflow-file-hidden">
+                                    <input type="hidden" id="reelflow-media-id" value="">
+                                    <button type="button" id="reelflow-select-media-btn" class="reelflow-btn reelflow-btn-secondary">📁 Upload File / Media Library</button>
+                                    <span id="reelflow-file-name" class="reelflow-file-name">No file selected</span>
                                 </div>
                             </div>
 
-                            <div class="infucar-field">
-                                <label class="infucar-label">Target Redirect URL <span class="req">*</span></label>
-                                <input type="url" id="infucar-new-target-url" placeholder="https://your-affiliate-offer.com" required class="infucar-input">
+                            <div class="reelflow-field">
+                                <label class="reelflow-label">Target Redirect URL <span class="req">*</span></label>
+                                <input type="url" id="reelflow-new-target-url" placeholder="https://your-affiliate-offer.com" required class="reelflow-input">
                             </div>
 
-                            <div class="infucar-field">
-                                <label class="infucar-label">Timer (Seconds)</label>
-                                <input type="number" id="infucar-new-timer" value="0" min="0" placeholder="0" class="infucar-input">
+                            <div class="reelflow-field">
+                                <label class="reelflow-label">Timer (Seconds)</label>
+                                <input type="number" id="reelflow-new-timer" value="0" min="0" placeholder="0" class="reelflow-input">
                             </div>
 
-                            <div class="infucar-field">
-                                <button type="submit" id="infucar-add-image-btn" class="infucar-btn infucar-btn-primary">
+                            <div class="reelflow-field">
+                                <button type="submit" id="reelflow-add-image-btn" class="reelflow-btn reelflow-btn-primary">
                                     🚀 Upload & Add
                                 </button>
                             </div>
@@ -252,36 +252,36 @@ class Infucar_Admin {
                 </div>
 
                 <!-- Grid List of Uploaded Images -->
-                <div class="infucar-card">
-                    <h3 class="infucar-card-title">🎬 Managed Reel Cards (<span id="infucar-images-count"><?php echo count($images); ?></span>)</h3>
-                    <p class="infucar-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
+                <div class="reelflow-card">
+                    <h3 class="reelflow-card-title">🎬 Managed Reel Cards (<span id="reelflow-images-count"><?php echo count($images); ?></span>)</h3>
+                    <p class="reelflow-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
 
-                    <div class="infucar-img-grid" id="infucar-images-container">
+                    <div class="reelflow-img-grid" id="reelflow-images-container">
                         <?php if (empty($images)) : ?>
-                            <div class="infucar-empty-state" id="infucar-empty-state">
+                            <div class="reelflow-empty-state" id="reelflow-empty-state">
                                 <div class="empty-icon">🖼️</div>
                                 <p>No 9:16 reel images added yet. Upload your first image above to launch your landing page!</p>
                             </div>
                         <?php else : ?>
                             <?php foreach ($images as $index => $img) : ?>
-                                <div class="infucar-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
-                                    <div class="infucar-img-thumb">
+                                <div class="reelflow-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
+                                    <div class="reelflow-img-thumb">
                                         <img src="<?php echo esc_url($img['url']); ?>" alt="Reel Card">
-                                        <span class="infucar-img-index">#<?php echo $index + 1; ?></span>
-                                        <span class="infucar-img-format-badge">WebP</span>
+                                        <span class="reelflow-img-index">#<?php echo $index + 1; ?></span>
+                                        <span class="reelflow-img-format-badge">WebP</span>
                                     </div>
-                                    <div class="infucar-img-body">
+                                    <div class="reelflow-img-body">
                                         <div>
-                                            <label class="infucar-label">Target URL:</label>
-                                            <input type="url" class="infucar-input infucar-card-target" value="<?php echo esc_url($img['target_url']); ?>">
+                                            <label class="reelflow-label">Target URL:</label>
+                                            <input type="url" class="reelflow-input reelflow-card-target" value="<?php echo esc_url($img['target_url']); ?>">
                                         </div>
                                         <div>
-                                            <label class="infucar-label">Redirect Timer (s):</label>
-                                            <input type="number" class="infucar-input infucar-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
+                                            <label class="reelflow-label">Redirect Timer (s):</label>
+                                            <input type="number" class="reelflow-input reelflow-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
                                         </div>
-                                        <div class="infucar-img-card-actions">
-                                            <button type="button" class="infucar-btn infucar-btn-success infucar-save-card-btn">💾 Save</button>
-                                            <button type="button" class="infucar-btn infucar-btn-danger infucar-delete-card-btn">🗑️ Delete</button>
+                                        <div class="reelflow-img-card-actions">
+                                            <button type="button" class="reelflow-btn reelflow-btn-success reelflow-save-card-btn">💾 Save</button>
+                                            <button type="button" class="reelflow-btn reelflow-btn-danger reelflow-delete-card-btn">🗑️ Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -292,63 +292,63 @@ class Infucar_Admin {
             </div>
 
             <!-- Tab 2: Publytics & Tracking -->
-            <div class="infucar-tab-panel" id="tab-tracking">
-                <div class="infucar-card">
+            <div class="reelflow-tab-panel" id="tab-tracking">
+                <div class="reelflow-card">
                     <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-                        <h3 class="infucar-card-title" style="margin:0;">📊 Publytics & Analytics Integration</h3>
-                        <div id="infucar-publytics-status" class="infucar-badge checking">
+                        <h3 class="reelflow-card-title" style="margin:0;">📊 Publytics & Analytics Integration</h3>
+                        <div id="reelflow-publytics-status" class="reelflow-badge checking">
                             🟡 Checking Status...
                         </div>
                     </div>
-                    <p class="infucar-card-subtitle">Paste custom tracking snippet (Publytics, GA4, TikTok Pixel, Facebook Pixel). It injects directly into the <code>&lt;head&gt;</code> of the 9:16 template.</p>
+                    <p class="reelflow-card-subtitle">Paste custom tracking snippet (Publytics, GA4, TikTok Pixel, Facebook Pixel). It injects directly into the <code>&lt;head&gt;</code> of the 9:16 template.</p>
 
-                    <div class="infucar-field">
-                        <label class="infucar-label">Tracking Code Snippet Tag:</label>
-                        <textarea id="infucar-tracking-script" class="infucar-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
-                        <span class="infucar-input-hint">Make sure to include full <code>&lt;script&gt;...&lt;/script&gt;</code> tags.</span>
+                    <div class="reelflow-field">
+                        <label class="reelflow-label">Tracking Code Snippet Tag:</label>
+                        <textarea id="reelflow-tracking-script" class="reelflow-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
+                        <span class="reelflow-input-hint">Make sure to include full <code>&lt;script&gt;...&lt;/script&gt;</code> tags.</span>
                     </div>
 
-                    <div class="infucar-actions">
-                        <button type="button" id="infucar-save-tracking-btn" class="infucar-btn infucar-btn-primary">
+                    <div class="reelflow-actions">
+                        <button type="button" id="reelflow-save-tracking-btn" class="reelflow-btn reelflow-btn-primary">
                             💾 Save Tracking Code
                         </button>
-                        <button type="button" id="infucar-verify-tracking-btn" class="infucar-btn infucar-btn-secondary">
+                        <button type="button" id="reelflow-verify-tracking-btn" class="reelflow-btn reelflow-btn-secondary">
                             🔍 Test & Verify Connection
                         </button>
-                        <button type="button" id="infucar-test-traffic-btn" class="infucar-btn infucar-btn-accent">
+                        <button type="button" id="reelflow-test-traffic-btn" class="reelflow-btn reelflow-btn-accent">
                             🚀 Fire Live Test Event
                         </button>
                     </div>
 
-                    <div id="infucar-verification-output" class="infucar-output-box" style="display:none;"></div>
+                    <div id="reelflow-verification-output" class="reelflow-output-box" style="display:none;"></div>
                 </div>
             </div>
 
             <!-- Tab 3: Cloaking & Fallback -->
-            <div class="infucar-tab-panel" id="tab-fallback">
-                <div class="infucar-card">
-                    <h3 class="infucar-card-title">🛡️ Advanced Dual-Layer Traffic Cloaking Engine</h3>
-                    <p class="infucar-card-subtitle">Genuine Facebook & Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
+            <div class="reelflow-tab-panel" id="tab-fallback">
+                <div class="reelflow-card">
+                    <h3 class="reelflow-card-title">🛡️ Advanced Dual-Layer Traffic Cloaking Engine</h3>
+                    <p class="reelflow-card-subtitle">Genuine Facebook & Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
 
-                    <div class="infucar-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
-                        <label class="infucar-label" style="font-size:14px; font-weight:700; color:var(--text);">🧪 Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
-                        <select id="infucar-test-mode" class="infucar-select" style="max-width:550px;">
+                    <div class="reelflow-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
+                        <label class="reelflow-label" style="font-size:14px; font-weight:700; color:var(--text);">🧪 Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
+                        <select id="reelflow-test-mode" class="reelflow-select" style="max-width:550px;">
                             <option value="0" <?php selected($test_mode, '0'); ?>>🔴 Disabled (Live Production Mode — Only Facebook/Instagram Traffic Sees Landing Page)</option>
                             <option value="1" <?php selected($test_mode, '1'); ?>>🟢 Enabled (Testing Mode — Open Landing Page Directly Without FB Post)</option>
                         </select>
-                        <span class="infucar-input-hint" style="margin-top:8px;">
+                        <span class="reelflow-input-hint" style="margin-top:8px;">
                             • <strong>Enabled (Testing):</strong> Anyone can open <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code> directly in browser to test the landing page without posting on Facebook.<br>
                             • <strong>Disabled (Live):</strong> Live protection mode. Direct visits are redirected to your Fallback URL, and only FB/IG clicks see the landing page.
                         </span>
                     </div>
 
-                    <div class="infucar-field">
-                        <label class="infucar-label">Custom Fallback Redirect URL <span class="req">*</span></label>
-                        <input type="url" id="infucar-fallback-url" class="infucar-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
-                        <span class="infucar-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
+                    <div class="reelflow-field">
+                        <label class="reelflow-label">Custom Fallback Redirect URL <span class="req">*</span></label>
+                        <input type="url" id="reelflow-fallback-url" class="reelflow-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
+                        <span class="reelflow-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
                     </div>
 
-                    <div class="infucar-cloaking-box">
+                    <div class="reelflow-cloaking-box">
                         <h4>Active Filter Signals:</h4>
                         <ul>
                             <li><span class="check">✓</span> Referrer Verification: <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
@@ -358,8 +358,8 @@ class Infucar_Admin {
                         </ul>
                     </div>
 
-                    <div class="infucar-actions">
-                        <button type="button" id="infucar-save-fallback-btn" class="infucar-btn infucar-btn-primary">
+                    <div class="reelflow-actions">
+                        <button type="button" id="reelflow-save-fallback-btn" class="reelflow-btn reelflow-btn-primary">
                             💾 Save Cloaking & Test Settings
                         </button>
                     </div>
@@ -367,29 +367,29 @@ class Infucar_Admin {
             </div>
 
             <!-- Tab 4: Site Settings -->
-            <div class="infucar-tab-panel" id="tab-settings">
-                <div class="infucar-card">
-                    <h3 class="infucar-card-title">⚙️ General Landing Page Configuration</h3>
-                    <p class="infucar-card-subtitle">Customize the landing page permalink route and browser title.</p>
+            <div class="reelflow-tab-panel" id="tab-settings">
+                <div class="reelflow-card">
+                    <h3 class="reelflow-card-title">⚙️ General Landing Page Configuration</h3>
+                    <p class="reelflow-card-subtitle">Customize the landing page permalink route and browser title.</p>
                     
-                    <div class="infucar-field">
-                        <label class="infucar-label">Browser Tab Title</label>
-                        <input type="text" id="infucar-tab-title" class="infucar-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Exclusive Video Content">
-                        <span class="infucar-input-hint">Title shown in the browser title bar when visitors view the 9:16 reels template.</span>
+                    <div class="reelflow-field">
+                        <label class="reelflow-label">Browser Tab Title</label>
+                        <input type="text" id="reelflow-tab-title" class="reelflow-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Exclusive Video Content">
+                        <span class="reelflow-input-hint">Title shown in the browser title bar when visitors view the 9:16 reels template.</span>
                     </div>
 
-                    <div class="infucar-field">
-                        <label class="infucar-label">Custom Landing Page Slug / Route</label>
-                        <div class="infucar-slug-row">
-                            <span class="infucar-slug-prefix"><?php echo esc_url(home_url('/')); ?></span>
-                            <input type="text" id="infucar-slug" class="infucar-input" value="<?php echo esc_attr($slug); ?>" placeholder="v">
-                            <span class="infucar-slug-suffix">/</span>
+                    <div class="reelflow-field">
+                        <label class="reelflow-label">Custom Landing Page Slug / Route</label>
+                        <div class="reelflow-slug-row">
+                            <span class="reelflow-slug-prefix"><?php echo esc_url(home_url('/')); ?></span>
+                            <input type="text" id="reelflow-slug" class="reelflow-input" value="<?php echo esc_attr($slug); ?>" placeholder="v">
+                            <span class="reelflow-slug-suffix">/</span>
                         </div>
-                        <span class="infucar-input-hint">Default slug is <code>v</code> (e.g., <code>yoursite.com/v/</code>). Changing this automatically updates WordPress rewrite rules.</span>
+                        <span class="reelflow-input-hint">Default slug is <code>v</code> (e.g., <code>yoursite.com/v/</code>). Changing this automatically updates WordPress rewrite rules.</span>
                     </div>
 
-                    <div class="infucar-actions">
-                        <button type="button" id="infucar-save-settings-btn" class="infucar-btn infucar-btn-primary">
+                    <div class="reelflow-actions">
+                        <button type="button" id="reelflow-save-settings-btn" class="reelflow-btn reelflow-btn-primary">
                             💾 Save All Settings
                         </button>
                     </div>
@@ -397,24 +397,24 @@ class Infucar_Admin {
             </div>
 
             <!-- Mobile Bottom Navigation (<768px) -->
-            <nav class="infucar-mobile-nav">
-                <button class="infucar-mobile-nav-item active" data-tab="tab-images">
+            <nav class="reelflow-mobile-nav">
+                <button class="reelflow-mobile-nav-item active" data-tab="tab-images">
                     <span class="nav-icon">🖼️</span>
                     <span>Reels</span>
                 </button>
-                <button class="infucar-mobile-nav-item" data-tab="tab-tracking">
+                <button class="reelflow-mobile-nav-item" data-tab="tab-tracking">
                     <span class="nav-icon">📊</span>
                     <span>Tracking</span>
                 </button>
-                <button class="infucar-mobile-nav-item" data-tab="tab-fallback">
+                <button class="reelflow-mobile-nav-item" data-tab="tab-fallback">
                     <span class="nav-icon">🛡️</span>
                     <span>Cloaking</span>
                 </button>
-                <button class="infucar-mobile-nav-item" data-tab="tab-settings">
+                <button class="reelflow-mobile-nav-item" data-tab="tab-settings">
                     <span class="nav-icon">⚙️</span>
                     <span>Settings</span>
                 </button>
-                <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="infucar-mobile-nav-item">
+                <a href="<?php echo esc_url($test_preview_url); ?>" target="_blank" class="reelflow-mobile-nav-item">
                     <span class="nav-icon">🧪</span>
                     <span>Test</span>
                 </a>
@@ -428,31 +428,31 @@ class Infucar_Admin {
      * AJAX Save Plugin Settings
      */
     public function ajax_save_settings() {
-        check_ajax_referer('infucar_admin_nonce', 'nonce');
+        check_ajax_referer('reelflow_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized access');
         }
 
         if (isset($_POST['fallback_url'])) {
-            update_option('infucar_fallback_url', esc_url_raw($_POST['fallback_url']));
+            update_option('reelflow_fallback_url', esc_url_raw($_POST['fallback_url']));
         }
         if (isset($_POST['test_mode'])) {
-            update_option('infucar_test_mode', sanitize_text_field($_POST['test_mode']));
+            update_option('reelflow_test_mode', sanitize_text_field($_POST['test_mode']));
         }
         if (isset($_POST['tab_title'])) {
-            update_option('infucar_tab_title', sanitize_text_field($_POST['tab_title']));
+            update_option('reelflow_tab_title', sanitize_text_field($_POST['tab_title']));
         }
         if (isset($_POST['slug'])) {
             $new_slug = sanitize_title($_POST['slug']);
             if (!empty($new_slug)) {
-                update_option('infucar_slug', $new_slug);
-                Infucar_Frontend::register_rewrite_rules();
+                update_option('reelflow_slug', $new_slug);
+                ReelFlow_Frontend::register_rewrite_rules();
                 flush_rewrite_rules();
             }
         }
         if (isset($_POST['tracking_script'])) {
-            update_option('infucar_tracking_script', wp_unslash($_POST['tracking_script']));
+            update_option('reelflow_tracking_script', wp_unslash($_POST['tracking_script']));
         }
 
         wp_send_json_success(array('message' => 'Settings saved successfully!'));
@@ -462,13 +462,13 @@ class Infucar_Admin {
      * AJAX Verification Engine for Publytics
      */
     public function ajax_verify_publytics() {
-        check_ajax_referer('infucar_admin_nonce', 'nonce');
+        check_ajax_referer('reelflow_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
         }
 
-        $tracking_code = get_option('infucar_tracking_script', '');
+        $tracking_code = get_option('reelflow_tracking_script', '');
         if (empty($tracking_code)) {
             wp_send_json_error('No tracking script found. Please paste your script tag and save first.');
         }
@@ -508,7 +508,7 @@ class Infucar_Admin {
      * AJAX Upload Image & Convert to WebP 540x960
      */
     public function ajax_upload_image() {
-        check_ajax_referer('infucar_admin_nonce', 'nonce');
+        check_ajax_referer('reelflow_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -521,10 +521,10 @@ class Infucar_Admin {
         $processed_result = null;
 
         if ($media_id > 0) {
-            $processed_result = Infucar_Image_Processor::process_from_attachment_id($media_id);
+            $processed_result = ReelFlow_Image_Processor::process_from_attachment_id($media_id);
         } elseif (!empty($_FILES['image_file']['tmp_name'])) {
             $tmp_path = $_FILES['image_file']['tmp_name'];
-            $processed_result = Infucar_Image_Processor::process_image($tmp_path);
+            $processed_result = ReelFlow_Image_Processor::process_image($tmp_path);
         }
 
         if (!$processed_result || is_wp_error($processed_result)) {
@@ -532,7 +532,7 @@ class Infucar_Admin {
             wp_send_json_error($err_msg);
         }
 
-        $images = get_option('infucar_images', array());
+        $images = get_option('reelflow_images', array());
         if (!is_array($images)) {
             $images = array();
         }
@@ -547,7 +547,7 @@ class Infucar_Admin {
         );
 
         array_unshift($images, $new_item);
-        update_option('infucar_images', $images);
+        update_option('reelflow_images', $images);
 
         wp_send_json_success(array(
             'message' => 'Image processed (540x960 WebP) and added successfully!',
@@ -560,7 +560,7 @@ class Infucar_Admin {
      * AJAX Update Existing Image Details
      */
     public function ajax_update_image() {
-        check_ajax_referer('infucar_admin_nonce', 'nonce');
+        check_ajax_referer('reelflow_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -574,7 +574,7 @@ class Infucar_Admin {
             wp_send_json_error('Invalid image ID.');
         }
 
-        $images = get_option('infucar_images', array());
+        $images = get_option('reelflow_images', array());
         $updated = false;
 
         foreach ($images as &$img) {
@@ -587,7 +587,7 @@ class Infucar_Admin {
         }
 
         if ($updated) {
-            update_option('infucar_images', $images);
+            update_option('reelflow_images', $images);
             wp_send_json_success(array('message' => 'Image details updated successfully!'));
         } else {
             wp_send_json_error('Image not found.');
@@ -598,7 +598,7 @@ class Infucar_Admin {
      * AJAX Delete Image
      */
     public function ajax_delete_image() {
-        check_ajax_referer('infucar_admin_nonce', 'nonce');
+        check_ajax_referer('reelflow_admin_nonce', 'nonce');
 
         if (!current_user_can('manage_options')) {
             wp_send_json_error('Unauthorized');
@@ -609,20 +609,20 @@ class Infucar_Admin {
             wp_send_json_error('Invalid image ID.');
         }
 
-        $images = get_option('infucar_images', array());
+        $images = get_option('reelflow_images', array());
         $filtered = array();
 
         foreach ($images as $img) {
             if ($img['id'] === $id) {
                 if (!empty($img['path'])) {
-                    Infucar_Image_Processor::delete_image($img['path']);
+                    ReelFlow_Image_Processor::delete_image($img['path']);
                 }
             } else {
                 $filtered[] = $img;
             }
         }
 
-        update_option('infucar_images', $filtered);
+        update_option('reelflow_images', $filtered);
 
         wp_send_json_success(array(
             'message' => 'Image deleted successfully!',

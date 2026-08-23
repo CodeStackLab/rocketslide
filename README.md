@@ -1,4 +1,4 @@
-# Infucar Landing Page WordPress Plugin
+# ReelFlow - Mobile Vertical Landing Page WordPress Plugin
 
 A high-speed, isolated vertical landing page plugin for mobile traffic and ads campaign cloaking.
 
@@ -11,5 +11,5 @@ A high-speed, isolated vertical landing page plugin for mobile traffic and ads c
 ## Installation via WP Pusher
 1. Install and activate **WP Pusher** on your WordPress live site.
 2. In WP Pusher, select **Install Plugin**.
-3. Enter repository: `<your-github-username>/infucar-landing-page`
+3. Enter repository: `<your-github-username>/reelflow-mobile-funnel`
 4. Enable **Push-to-Deploy** if automatic updates from GitHub are desired.

@@ -1,6 +1,6 @@
 <?php
 /**
- * class-infucar-image-processor.php
+ * class-reelflow-image-processor.php
  *
  * IMAGE UPLOAD & AUTOMATIC WebP CONVERSION ENGINE
  * ================================================
@@ -11,11 +11,11 @@
  *      PHP GD or PHP Imagick, whichever is installed on the server.
  *   3. Crops & resizes the image to exactly 540 × 960 px (9:16 ratio).
  *   4. Converts to WebP at 75% quality.
- *   5. Saves the optimised image to wp-content/uploads/infucar/.
+ *   5. Saves the optimised image to wp-content/uploads/reelflow/.
  *   6. Falls back gracefully to JPEG at 85% quality if the server does not
  *      support WebP output (very old GD builds without webp support).
  *
- * @package Infucar_Landing_Page
+ * @package ReelFlow_Landing_Page
  * @since   2.0.0
  */
 
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Infucar_Image_Processor {
+class ReelFlow_Image_Processor {
 
 	/** @const int   Target width for 9:16 vertical resolution */
 	const TARGET_WIDTH  = 540;
@@ -43,7 +43,7 @@ class Infucar_Image_Processor {
 	 * Called on plugin activation and on every AJAX upload request.
 	 */
 	public static function ensure_upload_dir() {
-		$dir = infucar_uploads_dir();
+		$dir = reelflow_uploads_dir();
 		if ( ! file_exists( $dir ) ) {
 			wp_mkdir_p( $dir );
 		}
@@ -68,7 +68,7 @@ class Infucar_Image_Processor {
 		// — — — Step 1: Validate source file — — —
 		if ( empty( $source_path ) || ! file_exists( $source_path ) ) {
 			return new WP_Error(
-				'infucar_file_not_found',
+				'reelflow_file_not_found',
 				sprintf( 'Source image not found: %s', esc_html( $source_path ) )
 			);
 		}
@@ -76,7 +76,7 @@ class Infucar_Image_Processor {
 		// Confirm the file is actually an image (basic MIME check via WP)
 		$mime = wp_check_filetype( $source_path );
 		if ( ! $mime['type'] || 0 !== strpos( $mime['type'], 'image/' ) ) {
-			return new WP_Error( 'infucar_not_image', 'The uploaded file is not a valid image.' );
+			return new WP_Error( 'reelflow_not_image', 'The uploaded file is not a valid image.' );
 		}
 
 		// — — — Step 2: Open with WP Image Editor — — —
@@ -103,8 +103,8 @@ class Infucar_Image_Processor {
 
 		// --- Attempt 1: Save as WebP ---
 		$webp_filename = 'reel_' . $unique_suffix . '.webp';
-		$webp_path     = infucar_uploads_dir() . $webp_filename;
-		$webp_url      = infucar_uploads_url() . $webp_filename;
+		$webp_path     = reelflow_uploads_dir() . $webp_filename;
+		$webp_url      = reelflow_uploads_url() . $webp_filename;
 
 		$editor->set_quality( self::WEBP_QUALITY );
 		$saved = $editor->save( $webp_path, 'image/webp' );
@@ -119,8 +119,8 @@ class Infucar_Image_Processor {
 
 		// --- Attempt 2: Fallback to JPEG if WebP not supported ---
 		$jpg_filename = 'reel_' . $unique_suffix . '.jpg';
-		$jpg_path     = infucar_uploads_dir() . $jpg_filename;
-		$jpg_url      = infucar_uploads_url() . $jpg_filename;
+		$jpg_path     = reelflow_uploads_dir() . $jpg_filename;
+		$jpg_url      = reelflow_uploads_url() . $jpg_filename;
 
 		$editor->set_quality( self::JPEG_FALLBACK_QUALITY );
 		$saved_jpg = $editor->save( $jpg_path, 'image/jpeg' );
@@ -148,7 +148,7 @@ class Infucar_Image_Processor {
 
 		if ( ! $attachment_path ) {
 			return new WP_Error(
-				'infucar_attachment_not_found',
+				'reelflow_attachment_not_found',
 				sprintf( 'Attachment ID %d could not be resolved to a local file.', $attachment_id )
 			);
 		}
@@ -157,7 +157,7 @@ class Infucar_Image_Processor {
 	}
 
 	/**
-	 * Delete a physically stored Infucar image from the uploads/infucar/ directory.
+	 * Delete a physically stored ReelFlow image from the uploads/reelflow/ directory.
 	 *
 	 * @param  string  $file_path  Absolute path to the image file.
 	 * @return bool    TRUE if the file was deleted (or didn't exist), FALSE on failure.
@@ -167,8 +167,8 @@ class Infucar_Image_Processor {
 			return false;
 		}
 
-		// Security: ensure the file is actually inside the Infucar upload directory
-		$upload_dir = infucar_uploads_dir();
+		// Security: ensure the file is actually inside the ReelFlow upload directory
+		$upload_dir = reelflow_uploads_dir();
 		if ( 0 !== strpos( realpath( dirname( $file_path ) ), realpath( $upload_dir ) ) ) {
 			return false; // Refuse to delete files outside our designated folder
 		}
