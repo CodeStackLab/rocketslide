@@ -226,6 +226,7 @@
                         `;
                         $('#rocketslide-images-container').prepend(cardHtml);
                         $('#rocketslide-images-count, #rocketslide-stat-images-count').text(res.data.total);
+                        updatePagination();
                     } else {
                         showNotice(res.data || 'Image upload failed.', true);
                     }
@@ -285,12 +286,89 @@
                         if (res.data.total === 0) {
                             $('#rocketslide-images-container').html('<div class="rocketslide-empty-state" id="rocketslide-empty-state"><div class="empty-icon">🖼️</div><p>No 9:16 reel images added yet.</p></div>');
                         }
+                        updatePagination();
                     });
                 } else {
                     showNotice(res.data || 'Failed to delete image', true);
                 }
             });
         });
+
+        // 9. Client-Side Pagination System (4 Cards / Row, 8 Cards / Page)
+        var currentPage = 1;
+        var itemsPerPage = 8;
+
+        function updatePagination() {
+            var $cards = $('#rocketslide-images-container .rocketslide-img-card');
+            var totalCards = $cards.length;
+
+            if (totalCards === 0) {
+                $('#rocketslide-pagination-wrapper').hide();
+                return;
+            }
+
+            var totalPages = Math.ceil(totalCards / itemsPerPage);
+            if (currentPage > totalPages) currentPage = totalPages;
+            if (currentPage < 1) currentPage = 1;
+
+            var startIndex = (currentPage - 1) * itemsPerPage;
+            var endIndex = Math.min(startIndex + itemsPerPage, totalCards);
+
+            $cards.hide();
+            $cards.slice(startIndex, endIndex).css('display', 'flex');
+
+            $('#rocketslide-pagination-wrapper').show();
+            $('#rocketslide-pagination-info').text(
+                'Showing ' + (startIndex + 1) + '–' + endIndex + ' of ' + totalCards + ' Reel Cards'
+            );
+
+            var $controls = $('#rocketslide-pagination-controls');
+            $controls.empty();
+
+            if (totalPages <= 1) {
+                return;
+            }
+
+            // Prev Button
+            var $prevBtn = $('<button type="button" class="rocketslide-page-btn">◀ Prev</button>');
+            $prevBtn.prop('disabled', currentPage === 1);
+            $prevBtn.on('click', function () {
+                if (currentPage > 1) {
+                    currentPage--;
+                    updatePagination();
+                }
+            });
+            $controls.append($prevBtn);
+
+            // Page Buttons
+            for (var i = 1; i <= totalPages; i++) {
+                (function (pageNum) {
+                    var $pageBtn = $('<button type="button" class="rocketslide-page-btn">' + pageNum + '</button>');
+                    if (pageNum === currentPage) {
+                        $pageBtn.addClass('active');
+                    }
+                    $pageBtn.on('click', function () {
+                        currentPage = pageNum;
+                        updatePagination();
+                    });
+                    $controls.append($pageBtn);
+                })(i);
+            }
+
+            // Next Button
+            var $nextBtn = $('<button type="button" class="rocketslide-page-btn">Next ▶</button>');
+            $nextBtn.prop('disabled', currentPage === totalPages);
+            $nextBtn.on('click', function () {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    updatePagination();
+                }
+            });
+            $controls.append($nextBtn);
+        }
+
+        // Initialize Pagination on Page Load
+        updatePagination();
 
     });
 

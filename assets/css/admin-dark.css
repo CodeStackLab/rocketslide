@@ -640,13 +640,94 @@
     }
 }
 
-/* Grid of 9:16 TikTok-style portrait image cards */
+/* Grid of 9:16 TikTok-style portrait image cards (4 Columns Desktop) */
 .rocketslide-img-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 190px));
-    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
     margin-top: 16px;
-    justify-content: start;
+    width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .rocketslide-img-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .rocketslide-img-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .rocketslide-img-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+}
+
+/* Pagination Controls Bar */
+.rocketslide-pagination-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 18px;
+    margin-top: 20px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.rocketslide-pagination-info {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.rocketslide-pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.rocketslide-page-btn {
+    padding: 6px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text);
+    cursor: pointer;
+    transition: all .15s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 34px;
+    height: 34px;
+}
+
+.rocketslide-page-btn:hover:not(:disabled) {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+}
+
+.rocketslide-page-btn.active {
+    background: var(--blue);
+    color: #ffffff;
+    border-color: var(--blue);
+    box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+}
+
+.rocketslide-page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+    background: #f1f5f9;
 }
 
 .rocketslide-img-card {
