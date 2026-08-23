@@ -302,7 +302,8 @@
             var $cards = $('#rocketslide-images-container .rocketslide-img-card');
             var totalCards = $cards.length;
 
-            if (totalCards === 0) {
+            if (totalCards <= itemsPerPage) {
+                $cards.css('display', 'flex');
                 $('#rocketslide-pagination-wrapper').hide();
                 return;
             }
