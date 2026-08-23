@@ -39,7 +39,7 @@ define( 'ROCKETSLIDE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
  * @return string  e.g. /var/www/html/wp-content/uploads/rocketslide/
  */
 function rocketslide_uploads_dir() {
-	return wp_upload_dir()['basedir'] . '/reelflow/';
+	return wp_upload_dir()['basedir'] . '/rocketslide/';
 }
 
 /**
@@ -48,7 +48,7 @@ function rocketslide_uploads_dir() {
  * @return string  e.g. https://example.com/wp-content/uploads/rocketslide/
  */
 function rocketslide_uploads_url() {
-	return wp_upload_dir()['baseurl'] . '/reelflow/';
+	return wp_upload_dir()['baseurl'] . '/rocketslide/';
 }
 
 /**
