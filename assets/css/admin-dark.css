@@ -640,19 +640,13 @@
     }
 }
 
-/* Grid of 9:16 TikTok-style portrait image cards (4 Columns Desktop) */
+/* Grid of 9:16 TikTok-style portrait image cards */
 .rocketslide-img-grid {
     display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 16px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
     margin-top: 16px;
     width: 100%;
-}
-
-@media (max-width: 1024px) {
-    .rocketslide-img-grid {
-        grid-template-columns: repeat(3, 1fr);
-    }
 }
 
 @media (max-width: 768px) {

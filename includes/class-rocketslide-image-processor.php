@@ -26,11 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class RocketSlide_Image_Processor {
 
-	/** @const int   Target width for 9:16 vertical resolution */
-	const TARGET_WIDTH  = 540;
+	/** @const int   Target width for 9:16 vertical resolution (TikTok HD) */
+	const TARGET_WIDTH  = 1080;
 
-	/** @const int   Target height for 9:16 vertical resolution */
-	const TARGET_HEIGHT = 960;
+	/** @const int   Target height for 9:16 vertical resolution (TikTok HD) */
+	const TARGET_HEIGHT = 1920;
 
 	/** @const int   WebP compression quality (0–100) */
 	const WEBP_QUALITY  = 75;

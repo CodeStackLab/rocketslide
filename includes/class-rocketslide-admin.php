@@ -201,8 +201,8 @@ class RocketSlide_Admin {
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">⚡</span>
-                    <span class="stat-value">540x960</span>
-                    <span class="stat-label">WebP Auto-Crop</span>
+                    <span class="stat-value">9:16 (1080×1920)</span>
+                    <span class="stat-label">TikTok WebP Crop</span>
                 </div>
             </div>
 
@@ -217,14 +217,14 @@ class RocketSlide_Admin {
             <!-- Tab 1: Image & Target Link Manager -->
             <div class="rocketslide-tab-panel active" id="tab-images">
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">✨ Add New 9:16 Reel Image</h3>
-                    <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be cropped to 540x960 resolution and converted to 75% quality WebP format automatically.</p>
+                    <h3 class="rocketslide-card-title">✨ Add New 9:16 TikTok Reel Image</h3>
+                    <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be auto-cropped to TikTok 9:16 vertical ratio (1080×1920 HD WebP) automatically.</p>
                     
                     <form id="rocketslide-add-image-form">
                         <div class="rocketslide-add-form-container">
                             <!-- Row 1: Image Selector -->
                             <div class="rocketslide-field">
-                                <label class="rocketslide-label">Image File (WebP 540×960 Auto-Crop) <span class="req">*</span></label>
+                                <label class="rocketslide-label">Image File (9:16 TikTok 1080×1920 WebP Auto-Crop) <span class="req">*</span></label>
                                 <div class="rocketslide-file-picker">
                                     <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
                                     <input type="hidden" id="rocketslide-media-id" value="">
