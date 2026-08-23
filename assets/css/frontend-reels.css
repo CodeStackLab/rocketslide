@@ -1,0 +1,171 @@
+/* Infucar 9:16 Reels Vertical Layout Stylesheet */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: #000000;
+    color: #ffffff;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+/* Animated Top Progress Bar for Auto-Redirect Timer */
+#redirect-progress-bar-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background-color: rgba(255, 255, 255, 0.15);
+    z-index: 99999;
+    display: none;
+}
+
+#redirect-progress-bar {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00f2fe 0%, #4facfe 100%);
+    box-shadow: 0 0 10px #00f2fe;
+    transition: width 0.1s linear;
+}
+
+/* Main Outer Centered Layout */
+.reels-main-wrapper {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+}
+
+/* 9:16 Centered Reels Container */
+.reels-container {
+    width: 100%;
+    max-width: 500px;
+    height: 100vh;
+    height: 100dvh;
+    background-color: #000000;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    position: relative;
+}
+
+.reels-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+}
+
+/* Individual Reel Card Item */
+.reel-card {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #000000;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+/* 9:16 Aspect Ratio Image */
+.reel-img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 9 / 16;
+    object-fit: cover;
+    display: block;
+    pointer-events: none;
+}
+
+/* Fallback / Overlay elements */
+.reel-play-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px;
+    height: 70px;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(8px);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.85;
+    pointer-events: none;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+.reel-play-overlay svg {
+    width: 32px;
+    height: 32px;
+    fill: #ffffff;
+    margin-left: 4px;
+}
+
+@keyframes pulseGlow {
+    from { transform: translate(-50%, -50%) scale(0.95); opacity: 0.7; }
+    to { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
+}
+
+/* Sound / CTA Floating Pill */
+.reel-cta-pill {
+    position: absolute;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(255,0,80,0.9), rgba(0,242,254,0.9));
+    color: #ffffff;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    box-shadow: 0 8px 25px rgba(255, 0, 80, 0.5);
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    animation: bounceCta 1.5s infinite;
+}
+
+@keyframes bounceCta {
+    0%, 100% { transform: translateX(-50%) translateY(0); }
+    50% { transform: translateX(-50%) translateY(-6px); }
+}
+
+/* Test Mode Top Pill Badge */
+.infucar-test-mode-pill {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(212, 153, 34, 0.95);
+    backdrop-filter: blur(8px);
+    color: #000;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    z-index: 100000;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    pointer-events: none;
+}

@@ -1,0 +1,834 @@
+/*
+ * ============================================================
+ * INFUCAR 9:16 — ADMIN DARK MODE STYLESHEET (v2.0)
+ * Modern, responsive dark admin panel for the plugin manager.
+ * Supports desktop tabs + fixed mobile bottom navigation bar.
+ * ============================================================
+ */
+
+/* ---- Google Font ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* ---- Design Tokens ---- */
+:root {
+    --bg:            #0d1117;
+    --surface:       #161b22;
+    --surface-2:     #1c2333;
+    --border:        #30363d;
+    --border-focus:  #388bfd;
+
+    --text:          #e6edf3;
+    --text-muted:    #8b949e;
+    --text-dim:      #484f58;
+
+    --blue:          #388bfd;
+    --blue-dark:     #1f6feb;
+    --green:         #3fb950;
+    --red:           #f85149;
+    --red-dim:       rgba(248,81,73,.15);
+    --orange:        #d29922;
+    --cyan:          #39d353;
+    --purple:        #8957e5;
+
+    --radius-sm:     8px;
+    --radius:        12px;
+    --radius-lg:     16px;
+
+    --shadow:        0 4px 24px rgba(0,0,0,.45);
+    --shadow-card:   0 2px 8px rgba(0,0,0,.35);
+}
+
+/* ---- Reset scoped to plugin wrapper ---- */
+.infucar-wrap *,
+.infucar-wrap *::before,
+.infucar-wrap *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.infucar-wrap {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    padding: 24px 24px 100px 24px;
+    max-width: 1100px;
+}
+
+/* ============================================================
+   HEADER BANNER
+   ============================================================ */
+.infucar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: linear-gradient(135deg, #161b22 0%, #1a1f2e 100%);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px 28px;
+    margin-bottom: 28px;
+    box-shadow: var(--shadow);
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.infucar-header-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.infucar-header-icon {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    border-radius: var(--radius);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+    box-shadow: 0 4px 14px rgba(56,139,253,.3);
+}
+
+.infucar-header-text h1 {
+    font-size: 20px;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -.3px;
+    line-height: 1.2;
+}
+
+.infucar-header-text p {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.infucar-header-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.infucar-live-url {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 13px;
+    color: var(--text-muted);
+    max-width: 260px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.infucar-live-url code {
+    color: var(--blue);
+    font-size: 13px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+/* ============================================================
+   STATS ROW
+   ============================================================ */
+.infucar-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 28px;
+}
+
+.infucar-stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.infucar-stat-card .stat-icon {
+    font-size: 22px;
+}
+
+.infucar-stat-card .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+}
+
+.infucar-stat-card .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+}
+
+/* ============================================================
+   DESKTOP TAB NAVIGATION
+   ============================================================ */
+.infucar-tabs-nav {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 24px;
+    padding-bottom: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+}
+
+.infucar-tabs-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.infucar-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 11px 18px;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    color: var(--text-muted);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+    margin-bottom: -1px;
+}
+
+.infucar-tab-btn:hover {
+    color: var(--text);
+}
+
+.infucar-tab-btn.active {
+    color: var(--blue);
+    border-bottom-color: var(--blue);
+}
+
+/* ============================================================
+   TAB PANELS
+   ============================================================ */
+.infucar-tab-panel {
+    display: none;
+    animation: infucar-fadein .25s ease;
+}
+
+.infucar-tab-panel.active {
+    display: block;
+}
+
+@keyframes infucar-fadein {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ============================================================
+   CARD
+   ============================================================ */
+.infucar-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 22px 24px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-card);
+}
+
+.infucar-card-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.infucar-card-subtitle {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 20px;
+    line-height: 1.6;
+}
+
+.infucar-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 20px 0;
+}
+
+/* ============================================================
+   FORM CONTROLS
+   ============================================================ */
+.infucar-field {
+    margin-bottom: 18px;
+}
+
+.infucar-field:last-child {
+    margin-bottom: 0;
+}
+
+.infucar-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 7px;
+}
+
+.infucar-label span.req {
+    color: var(--red);
+    margin-left: 2px;
+}
+
+.infucar-input,
+.infucar-textarea,
+.infucar-select {
+    width: 100%;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 10px 14px;
+    color: var(--text);
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+}
+
+.infucar-input:focus,
+.infucar-textarea:focus,
+.infucar-select:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(56,139,253,.2);
+}
+
+.infucar-input::placeholder,
+.infucar-textarea::placeholder {
+    color: var(--text-dim);
+}
+
+.infucar-textarea {
+    resize: vertical;
+    min-height: 110px;
+    line-height: 1.5;
+    font-size: 13px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.infucar-input-hint {
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 6px;
+    display: block;
+    line-height: 1.5;
+}
+
+.infucar-input-hint code {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11px;
+    color: var(--cyan);
+    font-family: monospace;
+}
+
+/* Inline URL slug builder */
+.infucar-slug-row {
+    display: flex;
+    align-items: center;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    overflow: hidden;
+}
+
+.infucar-slug-prefix,
+.infucar-slug-suffix {
+    padding: 10px 12px;
+    color: var(--text-muted);
+    font-size: 13px;
+    white-space: nowrap;
+    background: rgba(255,255,255,.03);
+    border-right: 1px solid var(--border);
+}
+
+.infucar-slug-suffix {
+    border-right: none;
+    border-left: 1px solid var(--border);
+}
+
+.infucar-slug-row .infucar-input {
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    padding: 10px 10px;
+    flex: 1;
+}
+
+.infucar-slug-row .infucar-input:focus {
+    box-shadow: none;
+    border-color: transparent;
+}
+
+/* Two-column field row */
+.infucar-fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+@media (max-width: 640px) {
+    .infucar-fields-row {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================
+   BUTTONS
+   ============================================================ */
+.infucar-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    padding: 9px 18px;
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+    border: 1px solid transparent;
+    text-decoration: none;
+    transition: background .15s, border-color .15s, transform .1s, box-shadow .15s;
+    white-space: nowrap;
+    line-height: 1;
+}
+
+.infucar-btn:active { transform: scale(.97); }
+.infucar-btn:disabled { opacity: .5; cursor: not-allowed; }
+
+/* Primary – Blue */
+.infucar-btn-primary {
+    background: var(--blue);
+    color: #fff;
+    border-color: var(--blue);
+}
+.infucar-btn-primary:hover { background: var(--blue-dark); }
+
+/* Secondary – Ghost */
+.infucar-btn-secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    border-color: var(--border);
+}
+.infucar-btn-secondary:hover { border-color: var(--text-muted); }
+
+/* Success – Green */
+.infucar-btn-success {
+    background: rgba(63,185,80,.15);
+    color: var(--green);
+    border-color: rgba(63,185,80,.4);
+}
+.infucar-btn-success:hover { background: var(--green); color: #fff; }
+
+/* Danger – Red */
+.infucar-btn-danger {
+    background: var(--red-dim);
+    color: var(--red);
+    border-color: rgba(248,81,73,.3);
+}
+.infucar-btn-danger:hover { background: var(--red); color: #fff; }
+
+/* Accent – Purple */
+.infucar-btn-accent {
+    background: rgba(137,87,229,.15);
+    color: var(--purple);
+    border-color: rgba(137,87,229,.4);
+}
+.infucar-btn-accent:hover { background: var(--purple); color: #fff; }
+
+/* Live Preview – gradient */
+.infucar-btn-live {
+    background: linear-gradient(135deg, var(--blue), var(--purple));
+    color: #fff;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(56,139,253,.35);
+}
+.infucar-btn-live:hover {
+    box-shadow: 0 6px 20px rgba(56,139,253,.5);
+    color: #fff;
+}
+
+/* Action bar */
+.infucar-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 20px;
+}
+
+/* ============================================================
+   STATUS BADGES
+   ============================================================ */
+.infucar-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.infucar-badge.verified  { background: rgba(63,185,80,.12); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+.infucar-badge.checking  { background: rgba(210,153,34,.12); color: var(--orange); border: 1px solid rgba(210,153,34,.3); }
+.infucar-badge.inactive  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,81,73,.3); }
+
+/* Verification output box */
+.infucar-output-box {
+    background: #0d1117;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+    margin-top: 16px;
+    font-family: 'SFMono-Regular', Consolas, monospace;
+    font-size: 12.5px;
+    color: var(--cyan);
+    white-space: pre-wrap;
+    line-height: 1.7;
+}
+
+/* ============================================================
+   FILE PICKER
+   ============================================================ */
+.infucar-file-picker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.infucar-file-hidden {
+    display: none;
+}
+
+.infucar-file-name {
+    font-size: 13px;
+    color: var(--text-muted);
+    font-style: italic;
+    flex: 1;
+    min-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ============================================================
+   CLOAKING ENGINE STATUS BOX
+   ============================================================ */
+.infucar-cloaking-box {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 20px;
+    margin-top: 16px;
+}
+
+.infucar-cloaking-box h4 {
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    margin-bottom: 12px;
+}
+
+.infucar-cloaking-box ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.infucar-cloaking-box li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+.infucar-cloaking-box li .check {
+    color: var(--green);
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 1px;
+}
+
+.infucar-cloaking-box code {
+    background: rgba(56,139,253,.12);
+    color: var(--blue);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 11.5px;
+    font-family: monospace;
+}
+
+/* ============================================================
+   IMAGE CARDS GRID
+   ============================================================ */
+
+/* Add Form Inline Row */
+.infucar-add-form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 120px auto;
+    gap: 12px;
+    align-items: end;
+}
+
+@media (max-width: 860px) {
+    .infucar-add-form-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+}
+
+@media (max-width: 540px) {
+    .infucar-add-form-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Grid of 9:16 image cards */
+.infucar-img-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.infucar-img-card {
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color .2s, transform .2s;
+    display: flex;
+    flex-direction: column;
+}
+
+.infucar-img-card:hover {
+    border-color: var(--blue);
+    transform: translateY(-3px);
+}
+
+/* 9:16 Aspect Ratio Preview */
+.infucar-img-thumb {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 9 / 16;
+    background: #000;
+    overflow: hidden;
+    max-height: 280px; /* prevent very tall cards on wide screens */
+}
+
+.infucar-img-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.infucar-img-index {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    background: rgba(0,0,0,.7);
+    backdrop-filter: blur(4px);
+    color: var(--blue);
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    border: 1px solid rgba(56,139,253,.4);
+    font-family: monospace;
+}
+
+.infucar-img-format-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(63,185,80,.15);
+    border: 1px solid rgba(63,185,80,.3);
+    color: var(--green);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 5px;
+}
+
+/* Card Detail Area */
+.infucar-img-body {
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    flex: 1;
+}
+
+.infucar-img-body .infucar-label {
+    font-size: 11px;
+    margin-bottom: 4px;
+    color: var(--text-muted);
+}
+
+.infucar-img-body .infucar-input {
+    padding: 7px 10px;
+    font-size: 12.5px;
+}
+
+.infucar-img-card-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 4px;
+}
+
+.infucar-img-card-actions .infucar-btn {
+    padding: 7px 8px;
+    font-size: 12px;
+}
+
+/* Empty State */
+.infucar-empty-state {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 48px 24px;
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    color: var(--text-muted);
+}
+
+.infucar-empty-state .empty-icon {
+    font-size: 40px;
+    margin-bottom: 12px;
+}
+
+.infucar-empty-state p {
+    font-size: 14px;
+    color: var(--text-muted);
+}
+
+/* ============================================================
+   MOBILE FIXED BOTTOM NAV
+   ============================================================ */
+.infucar-mobile-nav {
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .infucar-tabs-nav {
+        display: none;
+    }
+
+    .infucar-mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(22, 27, 34, .96);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-top: 1px solid var(--border);
+        padding: 8px 0 env(safe-area-inset-bottom, 8px);
+        z-index: 100000;
+        justify-content: space-around;
+    }
+
+    .infucar-mobile-nav-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 3px;
+        padding: 4px 10px;
+        background: none;
+        border: none;
+        color: var(--text-muted);
+        font-size: 10px;
+        font-weight: 600;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color .15s;
+    }
+
+    .infucar-mobile-nav-item .nav-icon { font-size: 20px; }
+    .infucar-mobile-nav-item.active    { color: var(--blue); }
+}
+
+/* ============================================================
+   TOAST NOTIFICATION
+   ============================================================ */
+.infucar-toast {
+    position: fixed;
+    bottom: 28px;
+    right: 24px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    color: #fff;
+    z-index: 200000;
+    box-shadow: 0 8px 24px rgba(0,0,0,.5);
+    font-family: 'Inter', sans-serif;
+    max-width: 340px;
+    animation: infucar-toast-in .25s ease;
+}
+
+@keyframes infucar-toast-in {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.infucar-toast.success { background: var(--green); }
+.infucar-toast.error   { background: var(--red); }
+
+/* ============================================================
+   RESPONSIVE — General
+   ============================================================ */
+@media (max-width: 768px) {
+    .infucar-wrap {
+        padding: 16px 14px 100px;
+    }
+
+    .infucar-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+    }
+
+    .infucar-card {
+        padding: 16px;
+    }
+
+    .infucar-img-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    }
+}
