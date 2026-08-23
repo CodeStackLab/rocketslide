@@ -42,6 +42,12 @@
                 $('#rocketslide-media-id').val(attachment.id);
                 $('#rocketslide-file-input').val('');
                 $('#rocketslide-file-name').html('✅ Gallery: <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
+
+                // Render Live Thumbnail Preview
+                if (attachment.url) {
+                    $('#rocketslide-image-preview-thumb').attr('src', attachment.url);
+                    $('#rocketslide-image-preview-wrapper').css('display', 'flex');
+                }
             });
 
             mediaUploader.open();
@@ -58,6 +64,14 @@
             if (file) {
                 $('#rocketslide-media-id').val('');
                 $('#rocketslide-file-name').html('✅ PC File: <strong style="color:var(--blue);">' + file.name + '</strong>');
+
+                // Render Local Computer Image Preview
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $('#rocketslide-image-preview-thumb').attr('src', e.target.result);
+                    $('#rocketslide-image-preview-wrapper').css('display', 'flex');
+                };
+                reader.readAsDataURL(file);
             }
         });
 
@@ -173,15 +187,9 @@
             var targetUrl = $('#rocketslide-new-target-url').val();
             var timer     = $('#rocketslide-new-timer').val();
 
-            if (!targetUrl || targetUrl.trim() === '') {
-                showNotice('Please enter Target Redirect URL.', true);
-                $('#rocketslide-new-target-url').focus();
-                return;
-            }
-
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
-                showNotice('Opening File Manager: Select an image file or upload from computer...', false);
-                openMediaModal();
+                showNotice('Please select an image file first via "Upload from Computer" or "WP Gallery".', true);
+                $('#rocketslide-file-input').trigger('click');
                 return;
             }
 
@@ -207,12 +215,13 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $btn.prop('disabled', false).html('🚀 Upload & Add');
+                    $btn.prop('disabled', false).html('🚀 Upload & Crop to TikTok 9:16 WebP');
                     if (res.success) {
                         showNotice(res.data.message, false);
                         $('#rocketslide-add-image-form')[0].reset();
                         $('#rocketslide-media-id').val('');
-                        $('#rocketslide-file-name').text('No file selected');
+                        $('#rocketslide-file-name').text('No file chosen');
+                        $('#rocketslide-image-preview-wrapper').hide();
                         
                         $('#rocketslide-empty-state').remove();
                         var img = res.data.image;

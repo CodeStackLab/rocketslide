@@ -239,11 +239,15 @@ class RocketSlide_Admin {
                                         <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Choose from WP Gallery</button>
                                         <span id="rocketslide-file-name" class="rocketslide-file-name">No file chosen</span>
                                     </div>
+                                    <div id="rocketslide-image-preview-wrapper" style="display:none; margin-top: 10px; align-items: center; gap: 10px;">
+                                        <img id="rocketslide-image-preview-thumb" src="" alt="Selected Preview" style="width: 50px; height: 88px; object-fit: cover; border-radius: 6px; border: 2px solid var(--blue); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
+                                        <span style="font-size: 11.5px; color: var(--green); font-weight: 600;">✨ Ready to convert to 9:16 HD WebP!</span>
+                                    </div>
                                 </div>
 
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Target Redirect URL <span class="req">*</span></label>
-                                    <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" required class="rocketslide-input">
+                                    <label class="rocketslide-label">Target Redirect URL <span style="font-weight:400; color:var(--text-muted);">(Optional — auto-uses Fallback URL if empty)</span></label>
+                                    <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" class="rocketslide-input">
                                 </div>
                             </div>
 
@@ -537,8 +541,11 @@ class RocketSlide_Admin {
         }
 
         $target_url = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
-        $timer      = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
-        $media_id   = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
+        if (empty($target_url)) {
+            $target_url = get_option('rocketslide_fallback_url', 'https://google.com');
+        }
+        $timer    = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
+        $media_id = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
 
         $processed_result = null;
 
