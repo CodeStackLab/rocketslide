@@ -83,13 +83,7 @@
             img.setAttribute('decoding', 'async');
         }
 
-        // Overlay play icon
-        var playOverlay = document.createElement('div');
-        playOverlay.className = 'reel-play-overlay';
-        playOverlay.innerHTML = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
-
         card.appendChild(img);
-        card.appendChild(playOverlay);
 
         // Click Handler -> Redirect (Disabled in Test Mode for previewing)
         card.addEventListener('click', function () {
