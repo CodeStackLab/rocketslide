@@ -35,8 +35,8 @@ $is_test_mode = ('1' === get_option('rocketslide_test_mode', '0')) || (isset($_G
     <meta property="og:url" content="<?php echo esc_url($current_url); ?>" />
     <?php if (!empty($og_image)) : ?>
         <meta property="og:image" content="<?php echo esc_url($og_image); ?>" />
-        <meta property="og:image:width" content="540" />
-        <meta property="og:image:height" content="960" />
+        <meta property="og:image:width" content="1080" />
+        <meta property="og:image:height" content="1920" />
     <?php endif; ?>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="robots" content="index, follow">
