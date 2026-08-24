@@ -192,25 +192,27 @@ class RocketSlide_Admin {
             <div class="rocketslide-stats-row">
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">🎬</span>
-                    <span class="stat-value" id="rocketslide-stat-images-count"><?php echo count($images); ?></span>
+                    <span class="stat-value" id="rocketslide-stat-images-count" style="color: #38bdf8;"><?php echo count($images); ?></span>
                     <span class="stat-label">Active Reels</span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon"><?php echo ($test_mode === '1') ? '🧪' : '🛡️'; ?></span>
-                    <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#d29922' : '#3fb950'; ?>;">
+                    <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#f59e0b' : '#4ade80'; ?>;">
                         <?php echo ($test_mode === '1') ? 'Testing' : 'Active'; ?>
                     </span>
-                    <span class="stat-label"><?php echo ($test_mode === '1') ? 'Bypass Active' : 'FB/IG Cloaking'; ?></span>
+                    <span class="stat-label"><?php echo ($test_mode === '1') ? 'Bypass Active' : 'Dual-Layer Engine'; ?></span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">📊</span>
-                    <span class="stat-value"><?php echo !empty($tracking_script) ? 'Connected' : 'None'; ?></span>
-                    <span class="stat-label">Tracking Engine</span>
+                    <span class="stat-value" style="color: <?php echo !empty($tracking_script) ? '#a855f7' : '#94a3b8'; ?>;">
+                        <?php echo !empty($tracking_script) ? 'Connected' : 'None'; ?>
+                    </span>
+                    <span class="stat-label">Publytics & GA</span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">⚡</span>
-                    <span class="stat-value">9:16 <span class="stat-subval">(1080×1920)</span></span>
-                    <span class="stat-label">TikTok WebP Crop</span>
+                    <span class="stat-value" style="color: #38bdf8;">9:16 HD</span>
+                    <span class="stat-label">540×960 WebP</span>
                 </div>
             </div>
 
