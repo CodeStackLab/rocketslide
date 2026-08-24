@@ -110,6 +110,7 @@ require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-cloaking.php';
 require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-image-processor.php';
 require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-frontend.php';
 require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-admin.php';
+require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-updater.php';
 
 // ============================================================
 // MAIN PLUGIN SINGLETON
@@ -159,8 +160,9 @@ final class RocketSlide_Landing_Page {
 	private function boot_components() {
 		new RocketSlide_Frontend();
 		new RocketSlide_Admin();
-		// RocketSlide_Cloaking & RocketSlide_Image_Processor are static-utility classes
-		// — they don't need instantiation; they're called by Frontend & Admin.
+		if ( is_admin() ) {
+			new RocketSlide_Updater( ROCKETSLIDE_PLUGIN_FILE, 'CodeStackLab', 'rocketslide' );
+		}
 	}
 
 	// -----------------------------------------------------------
