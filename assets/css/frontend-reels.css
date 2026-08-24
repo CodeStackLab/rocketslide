@@ -71,6 +71,33 @@ html, body {
     }
 }
 
+@media (max-width: 360px) {
+    .reel-info-block {
+        left: 10px !important;
+        right: 70px !important;
+        bottom: 16px !important;
+    }
+    .reel-action-bar {
+        right: 10px !important;
+        bottom: 16px !important;
+        gap: 14px !important;
+    }
+    .reel-username {
+        font-size: 13.5px !important;
+    }
+    .reel-caption {
+        font-size: 12px !important;
+    }
+    .reel-action-icon {
+        width: 34px !important;
+        height: 34px !important;
+        font-size: 22px !important;
+    }
+    .reel-action-count {
+        font-size: 10.5px !important;
+    }
+}
+
 .reels-container::-webkit-scrollbar {
     display: none;
 }
