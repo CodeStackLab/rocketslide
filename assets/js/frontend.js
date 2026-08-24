@@ -182,6 +182,16 @@
         gradient.className = 'reel-overlay-gradient';
         card.appendChild(gradient);
 
+        // Center Glassmorphism Play Button Overlay
+        var playOverlay = document.createElement('div');
+        playOverlay.className = 'reel-play-overlay';
+        playOverlay.innerHTML = `
+            <svg viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z"/>
+            </svg>
+        `;
+        card.appendChild(playOverlay);
+
         // Bottom-Left Author & Info Block
         var infoBlock = document.createElement('div');
         infoBlock.className = 'reel-info-block';
@@ -225,7 +235,11 @@
                 <span class="reel-action-count">${escapeHtml(commentsCount)}</span>
             </button>
             <button class="reel-action-btn action-share-btn">
-                <span class="reel-action-icon">↗️</span>
+                <span class="reel-action-icon" style="display:flex; align-items:center; justify-content:center;">
+                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style="display:block; margin:0 auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
+                        <path d="M14 4v4.5C7 9.5 4 14.5 3 19.5c2.5-3.5 6-5.1 11-5.1V19l8-7.5L14 4z"/>
+                    </svg>
+                </span>
                 <span class="reel-action-count">${escapeHtml(sharesCount)}</span>
             </button>
             <div class="reel-music-disc">

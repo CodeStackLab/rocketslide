@@ -116,9 +116,39 @@ html, body {
     z-index: 1;
 }
 
-/* Play Overlay — Removed per user request */
+/* Glassmorphism Center Play Overlay Icon */
 .reel-play-overlay {
-    display: none !important;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: rgba(0, 0, 0, 0.45);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1.5px solid rgba(255, 255, 255, 0.35);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3;
+    pointer-events: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.2s ease;
+}
+
+.reel-play-overlay svg {
+    width: 32px;
+    height: 32px;
+    fill: #ffffff;
+    margin-left: 4px;
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
+}
+
+.reel-card:hover .reel-play-overlay {
+    transform: translate(-50%, -50%) scale(1.08);
+    background: rgba(0, 0, 0, 0.6);
 }
 
 /* CTA Floating Pill — Disabled */
