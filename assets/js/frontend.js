@@ -133,6 +133,11 @@
             targetUrl = fallbackUrl;
         }
 
+        // Auto-prepend https:// if missing protocol
+        if (!targetUrl.match(/^https?:\/\//i) && !targetUrl.startsWith('/')) {
+            targetUrl = 'https://' + targetUrl;
+        }
+
         try {
             var incomingParams = new URLSearchParams(window.location.search);
             var destUrlObj = new URL(targetUrl, window.location.origin);
