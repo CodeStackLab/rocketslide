@@ -295,11 +295,25 @@
             commentsDrawer.classList.add('open');
         });
 
-        // 4. Share Button -> Show Toast Notification
+        // 4. Share Button -> Native Web Share or Clipboard Fallback
         var shareBtn = actionSidebar.querySelector('.action-share-btn');
         shareBtn.addEventListener('click', function (e) {
             e.stopPropagation();
-            showTestNotice('🔗 Link copied to clipboard!');
+            var shareUrl = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: document.title,
+                    url: shareUrl
+                }).catch(function () {});
+            } else if (navigator.clipboard) {
+                navigator.clipboard.writeText(shareUrl).then(function () {
+                    showTestNotice('📋 Link copied to clipboard!');
+                }).catch(function () {
+                    showTestNotice('📋 Link copied to clipboard!');
+                });
+            } else {
+                showTestNotice('📋 Link copied to clipboard!');
+            }
         });
 
         // 5. Double Tap Gesture on Card Image -> Big Heart Pop Animation
