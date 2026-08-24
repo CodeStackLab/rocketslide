@@ -37,6 +37,7 @@ class RocketSlide_Admin {
         add_action('wp_ajax_rocketslide_save_settings', array($this, 'ajax_save_settings'));
         add_action('wp_ajax_rocketslide_verify_publytics', array($this, 'ajax_verify_publytics'));
         add_action('wp_ajax_rocketslide_upload_image', array($this, 'ajax_upload_image'));
+        add_action('wp_ajax_rocketslide_upload_avatar', array($this, 'ajax_upload_avatar'));
         add_action('wp_ajax_rocketslide_update_image', array($this, 'ajax_update_image'));
         add_action('wp_ajax_rocketslide_delete_image', array($this, 'ajax_delete_image'));
     }
@@ -259,10 +260,12 @@ class RocketSlide_Admin {
                                 </div>
 
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Custom image URL or file)</span></label>
-                                    <div style="display:flex; gap:8px;">
+                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Upload local file or pick WP gallery)</span></label>
+                                    <div style="display:flex; gap:6px;">
                                         <input type="url" id="rocketslide-new-user-avatar" placeholder="https://example.com/avatar.jpg (Optional)" class="rocketslide-input">
-                                        <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary" style="white-space:nowrap;">👤 WP Media</button>
+                                        <input type="file" id="rocketslide-new-avatar-file-input" accept="image/*" class="rocketslide-file-hidden" style="display:none;">
+                                        <button type="button" id="rocketslide-upload-avatar-computer-btn" class="rocketslide-btn rocketslide-btn-primary" style="white-space:nowrap; padding:6px 10px; font-size:11px;">💻 Local</button>
+                                        <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary" style="white-space:nowrap; padding:6px 10px; font-size:11px;">📁 Gallery</button>
                                     </div>
                                 </div>
                             </div>
@@ -356,7 +359,9 @@ class RocketSlide_Admin {
                                             <label class="rocketslide-label">Avatar Image URL:</label>
                                             <div style="display:flex; gap:6px;">
                                                 <input type="url" class="rocketslide-input rocketslide-card-avatar" value="<?php echo esc_url($user_avatar); ?>" placeholder="Avatar URL">
-                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;">🖼️</button>
+                                                <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
+                                                <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar">💻 Local</button>
+                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery">📁 Gallery</button>
                                             </div>
                                         </div>
                                         <div>
@@ -761,5 +766,55 @@ class RocketSlide_Admin {
             'message' => 'Image deleted successfully!',
             'total'   => count($filtered)
         ));
+    }
+
+    /**
+     * AJAX Upload Avatar File from Local Computer
+     */
+    public function ajax_upload_avatar() {
+        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Unauthorized');
+        }
+
+        if (!isset($_FILES['avatar_file']) || empty($_FILES['avatar_file']['name'])) {
+            wp_send_json_error('No avatar image file provided.');
+        }
+
+        $file = $_FILES['avatar_file'];
+
+        $allowed_mimes = array(
+            'jpg'  => 'image/jpeg',
+            'jpeg' => 'image/jpeg',
+            'png'  => 'image/png',
+            'webp' => 'image/webp',
+            'gif'  => 'image/gif'
+        );
+
+        $file_info = wp_check_filetype(basename($file['name']), $allowed_mimes);
+
+        if (empty($file_info['ext'])) {
+            wp_send_json_error('Invalid image type. Please upload a JPG, PNG, WebP, or GIF image.');
+        }
+
+        $upload_dir = rocketslide_uploads_dir();
+        $avatar_dir = $upload_dir . 'avatars/';
+        if (!file_exists($avatar_dir)) {
+            wp_mkdir_p($avatar_dir);
+        }
+
+        $filename    = 'avatar_' . uniqid() . '.' . $file_info['ext'];
+        $target_path = $avatar_dir . $filename;
+
+        if (move_uploaded_file($file['tmp_name'], $target_path)) {
+            $avatar_url = rocketslide_uploads_url() . 'avatars/' . $filename;
+            wp_send_json_success(array(
+                'message' => 'Avatar uploaded successfully!',
+                'url'     => $avatar_url
+            ));
+        } else {
+            wp_send_json_error('Failed to save uploaded avatar file.');
+        }
     }
 }

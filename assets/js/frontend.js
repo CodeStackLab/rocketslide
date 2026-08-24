@@ -156,7 +156,7 @@
         card.setAttribute('data-timer', imageItem.timer || 0);
 
         var username       = imageItem.username || '@viral_reels_official';
-        var userAvatar    = imageItem.user_avatar || '';
+        var userAvatar     = imageItem.user_avatar || imageItem.url || '';
         var caption        = imageItem.caption || 'Wait till the end! 😱🔥 #viral #trending #reels';
         var likesCount     = imageItem.likes_count || '142.8K';
         var commentsCount  = imageItem.comments_count || '3.4K';

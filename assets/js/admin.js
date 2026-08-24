@@ -198,6 +198,43 @@
             avatarUploader.open();
         });
 
+        // Local Computer Avatar Upload for New Reel Form
+        $('#rocketslide-upload-avatar-computer-btn').on('click', function (e) {
+            e.preventDefault();
+            $('#rocketslide-new-avatar-file-input').trigger('click');
+        });
+
+        $('#rocketslide-new-avatar-file-input').on('change', function () {
+            var files = this.files;
+            if (!files || files.length === 0) return;
+
+            var formData = new FormData();
+            formData.append('action', 'rocketslide_upload_avatar');
+            formData.append('nonce', rocketslide_admin_vars.nonce);
+            formData.append('avatar_file', files[0]);
+
+            showNotice('Uploading avatar image...', false);
+
+            $.ajax({
+                url: rocketslide_admin_vars.ajax_url,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.success) {
+                        $('#rocketslide-new-user-avatar').val(res.data.url);
+                        showNotice('👤 Avatar image uploaded successfully!', false);
+                    } else {
+                        showNotice(res.data || 'Avatar upload failed.', true);
+                    }
+                },
+                error: function () {
+                    showNotice('Server error uploading avatar.', true);
+                }
+            });
+        });
+
         // Avatar WP Media Picker for Individual Cards
         $(document).on('click', '.rocketslide-pick-card-avatar-btn', function (e) {
             e.preventDefault();
@@ -212,6 +249,45 @@
                 $input.val(attachment.url);
             });
             cardAvatarPicker.open();
+        });
+
+        // Local Computer Avatar Upload for Individual Cards
+        $(document).on('click', '.rocketslide-pick-card-avatar-computer-btn', function (e) {
+            e.preventDefault();
+            var $fileInput = $(this).siblings('.rocketslide-card-avatar-file-input');
+            $fileInput.trigger('click');
+        });
+
+        $(document).on('change', '.rocketslide-card-avatar-file-input', function () {
+            var files = this.files;
+            if (!files || files.length === 0) return;
+
+            var $urlInput = $(this).siblings('.rocketslide-card-avatar');
+            var formData = new FormData();
+            formData.append('action', 'rocketslide_upload_avatar');
+            formData.append('nonce', rocketslide_admin_vars.nonce);
+            formData.append('avatar_file', files[0]);
+
+            showNotice('Uploading avatar image...', false);
+
+            $.ajax({
+                url: rocketslide_admin_vars.ajax_url,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.success) {
+                        $urlInput.val(res.data.url);
+                        showNotice('👤 Card avatar uploaded successfully!', false);
+                    } else {
+                        showNotice(res.data || 'Avatar upload failed.', true);
+                    }
+                },
+                error: function () {
+                    showNotice('Server error uploading avatar.', true);
+                }
+            });
         });
 
         // 6. Upload & Process Image Form
