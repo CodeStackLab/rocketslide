@@ -330,7 +330,7 @@
             }
 
             var $btn = $('#rocketslide-add-image-btn');
-            $btn.prop('disabled', true).html('⏳ Converting 540x960 WebP...');
+            $btn.prop('disabled', true).html('⏳ Saving & Converting WebP...');
 
             $.ajax({
                 url: rocketslide_admin_vars.ajax_url,
@@ -339,7 +339,7 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $btn.prop('disabled', false).html('🚀 Upload & Crop to TikTok 9:16 WebP');
+                    $btn.prop('disabled', false).html('🚀 Save & Add Reel to Gallery (540x960 WebP)');
                     if (res.success) {
                         showNotice(res.data.message, false);
                         $('#rocketslide-add-image-form')[0].reset();
@@ -380,7 +380,9 @@
                                         <label class="rocketslide-label">Avatar Image URL:</label>
                                         <div style="display:flex; gap:6px;">
                                             <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar URL">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;">🖼️</button>
+                                            <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar">💻 Local</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery">📁 Gallery</button>
                                         </div>
                                     </div>
                                     <div>

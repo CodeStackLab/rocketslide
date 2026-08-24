@@ -299,7 +299,7 @@ class RocketSlide_Admin {
                             <!-- Row 5: Submit Action -->
                             <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
                                 <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
-                                    🚀 Upload & Crop to TikTok 9:16 WebP
+                                    🚀 Save & Add Reel to Gallery (540x960 WebP)
                                 </button>
                             </div>
                         </div>
