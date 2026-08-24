@@ -306,8 +306,7 @@
             var sharesCount    = $('#rocketslide-new-shares').val();
 
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
-                showNotice('Please select an image file first via "Upload from Computer" or "WP Gallery".', true);
-                $('#rocketslide-file-input').trigger('click');
+                showNotice('Please select an image file first via "Upload from Computer" or "Choose from WP Gallery".', true);
                 return;
             }
 
