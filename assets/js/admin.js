@@ -378,12 +378,7 @@
                                     </div>
                                     <div>
                                         <label class="rocketslide-label">Avatar Image URL:</label>
-                                        <div style="display:flex; gap:6px;">
-                                            <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar URL">
-                                            <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar">💻 Local</button>
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery">📁 Gallery</button>
-                                        </div>
+                                        <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar Image URL">
                                     </div>
                                     <div>
                                         <label class="rocketslide-label">Reel Caption:</label>
