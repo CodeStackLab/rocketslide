@@ -297,13 +297,13 @@
             var fileInput      = $('#rocketslide-file-input')[0];
             var mediaId        = $('#rocketslide-media-id').val();
             var targetUrl      = $('#rocketslide-new-target-url').val();
-            var timer          = $('#rocketslide-new-timer').val();
-            var username       = $('#rocketslide-new-username').val();
-            var userAvatar     = $('#rocketslide-new-user-avatar').val();
-            var caption        = $('#rocketslide-new-caption').val();
-            var likesCount     = $('#rocketslide-new-likes').val();
-            var commentsCount  = $('#rocketslide-new-comments').val();
-            var sharesCount    = $('#rocketslide-new-shares').val();
+            var timer          = 0;
+            var username       = '@viral_reels';
+            var userAvatar     = '';
+            var caption        = 'Wait till the end! 😱🔥 #viral #trending #reels';
+            var likesCount     = '142.8K';
+            var commentsCount  = '3.4K';
+            var sharesCount    = '18.9K';
 
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
                 showNotice('Please select an image file first via "Upload from Computer" or "Choose from WP Gallery".', true);

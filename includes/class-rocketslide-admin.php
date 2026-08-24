@@ -252,51 +252,7 @@ class RocketSlide_Admin {
                                 </div>
                             </div>
 
-                            <!-- Row 2: Username & Profile Avatar Image -->
-                            <div class="rocketslide-form-grid-2" style="margin-top: 16px;">
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Username Handle (e.g. @viral_reels)</label>
-                                    <input type="text" id="rocketslide-new-username" placeholder="@viral_reels_official" class="rocketslide-input" value="@viral_reels">
-                                </div>
-
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Upload local file or pick WP gallery)</span></label>
-                                    <div style="display:flex; gap:6px;">
-                                        <input type="url" id="rocketslide-new-user-avatar" placeholder="https://example.com/avatar.jpg (Optional)" class="rocketslide-input">
-                                        <input type="file" id="rocketslide-new-avatar-file-input" accept="image/*" class="rocketslide-file-hidden" style="display:none;">
-                                        <button type="button" id="rocketslide-upload-avatar-computer-btn" class="rocketslide-btn rocketslide-btn-primary" style="white-space:nowrap; padding:6px 10px; font-size:11px;">💻 Local</button>
-                                        <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary" style="white-space:nowrap; padding:6px 10px; font-size:11px;">📁 Gallery</button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!-- Row 3: Caption Text -->
-                            <div class="rocketslide-field" style="margin-top: 16px;">
-                                <label class="rocketslide-label">Reel Caption / Description Text</label>
-                                <input type="text" id="rocketslide-new-caption" placeholder="Wait till the end! 😱🔥 #viral #trending #reels" class="rocketslide-input" value="Wait till the end! 😱🔥 #viral #trending #reels">
-                            </div>
-
-                            <!-- Row 4: Engagement Counters (Likes, Comments, Shares, Timer) -->
-                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-top:16px;">
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">❤️ Likes Count</label>
-                                    <input type="text" id="rocketslide-new-likes" placeholder="142.8K" value="142.8K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">💬 Comments</label>
-                                    <input type="text" id="rocketslide-new-comments" placeholder="3.4K" value="3.4K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">↗️ Shares Count</label>
-                                    <input type="text" id="rocketslide-new-shares" placeholder="18.9K" value="18.9K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">⏱️ Timer (s)</label>
-                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
-                                </div>
-                            </div>
-
-                            <!-- Row 5: Submit Action -->
+                            <!-- Row 2: Submit Action -->
                             <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
                                 <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
                                     🚀 Save & Crop New Reel (540×960 WebP)
