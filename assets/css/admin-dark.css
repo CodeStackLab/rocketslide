@@ -641,7 +641,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 18px;
-    align-items: end;
+    align-items: start;
 }
 
 .rocketslide-field-submit .rocketslide-btn {
