@@ -339,7 +339,7 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $btn.prop('disabled', false).html('🚀 Save & Add Reel to Gallery (540x960 WebP)');
+                    $btn.prop('disabled', false).html('🚀 Save & Crop New Reel (540×960 WebP)');
                     if (res.success) {
                         showNotice(res.data.message, false);
                         $('#rocketslide-add-image-form')[0].reset();
