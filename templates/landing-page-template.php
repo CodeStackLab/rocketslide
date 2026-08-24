@@ -20,6 +20,7 @@ $og_image = !empty($images) ? $images[0]['url'] : '';
 $current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
 $is_test_mode = ('1' === get_option('rocketslide_test_mode', '0')) || (isset($_GET['test_mode']) && '1' === $_GET['test_mode']);
+$is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
