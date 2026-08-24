@@ -253,7 +253,51 @@ class RocketSlide_Admin {
                                 </div>
                             </div>
 
-                            <!-- Row 2: Submit Action -->
+                            <!-- Row 2: Username & Profile Avatar Image -->
+                            <div class="rocketslide-form-grid-2" style="margin-top: 16px;">
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">Username Handle (e.g. @viral_reels)</label>
+                                    <input type="text" id="rocketslide-new-username" placeholder="@viral_reels_official" class="rocketslide-input" value="@viral_reels">
+                                </div>
+
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Upload local file or pick WP gallery)</span></label>
+                                    <div style="display:flex; gap:6px;">
+                                        <input type="url" id="rocketslide-new-user-avatar" placeholder="https://example.com/avatar.jpg (Optional)" class="rocketslide-input">
+                                        <input type="file" id="rocketslide-new-avatar-file-input" accept="image/*" class="rocketslide-file-hidden" style="display:none;">
+                                        <button type="button" id="rocketslide-upload-avatar-computer-btn" class="rocketslide-btn rocketslide-btn-primary" style="white-space:nowrap; padding:6px 10px; font-size:11px;" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Local</button>
+                                        <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary" style="white-space:nowrap; padding:6px 10px; font-size:11px;" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Gallery</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Row 3: Caption Text -->
+                            <div class="rocketslide-field" style="margin-top: 16px;">
+                                <label class="rocketslide-label">Reel Caption / Description Text</label>
+                                <input type="text" id="rocketslide-new-caption" placeholder="Wait till the end! 😱🔥 #viral #trending #reels" class="rocketslide-input" value="Wait till the end! 😱🔥 #viral #trending #reels">
+                            </div>
+
+                            <!-- Row 4: Engagement Counters (Likes, Comments, Shares, Timer) -->
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-top:16px;">
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">❤️ Likes Count</label>
+                                    <input type="text" id="rocketslide-new-likes" placeholder="142.8K" value="142.8K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">💬 Comments</label>
+                                    <input type="text" id="rocketslide-new-comments" placeholder="3.4K" value="3.4K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">↗️ Shares Count</label>
+                                    <input type="text" id="rocketslide-new-shares" placeholder="18.9K" value="18.9K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">⏱️ Timer (s)</label>
+                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
+                                </div>
+                            </div>
+
+                            <!-- Row 5: Submit Action -->
                             <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
                                 <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
                                     <span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)
@@ -278,10 +322,6 @@ class RocketSlide_Admin {
                             <?php foreach ($images as $index => $img) : 
                                 $username       = !empty($img['username']) ? $img['username'] : '@viral_reels';
                                 $user_avatar    = !empty($img['user_avatar']) ? $img['user_avatar'] : '';
-                                $caption        = !empty($img['caption']) ? $img['caption'] : 'Wait till the end! 😱🔥 #viral #trending';
-                                $likes_count    = !empty($img['likes_count']) ? $img['likes_count'] : '142.8K';
-                                $comments_count = !empty($img['comments_count']) ? $img['comments_count'] : '3.4K';
-                                $shares_count   = !empty($img['shares_count']) ? $img['shares_count'] : '18.9K';
                             ?>
                                 <div class="rocketslide-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
                                     <div class="rocketslide-img-thumb">
@@ -302,44 +342,7 @@ class RocketSlide_Admin {
                                             <label class="rocketslide-label">Target URL:</label>
                                             <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>">
                                         </div>
-                                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                                            <div>
-                                                <label class="rocketslide-label">Username:</label>
-                                                <input type="text" class="rocketslide-input rocketslide-card-username" value="<?php echo esc_attr($username); ?>">
-                                            </div>
-                                            <div>
-                                                <label class="rocketslide-label">Redirect Timer (s):</label>
-                                                <input type="number" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="rocketslide-label">Avatar Image URL:</label>
-                                            <div style="display:flex; gap:6px;">
-                                                <input type="url" class="rocketslide-input rocketslide-card-avatar" value="<?php echo esc_url($user_avatar); ?>" placeholder="Avatar URL">
-                                                <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
-                                                <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Local</button>
-                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Gallery</button>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <label class="rocketslide-label">Reel Caption:</label>
-                                            <input type="text" class="rocketslide-input rocketslide-card-caption" value="<?php echo esc_attr($caption); ?>">
-                                        </div>
-                                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
-                                            <div>
-                                                <label class="rocketslide-label">❤️ Likes:</label>
-                                                <input type="text" class="rocketslide-input rocketslide-card-likes" value="<?php echo esc_attr($likes_count); ?>">
-                                            </div>
-                                            <div>
-                                                <label class="rocketslide-label">💬 Comments:</label>
-                                                <input type="text" class="rocketslide-input rocketslide-card-comments" value="<?php echo esc_attr($comments_count); ?>">
-                                            </div>
-                                            <div>
-                                                <label class="rocketslide-label">↗️ Shares:</label>
-                                                <input type="text" class="rocketslide-input rocketslide-card-shares" value="<?php echo esc_attr($shares_count); ?>">
-                                            </div>
-                                        </div>
-                                        <div class="rocketslide-img-card-actions">
+                                        <div class="rocketslide-img-card-actions" style="margin-top:12px;">
                                             <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
                                             <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
                                         </div>

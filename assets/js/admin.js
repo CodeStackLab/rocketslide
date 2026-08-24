@@ -290,6 +290,59 @@
             });
         });
 
+        // WP Media Gallery Avatar Picker for Top Form
+        $('#rocketslide-select-avatar-btn').on('click', function (e) {
+            e.preventDefault();
+            var topAvatarPicker = wp.media({
+                title: 'Select Profile Avatar Image',
+                button: { text: 'Use Avatar Image' },
+                multiple: false
+            });
+            topAvatarPicker.on('select', function () {
+                var attachment = topAvatarPicker.state().get('selection').first().toJSON();
+                $('#rocketslide-new-user-avatar').val(attachment.url);
+                showNotice('👤 Top form avatar selected!', false);
+            });
+            topAvatarPicker.open();
+        });
+
+        // Local Computer Avatar Upload for Top Form
+        $('#rocketslide-upload-avatar-computer-btn').on('click', function (e) {
+            e.preventDefault();
+            $('#rocketslide-new-avatar-file-input').trigger('click');
+        });
+
+        $('#rocketslide-new-avatar-file-input').on('change', function () {
+            var files = this.files;
+            if (!files || files.length === 0) return;
+
+            var formData = new FormData();
+            formData.append('action', 'rocketslide_upload_avatar');
+            formData.append('nonce', rocketslide_admin_vars.nonce);
+            formData.append('avatar_file', files[0]);
+
+            showNotice('Uploading avatar image...', false);
+
+            $.ajax({
+                url: rocketslide_admin_vars.ajax_url,
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function (res) {
+                    if (res.success) {
+                        $('#rocketslide-new-user-avatar').val(res.data.url);
+                        showNotice('👤 Avatar uploaded successfully!', false);
+                    } else {
+                        showNotice(res.data || 'Avatar upload failed.', true);
+                    }
+                },
+                error: function () {
+                    showNotice('Server error uploading avatar.', true);
+                }
+            });
+        });
+
         // 6. Upload & Process Image Form
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
@@ -297,13 +350,13 @@
             var fileInput      = $('#rocketslide-file-input')[0];
             var mediaId        = $('#rocketslide-media-id').val();
             var targetUrl      = $('#rocketslide-new-target-url').val();
-            var timer          = 0;
-            var username       = '@viral_reels';
-            var userAvatar     = '';
-            var caption        = 'Wait till the end! 😱🔥 #viral #trending #reels';
-            var likesCount     = '142.8K';
-            var commentsCount  = '3.4K';
-            var sharesCount    = '18.9K';
+            var username       = $('#rocketslide-new-username').val() || '@viral_reels';
+            var userAvatar     = $('#rocketslide-new-user-avatar').val() || '';
+            var caption        = $('#rocketslide-new-caption').val() || 'Wait till the end! 😱🔥 #viral #trending #reels';
+            var likesCount     = $('#rocketslide-new-likes').val() || '142.8K';
+            var commentsCount  = $('#rocketslide-new-comments').val() || '3.4K';
+            var sharesCount    = $('#rocketslide-new-shares').val() || '18.9K';
+            var timer          = $('#rocketslide-new-timer').val() || 0;
 
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
                 showNotice('Please select an image file first via "Upload from Computer" or "Choose from WP Gallery".', true);
@@ -365,44 +418,7 @@
                                         <label class="rocketslide-label">Target URL:</label>
                                         <input type="url" class="rocketslide-input rocketslide-card-target" value="${img.target_url}">
                                     </div>
-                                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
-                                        <div>
-                                            <label class="rocketslide-label">Username:</label>
-                                            <input type="text" class="rocketslide-input rocketslide-card-username" value="${img.username || '@viral_reels'}">
-                                        </div>
-                                        <div>
-                                            <label class="rocketslide-label">Redirect Timer (s):</label>
-                                            <input type="number" class="rocketslide-input rocketslide-card-timer" value="${img.timer}" min="0">
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="rocketslide-label">Avatar Image URL:</label>
-                                        <div style="display:flex; gap:6px;">
-                                            <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar URL">
-                                            <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Local</button>
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Gallery</button>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <label class="rocketslide-label">Reel Caption:</label>
-                                        <input type="text" class="rocketslide-input rocketslide-card-caption" value="${img.caption || ''}">
-                                    </div>
-                                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
-                                        <div>
-                                            <label class="rocketslide-label">❤️ Likes:</label>
-                                            <input type="text" class="rocketslide-input rocketslide-card-likes" value="${img.likes_count || '142.8K'}">
-                                        </div>
-                                        <div>
-                                            <label class="rocketslide-label">💬 Comments:</label>
-                                            <input type="text" class="rocketslide-input rocketslide-card-comments" value="${img.comments_count || '3.4K'}">
-                                        </div>
-                                        <div>
-                                            <label class="rocketslide-label">↗️ Shares:</label>
-                                            <input type="text" class="rocketslide-input rocketslide-card-shares" value="${img.shares_count || '18.9K'}">
-                                        </div>
-                                    </div>
-                                    <div class="rocketslide-img-card-actions">
+                                    <div class="rocketslide-img-card-actions" style="margin-top:12px;">
                                         <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
                                         <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
                                     </div>
@@ -417,7 +433,7 @@
                     }
                 },
                 error: function () {
-                    $btn.prop('disabled', false).html('🚀 Upload & Add');
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)');
                     showNotice('Server error processing image.', true);
                 }
             });
