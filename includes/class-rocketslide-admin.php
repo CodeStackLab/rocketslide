@@ -113,6 +113,7 @@ class RocketSlide_Admin {
         }
 
         wp_enqueue_media();
+        wp_enqueue_style('dashicons');
 
         wp_enqueue_style(
             'rocketslide-admin-dark-css',
@@ -236,8 +237,8 @@ class RocketSlide_Admin {
                                     <div class="rocketslide-file-picker">
                                         <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
                                         <input type="hidden" id="rocketslide-media-id" value="">
-                                        <button type="button" id="rocketslide-upload-computer-btn" class="rocketslide-btn rocketslide-btn-primary">💻 Upload from Computer</button>
-                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">📁 Choose from WP Gallery</button>
+                                        <button type="button" id="rocketslide-upload-computer-btn" class="rocketslide-btn rocketslide-btn-primary"><span class="dashicons dashicons-desktop" style="font-size:16px; width:16px; height:16px; margin-right:4px; vertical-align:middle;"></span> Upload from Computer</button>
+                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary"><span class="dashicons dashicons-admin-media" style="font-size:16px; width:16px; height:16px; margin-right:4px; vertical-align:middle;"></span> Choose from WP Gallery</button>
                                         <span id="rocketslide-file-name" class="rocketslide-file-name">No file chosen</span>
                                     </div>
                                     <div id="rocketslide-image-preview-wrapper" style="display:none; margin-top: 10px; align-items: center; gap: 10px;">
@@ -255,7 +256,7 @@ class RocketSlide_Admin {
                             <!-- Row 2: Submit Action -->
                             <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
                                 <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
-                                    🚀 Save & Crop New Reel (540×960 WebP)
+                                    <span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)
                                 </button>
                             </div>
                         </div>
@@ -316,8 +317,8 @@ class RocketSlide_Admin {
                                             <div style="display:flex; gap:6px;">
                                                 <input type="url" class="rocketslide-input rocketslide-card-avatar" value="<?php echo esc_url($user_avatar); ?>" placeholder="Avatar URL">
                                                 <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
-                                                <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar">💻 Local</button>
-                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery">📁 Gallery</button>
+                                                <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Local</button>
+                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Gallery</button>
                                             </div>
                                         </div>
                                         <div>
@@ -339,8 +340,8 @@ class RocketSlide_Admin {
                                             </div>
                                         </div>
                                         <div class="rocketslide-img-card-actions">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn">💾 Save</button>
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn">🗑️ Delete</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
                                         </div>
                                     </div>
                                 </div>

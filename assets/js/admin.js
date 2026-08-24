@@ -338,7 +338,7 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $btn.prop('disabled', false).html('🚀 Save & Crop New Reel (540×960 WebP)');
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)');
                     if (res.success) {
                         showNotice(res.data.message, false);
                         $('#rocketslide-add-image-form')[0].reset();
@@ -380,8 +380,8 @@
                                         <div style="display:flex; gap:6px;">
                                             <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar URL">
                                             <input type="file" class="rocketslide-card-avatar-file-input" accept="image/*" style="display:none;">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar">💻 Local</button>
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery">📁 Gallery</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-primary rocketslide-pick-card-avatar-computer-btn" style="padding:4px 8px; font-size:11px;" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Local</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery" style="font-size:12px; width:12px; height:12px; vertical-align:middle;"></span> Gallery</button>
                                         </div>
                                     </div>
                                     <div>
@@ -403,8 +403,8 @@
                                         </div>
                                     </div>
                                     <div class="rocketslide-img-card-actions">
-                                        <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn">💾 Save</button>
-                                        <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn">🗑️ Delete</button>
+                                        <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
+                                        <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
                                     </div>
                                 </div>
                             </div>
