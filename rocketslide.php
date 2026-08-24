@@ -59,28 +59,46 @@ function rocketslide_uploads_url() {
 function rocketslide_get_default_images() {
 	return array(
 		array(
-			'id'         => 'sample_1',
-			'url'        => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-1.webp',
-			'path'       => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-1.webp',
-			'target_url' => 'https://google.com',
-			'timer'      => 0,
-			'created_at' => time()
+			'id'             => 'sample_1',
+			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-1.webp',
+			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-1.webp',
+			'target_url'     => 'https://google.com',
+			'timer'          => 0,
+			'username'       => '@viral_reels_official',
+			'user_avatar'    => '',
+			'caption'        => 'Wait till the end! 😱🔥 #viral #trending #reels',
+			'likes_count'    => '142.8K',
+			'comments_count' => '3.4K',
+			'shares_count'   => '18.9K',
+			'created_at'     => time()
 		),
 		array(
-			'id'         => 'sample_2',
-			'url'        => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-2.webp',
-			'path'       => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-2.webp',
-			'target_url' => 'https://bing.com',
-			'timer'      => 0,
-			'created_at' => time()
+			'id'             => 'sample_2',
+			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-2.webp',
+			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-2.webp',
+			'target_url'     => 'https://bing.com',
+			'timer'          => 0,
+			'username'       => '@top_trends_daily',
+			'user_avatar'    => '',
+			'caption'        => 'You won\'t believe this happened... 💥 #foryou #fyp',
+			'likes_count'    => '98.5K',
+			'comments_count' => '2.1K',
+			'shares_count'   => '11.4K',
+			'created_at'     => time()
 		),
 		array(
-			'id'         => 'sample_3',
-			'url'        => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-3.webp',
-			'path'       => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-3.webp',
-			'target_url' => 'https://yahoo.com',
-			'timer'      => 0,
-			'created_at' => time()
+			'id'             => 'sample_3',
+			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-3.webp',
+			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-3.webp',
+			'target_url'     => 'https://yahoo.com',
+			'timer'          => 0,
+			'username'       => '@reels_hub_vids',
+			'user_avatar'    => '',
+			'caption'        => 'Tap anywhere to watch full video! 🎬✨',
+			'likes_count'    => '215.3K',
+			'comments_count' => '5.9K',
+			'shares_count'   => '29.7K',
+			'created_at'     => time()
 		),
 	);
 }

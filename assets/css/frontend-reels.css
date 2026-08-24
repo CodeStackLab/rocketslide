@@ -104,6 +104,18 @@ html, body {
     pointer-events: none;
 }
 
+/* Linear Overlay Shadow for text readability */
+.reel-overlay-gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, transparent 20%, transparent 60%, rgba(0,0,0,0.85) 100%);
+    pointer-events: none;
+    z-index: 1;
+}
+
 /* Play Overlay — Removed per user request */
 .reel-play-overlay {
     display: none !important;
@@ -112,11 +124,6 @@ html, body {
 /* CTA Floating Pill — Disabled */
 .reel-cta-pill {
     display: none !important;
-}
-
-@keyframes bounceCta {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(-6px); }
 }
 
 /* Test Mode Top Pill Badge */
@@ -136,4 +143,398 @@ html, body {
     z-index: 100000;
     box-shadow: 0 4px 15px rgba(0,0,0,0.5);
     pointer-events: none;
+}
+
+/* ============================================================
+   RIGHT SIDEBAR SOCIAL INTERACTION BUTTONS
+   ============================================================ */
+.reel-action-bar {
+    position: absolute;
+    right: 14px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+    z-index: 10;
+}
+
+.reel-avatar-wrapper {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 6px;
+}
+
+.reel-avatar-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.reel-avatar-placeholder {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fe2c55, #ff0050);
+    color: #ffffff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    border: 2px solid #ffffff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4);
+}
+
+.reel-follow-plus {
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 20px;
+    height: 20px;
+    background: #fe2c55;
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 800;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease, background 0.2s ease;
+    cursor: pointer;
+}
+
+.reel-follow-plus.followed {
+    background: #25d366;
+    transform: translateX(-50%) scale(1.1);
+}
+
+.reel-action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+    transition: transform 0.15s ease;
+}
+
+.reel-action-btn:active {
+    transform: scale(0.85);
+}
+
+.reel-action-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 26px;
+    filter: drop-shadow(0 2px 5px rgba(0,0,0,0.5));
+}
+
+.reel-action-btn.liked .reel-action-icon {
+    animation: heartPulse 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+@keyframes heartPulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.4); }
+    100% { transform: scale(1); }
+}
+
+.reel-action-count {
+    font-size: 11.5px;
+    font-weight: 700;
+    color: #ffffff;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    letter-spacing: 0.2px;
+}
+
+/* Spinning Music Vinyl Disc */
+.reel-music-disc {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #111111;
+    border: 8px solid #222222;
+    box-shadow: 0 0 10px rgba(0,0,0,0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    animation: spinDisc 4s linear infinite;
+    margin-top: 4px;
+}
+
+.reel-music-disc-inner {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: #fe2c55;
+    border: 2px solid #ffffff;
+}
+
+@keyframes spinDisc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* ============================================================
+   BOTTOM-LEFT AUTHOR & CAPTION INFO SECTION
+   ============================================================ */
+.reel-info-block {
+    position: absolute;
+    left: 14px;
+    bottom: 24px;
+    right: 80px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #ffffff;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.8);
+}
+
+.reel-user-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.reel-username {
+    font-size: 15px;
+    font-weight: 800;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.reel-follow-pill {
+    background: #ffffff;
+    color: #000000;
+    border: none;
+    padding: 5px 14px;
+    border-radius: 18px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+}
+
+.reel-follow-pill.following {
+    background: rgba(255, 255, 255, 0.2);
+    color: #ffffff;
+    backdrop-filter: blur(4px);
+}
+
+.reel-caption {
+    font-size: 13.5px;
+    line-height: 1.4;
+    color: #f1f5f9;
+    font-weight: 400;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.reel-music-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: #e2e8f0;
+    font-weight: 500;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.reel-music-row span {
+    display: inline-block;
+    animation: marqueeText 10s linear infinite;
+}
+
+@keyframes marqueeText {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ============================================================
+   DOUBLE-TAP HEART POP & FLOATING PARTICLES ANIMATION
+   ============================================================ */
+.big-heart-pop {
+    position: absolute;
+    font-size: 90px;
+    pointer-events: none;
+    z-index: 99;
+    animation: bigHeartPop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    filter: drop-shadow(0 4px 15px rgba(254, 44, 85, 0.6));
+}
+
+@keyframes bigHeartPop {
+    0% { transform: translate(-50%, -50%) scale(0.2) rotate(-15deg); opacity: 0; }
+    50% { transform: translate(-50%, -50%) scale(1.2) rotate(0deg); opacity: 1; }
+    80% { transform: translate(-50%, -50%) scale(1) rotate(5deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1.4) rotate(0deg); opacity: 0; }
+}
+
+.floating-heart {
+    position: absolute;
+    font-size: 24px;
+    pointer-events: none;
+    z-index: 98;
+    animation: floatUp 1.2s ease-out forwards;
+}
+
+@keyframes floatUp {
+    0% { transform: translateY(0) scale(0.6); opacity: 1; }
+    100% { transform: translateY(-120px) scale(1.2) rotate(20deg); opacity: 0; }
+}
+
+/* ============================================================
+   INTERACTIVE DUMMY COMMENT DRAWER MODAL
+   ============================================================ */
+.reel-comments-drawer {
+    position: fixed;
+    bottom: -100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 430px;
+    height: 65vh;
+    height: 65dvh;
+    background: #121212;
+    border-top-left-radius: 18px;
+    border-top-right-radius: 18px;
+    z-index: 100000;
+    transition: bottom 0.3s cubic-bezier(0.1, 0.9, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 -8px 30px rgba(0,0,0,0.8);
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+@media (max-width: 480px) {
+    .reel-comments-drawer {
+        max-width: 100%;
+    }
+}
+
+.reel-comments-drawer.open {
+    bottom: 0;
+}
+
+.comments-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.comments-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: 0.3px;
+}
+
+.comments-close-btn {
+    background: none;
+    border: none;
+    color: #8e8e93;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 4px;
+}
+
+.comments-list {
+    flex: 1;
+    overflow-y: auto;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.comment-item {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.comment-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: #262626;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.comment-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.comment-author {
+    font-size: 12px;
+    font-weight: 700;
+    color: #a8a8a8;
+}
+
+.comment-text {
+    font-size: 13px;
+    color: #ffffff;
+    line-height: 1.35;
+}
+
+.comment-time {
+    font-size: 11px;
+    color: #666666;
+    margin-top: 2px;
+}
+
+.comments-input-bar {
+    padding: 12px 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    background: #181818;
+}
+
+.comments-input {
+    flex: 1;
+    background: #262626;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #ffffff;
+    font-size: 13px;
+    outline: none;
+}
+
+.comments-send-btn {
+    background: #fe2c55;
+    color: #ffffff;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    cursor: pointer;
 }

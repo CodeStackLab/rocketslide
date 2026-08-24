@@ -251,19 +251,53 @@ class RocketSlide_Admin {
                                 </div>
                             </div>
 
-                            <!-- Row 2: Auto-Redirect Timer & Submit Action -->
+                            <!-- Row 2: Username & Profile Avatar Image -->
                             <div class="rocketslide-form-grid-2" style="margin-top: 16px;">
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Auto-Redirect Timer (Seconds)</label>
-                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0 = Immediate Redirect on Click" class="rocketslide-input">
+                                    <label class="rocketslide-label">Username Handle (e.g. @viral_reels)</label>
+                                    <input type="text" id="rocketslide-new-username" placeholder="@viral_reels_official" class="rocketslide-input" value="@viral_reels">
                                 </div>
 
-                                <div class="rocketslide-field rocketslide-field-submit">
-                                    <label class="rocketslide-label rocketslide-label-spacer">Submit Action</label>
-                                    <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary">
-                                        🚀 Upload & Crop to TikTok 9:16 WebP
-                                    </button>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Custom image URL or file)</span></label>
+                                    <div style="display:flex; gap:8px;">
+                                        <input type="url" id="rocketslide-new-user-avatar" placeholder="https://example.com/avatar.jpg (Optional)" class="rocketslide-input">
+                                        <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary" style="white-space:nowrap;">👤 WP Media</button>
+                                    </div>
                                 </div>
+                            </div>
+
+                            <!-- Row 3: Caption Text -->
+                            <div class="rocketslide-field" style="margin-top: 16px;">
+                                <label class="rocketslide-label">Reel Caption / Description Text</label>
+                                <input type="text" id="rocketslide-new-caption" placeholder="Wait till the end! 😱🔥 #viral #trending #reels" class="rocketslide-input" value="Wait till the end! 😱🔥 #viral #trending #reels">
+                            </div>
+
+                            <!-- Row 4: Engagement Counters (Likes, Comments, Shares, Timer) -->
+                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-top:16px;">
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">❤️ Likes Count</label>
+                                    <input type="text" id="rocketslide-new-likes" placeholder="142.8K" value="142.8K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">💬 Comments</label>
+                                    <input type="text" id="rocketslide-new-comments" placeholder="3.4K" value="3.4K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">↗️ Shares Count</label>
+                                    <input type="text" id="rocketslide-new-shares" placeholder="18.9K" value="18.9K" class="rocketslide-input">
+                                </div>
+                                <div class="rocketslide-field">
+                                    <label class="rocketslide-label">⏱️ Timer (s)</label>
+                                    <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
+                                </div>
+                            </div>
+
+                            <!-- Row 5: Submit Action -->
+                            <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
+                                <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
+                                    🚀 Upload & Crop to TikTok 9:16 WebP
+                                </button>
                             </div>
                         </div>
                     </form>
@@ -281,21 +315,67 @@ class RocketSlide_Admin {
                                 <p>No 9:16 reel images added yet. Upload your first image above to launch your landing page!</p>
                             </div>
                         <?php else : ?>
-                            <?php foreach ($images as $index => $img) : ?>
+                            <?php foreach ($images as $index => $img) : 
+                                $username       = !empty($img['username']) ? $img['username'] : '@viral_reels';
+                                $user_avatar    = !empty($img['user_avatar']) ? $img['user_avatar'] : '';
+                                $caption        = !empty($img['caption']) ? $img['caption'] : 'Wait till the end! 😱🔥 #viral #trending';
+                                $likes_count    = !empty($img['likes_count']) ? $img['likes_count'] : '142.8K';
+                                $comments_count = !empty($img['comments_count']) ? $img['comments_count'] : '3.4K';
+                                $shares_count   = !empty($img['shares_count']) ? $img['shares_count'] : '18.9K';
+                            ?>
                                 <div class="rocketslide-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
                                     <div class="rocketslide-img-thumb">
                                         <img src="<?php echo esc_url($img['url']); ?>" alt="Reel Card">
                                         <span class="rocketslide-img-index">#<?php echo $index + 1; ?></span>
                                         <span class="rocketslide-img-format-badge">WebP</span>
+                                        <div class="rocketslide-thumb-user-badge">
+                                            <?php if (!empty($user_avatar)) : ?>
+                                                <img src="<?php echo esc_url($user_avatar); ?>" class="thumb-avatar" alt="Avatar">
+                                            <?php else : ?>
+                                                <span class="thumb-avatar-placeholder">👤</span>
+                                            <?php endif; ?>
+                                            <span><?php echo esc_html($username); ?></span>
+                                        </div>
                                     </div>
                                     <div class="rocketslide-img-body">
                                         <div>
                                             <label class="rocketslide-label">Target URL:</label>
                                             <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>">
                                         </div>
+                                        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                                            <div>
+                                                <label class="rocketslide-label">Username:</label>
+                                                <input type="text" class="rocketslide-input rocketslide-card-username" value="<?php echo esc_attr($username); ?>">
+                                            </div>
+                                            <div>
+                                                <label class="rocketslide-label">Redirect Timer (s):</label>
+                                                <input type="number" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
+                                            </div>
+                                        </div>
                                         <div>
-                                            <label class="rocketslide-label">Redirect Timer (s):</label>
-                                            <input type="number" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr($img['timer']); ?>" min="0">
+                                            <label class="rocketslide-label">Avatar Image URL:</label>
+                                            <div style="display:flex; gap:6px;">
+                                                <input type="url" class="rocketslide-input rocketslide-card-avatar" value="<?php echo esc_url($user_avatar); ?>" placeholder="Avatar URL">
+                                                <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;">🖼️</button>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <label class="rocketslide-label">Reel Caption:</label>
+                                            <input type="text" class="rocketslide-input rocketslide-card-caption" value="<?php echo esc_attr($caption); ?>">
+                                        </div>
+                                        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
+                                            <div>
+                                                <label class="rocketslide-label">❤️ Likes:</label>
+                                                <input type="text" class="rocketslide-input rocketslide-card-likes" value="<?php echo esc_attr($likes_count); ?>">
+                                            </div>
+                                            <div>
+                                                <label class="rocketslide-label">💬 Comments:</label>
+                                                <input type="text" class="rocketslide-input rocketslide-card-comments" value="<?php echo esc_attr($comments_count); ?>">
+                                            </div>
+                                            <div>
+                                                <label class="rocketslide-label">↗️ Shares:</label>
+                                                <input type="text" class="rocketslide-input rocketslide-card-shares" value="<?php echo esc_attr($shares_count); ?>">
+                                            </div>
                                         </div>
                                         <div class="rocketslide-img-card-actions">
                                             <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn">💾 Save</button>
@@ -540,12 +620,18 @@ class RocketSlide_Admin {
             wp_send_json_error('Unauthorized');
         }
 
-        $target_url = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
+        $target_url     = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
         if (empty($target_url)) {
             $target_url = get_option('rocketslide_fallback_url', 'https://google.com');
         }
-        $timer    = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
-        $media_id = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
+        $timer          = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
+        $media_id       = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
+        $username       = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '@viral_reels';
+        $user_avatar    = isset($_POST['user_avatar']) ? esc_url_raw($_POST['user_avatar']) : '';
+        $caption        = isset($_POST['caption']) ? sanitize_text_field($_POST['caption']) : 'Wait till the end! 😱🔥';
+        $likes_count    = isset($_POST['likes_count']) ? sanitize_text_field($_POST['likes_count']) : '142.8K';
+        $comments_count = isset($_POST['comments_count']) ? sanitize_text_field($_POST['comments_count']) : '3.4K';
+        $shares_count   = isset($_POST['shares_count']) ? sanitize_text_field($_POST['shares_count']) : '18.9K';
 
         $processed_result = null;
 
@@ -567,12 +653,18 @@ class RocketSlide_Admin {
         }
 
         $new_item = array(
-            'id'         => uniqid('img_'),
-            'url'        => $processed_result['url'],
-            'path'       => $processed_result['path'],
-            'target_url' => $target_url,
-            'timer'      => $timer,
-            'created_at' => time()
+            'id'             => uniqid('img_'),
+            'url'            => $processed_result['url'],
+            'path'           => $processed_result['path'],
+            'target_url'     => $target_url,
+            'timer'          => $timer,
+            'username'       => $username,
+            'user_avatar'    => $user_avatar,
+            'caption'        => $caption,
+            'likes_count'    => $likes_count,
+            'comments_count' => $comments_count,
+            'shares_count'   => $shares_count,
+            'created_at'     => time()
         );
 
         array_unshift($images, $new_item);
@@ -595,9 +687,15 @@ class RocketSlide_Admin {
             wp_send_json_error('Unauthorized');
         }
 
-        $id         = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
-        $target_url = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
-        $timer      = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
+        $id             = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
+        $target_url     = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
+        $timer          = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
+        $username       = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '@viral_reels';
+        $user_avatar    = isset($_POST['user_avatar']) ? esc_url_raw($_POST['user_avatar']) : '';
+        $caption        = isset($_POST['caption']) ? sanitize_text_field($_POST['caption']) : '';
+        $likes_count    = isset($_POST['likes_count']) ? sanitize_text_field($_POST['likes_count']) : '';
+        $comments_count = isset($_POST['comments_count']) ? sanitize_text_field($_POST['comments_count']) : '';
+        $shares_count   = isset($_POST['shares_count']) ? sanitize_text_field($_POST['shares_count']) : '';
 
         if (empty($id)) {
             wp_send_json_error('Invalid image ID.');
@@ -608,16 +706,22 @@ class RocketSlide_Admin {
 
         foreach ($images as &$img) {
             if ($img['id'] === $id) {
-                $img['target_url'] = $target_url;
-                $img['timer']      = $timer;
-                $updated           = true;
+                $img['target_url']     = $target_url;
+                $img['timer']          = $timer;
+                $img['username']       = $username;
+                $img['user_avatar']    = $user_avatar;
+                $img['caption']        = $caption;
+                $img['likes_count']    = $likes_count;
+                $img['comments_count'] = $comments_count;
+                $img['shares_count']   = $shares_count;
+                $updated               = true;
                 break;
             }
         }
 
         if ($updated) {
             update_option('rocketslide_images', $images);
-            wp_send_json_success(array('message' => 'Image details updated successfully!'));
+            wp_send_json_success(array('message' => 'Reel details updated successfully!'));
         } else {
             wp_send_json_error('Image not found.');
         }

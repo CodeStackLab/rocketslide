@@ -15,7 +15,92 @@
     var batchSize = 5;
     var isTimerActive = false;
 
-    // Toast Notice for Test Mode
+    // Create Comments Drawer Modal Element
+    var commentsDrawer = document.createElement('div');
+    commentsDrawer.className = 'reel-comments-drawer';
+    commentsDrawer.innerHTML = `
+        <div class="comments-header">
+            <span class="comments-title" id="comments-title">3.4K Comments</span>
+            <button class="comments-close-btn" id="comments-close-btn">✕</button>
+        </div>
+        <div class="comments-list" id="comments-list">
+            <div class="comment-item">
+                <div class="comment-avatar">👤</div>
+                <div class="comment-body">
+                    <div class="comment-author">@alex_vibe</div>
+                    <div class="comment-text">OMG wait for the end! 😱🔥</div>
+                    <div class="comment-time">2h ago • Reply</div>
+                </div>
+            </div>
+            <div class="comment-item">
+                <div class="comment-avatar">🔥</div>
+                <div class="comment-body">
+                    <div class="comment-author">@sarah_trends</div>
+                    <div class="comment-text">Is this real?! Tap the link guys! 👇</div>
+                    <div class="comment-time">4h ago • Reply</div>
+                </div>
+            </div>
+            <div class="comment-item">
+                <div class="comment-avatar">⚡</div>
+                <div class="comment-body">
+                    <div class="comment-author">@mike_reels</div>
+                    <div class="comment-text">Best video on my fyp today 😂</div>
+                    <div class="comment-time">6h ago • Reply</div>
+                </div>
+            </div>
+        </div>
+        <div class="comments-input-bar">
+            <input type="text" class="comments-input" id="comments-input-field" placeholder="Add comment...">
+            <button class="comments-send-btn" id="comments-send-btn">Post</button>
+        </div>
+    `;
+    document.body.appendChild(commentsDrawer);
+
+    // Comments Drawer Event Handlers
+    document.getElementById('comments-close-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        commentsDrawer.classList.remove('open');
+    });
+
+    function postComment() {
+        var input = document.getElementById('comments-input-field');
+        var val = input.value.trim();
+        if (!val) return;
+
+        var list = document.getElementById('comments-list');
+        var item = document.createElement('div');
+        item.className = 'comment-item';
+        item.innerHTML = `
+            <div class="comment-avatar">👤</div>
+            <div class="comment-body">
+                <div class="comment-author">@you</div>
+                <div class="comment-text">${escapeHtml(val)}</div>
+                <div class="comment-time">Just now • Reply</div>
+            </div>
+        `;
+        list.prepend(item);
+        input.value = '';
+    }
+
+    document.getElementById('comments-send-btn').addEventListener('click', function (e) {
+        e.stopPropagation();
+        postComment();
+    });
+
+    document.getElementById('comments-input-field').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') {
+            e.stopPropagation();
+            postComment();
+        }
+    });
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    // Toast Notice for Test Mode & Interactivity
     function showTestNotice(msg) {
         var existing = document.getElementById('rocketslide-test-toast');
         if (existing) existing.remove();
@@ -63,19 +148,26 @@
         }
     }
 
-    // 3. Render Reel Card Item
+    // 3. Render Reel Card Item with TikTok/Reels Interactive Social UI
     function createReelCard(imageItem, index) {
         var card = document.createElement('div');
         card.className = 'reel-card';
         card.setAttribute('data-target-url', imageItem.target_url || fallbackUrl);
         card.setAttribute('data-timer', imageItem.timer || 0);
 
+        var username       = imageItem.username || '@viral_reels_official';
+        var userAvatar    = imageItem.user_avatar || '';
+        var caption        = imageItem.caption || 'Wait till the end! 😱🔥 #viral #trending #reels';
+        var likesCount     = imageItem.likes_count || '142.8K';
+        var commentsCount  = imageItem.comments_count || '3.4K';
+        var sharesCount    = imageItem.shares_count || '18.9K';
+
+        // 9:16 Full Screen Image
         var img = document.createElement('img');
         img.className = 'reel-img';
         img.src = imageItem.url;
         img.alt = 'Reel Content';
 
-        // Infinite Scroll Optimization: First 2 eager, subsequent lazy
         if (index < 2) {
             img.setAttribute('loading', 'eager');
         } else {
@@ -85,23 +177,189 @@
 
         card.appendChild(img);
 
-        // Click Handler -> Redirect (Disabled in Test Mode for previewing)
-        card.addEventListener('click', function () {
-            var destUrl = buildTargetUrlWithParams(imageItem.target_url);
-            if (isTestMode) {
-                showTestNotice('🧪 Test Mode Active: External redirect bypassed for testing');
+        // Linear Gradient Shadow for contrast
+        var gradient = document.createElement('div');
+        gradient.className = 'reel-overlay-gradient';
+        card.appendChild(gradient);
+
+        // Bottom-Left Author & Info Block
+        var infoBlock = document.createElement('div');
+        infoBlock.className = 'reel-info-block';
+
+        var avatarMarkup = userAvatar 
+            ? `<img src="${userAvatar}" class="reel-avatar-img" alt="Avatar" style="width:28px; height:28px;">` 
+            : `<div class="reel-avatar-placeholder" style="width:28px; height:28px; font-size:14px;">👤</div>`;
+
+        infoBlock.innerHTML = `
+            <div class="reel-user-row">
+                ${avatarMarkup}
+                <span class="reel-username">${escapeHtml(username)}</span>
+                <button class="reel-follow-pill">Follow</button>
+            </div>
+            <div class="reel-caption">${escapeHtml(caption)}</div>
+            <div class="reel-music-row">
+                <span>🎵 Original Audio - ${escapeHtml(username)} &nbsp;&nbsp;&nbsp;&nbsp; 🎵 Original Audio - ${escapeHtml(username)}</span>
+            </div>
+        `;
+        card.appendChild(infoBlock);
+
+        // Right Sidebar Social Interaction Bar
+        var actionSidebar = document.createElement('div');
+        actionSidebar.className = 'reel-action-bar';
+
+        var avatarSidebarMarkup = userAvatar
+            ? `<img src="${userAvatar}" class="reel-avatar-img" alt="Avatar">`
+            : `<div class="reel-avatar-placeholder">👤</div>`;
+
+        actionSidebar.innerHTML = `
+            <div class="reel-avatar-wrapper">
+                ${avatarSidebarMarkup}
+                <div class="reel-follow-plus">+</div>
+            </div>
+            <button class="reel-action-btn action-like-btn">
+                <span class="reel-action-icon">🤍</span>
+                <span class="reel-action-count count-likes">${escapeHtml(likesCount)}</span>
+            </button>
+            <button class="reel-action-btn action-comment-btn">
+                <span class="reel-action-icon">💬</span>
+                <span class="reel-action-count">${escapeHtml(commentsCount)}</span>
+            </button>
+            <button class="reel-action-btn action-share-btn">
+                <span class="reel-action-icon">↗️</span>
+                <span class="reel-action-count">${escapeHtml(sharesCount)}</span>
+            </button>
+            <div class="reel-music-disc">
+                <div class="reel-music-disc-inner"></div>
+            </div>
+        `;
+        card.appendChild(actionSidebar);
+
+        // INTERACTION HANDLERS (Stop Propagation so clicking buttons doesn't trigger instant redirect)
+
+        // 1. Follow Buttons Toggle
+        var followPill = infoBlock.querySelector('.reel-follow-pill');
+        var followPlus = actionSidebar.querySelector('.reel-follow-plus');
+
+        function toggleFollow(e) {
+            e.stopPropagation();
+            if (followPill.classList.contains('following')) {
+                followPill.classList.remove('following');
+                followPill.innerText = 'Follow';
+                followPlus.classList.remove('followed');
+                followPlus.innerText = '+';
             } else {
-                window.location.replace(destUrl);
+                followPill.classList.add('following');
+                followPill.innerText = 'Following';
+                followPlus.classList.add('followed');
+                followPlus.innerText = '✓';
             }
+        }
+        followPill.addEventListener('click', toggleFollow);
+        followPlus.addEventListener('click', toggleFollow);
+
+        // 2. Like Button Toggle & Particle Animation
+        var likeBtn = actionSidebar.querySelector('.action-like-btn');
+        var likeIcon = likeBtn.querySelector('.reel-action-icon');
+
+        likeBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            if (likeBtn.classList.contains('liked')) {
+                likeBtn.classList.remove('liked');
+                likeIcon.innerText = '🤍';
+            } else {
+                likeBtn.classList.add('liked');
+                likeIcon.innerText = '❤️';
+                spawnFloatingHeart(card, e.clientX, e.clientY);
+            }
+        });
+
+        // 3. Comment Button -> Opens Comments Drawer
+        var commentBtn = actionSidebar.querySelector('.action-comment-btn');
+        commentBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            document.getElementById('comments-title').innerText = commentsCount + ' Comments';
+            commentsDrawer.classList.add('open');
+        });
+
+        // 4. Share Button -> Show Toast Notification
+        var shareBtn = actionSidebar.querySelector('.action-share-btn');
+        shareBtn.addEventListener('click', function (e) {
+            e.stopPropagation();
+            showTestNotice('🔗 Link copied to clipboard!');
+        });
+
+        // 5. Double Tap Gesture on Card Image -> Big Heart Pop Animation
+        var lastTap = 0;
+        card.addEventListener('click', function (e) {
+            // Check if click was on interactive buttons
+            if (e.target.closest('.reel-action-bar') || e.target.closest('.reel-info-block')) {
+                return;
+            }
+
+            var currentTime = new Date().getTime();
+            var tapLength = currentTime - lastTap;
+            if (tapLength < 300 && tapLength > 0) {
+                // Double tap detected!
+                e.stopPropagation();
+                spawnBigHeartPop(card, e.clientX, e.clientY);
+                if (!likeBtn.classList.contains('liked')) {
+                    likeBtn.classList.add('liked');
+                    likeIcon.innerText = '❤️';
+                }
+                lastTap = 0;
+                return;
+            }
+            lastTap = currentTime;
+
+            // Single Tap -> Trigger Target Redirect
+            setTimeout(function () {
+                if (lastTap !== 0) {
+                    var destUrl = buildTargetUrlWithParams(imageItem.target_url);
+                    if (isTestMode) {
+                        showTestNotice('🧪 Test Mode Active: External redirect bypassed for testing');
+                    } else {
+                        window.location.replace(destUrl);
+                    }
+                }
+            }, 300);
         });
 
         return card;
     }
 
+    // Helper: Spawn Floating Heart Particles
+    function spawnFloatingHeart(parent, x, y) {
+        var heart = document.createElement('div');
+        heart.className = 'floating-heart';
+        heart.innerText = '❤️';
+        var rect = parent.getBoundingClientRect();
+        heart.style.left = (x - rect.left - 12) + 'px';
+        heart.style.top = (y - rect.top - 12) + 'px';
+        parent.appendChild(heart);
+
+        setTimeout(function () {
+            heart.remove();
+        }, 1200);
+    }
+
+    // Helper: Spawn Big Heart Pop on Double Tap
+    function spawnBigHeartPop(parent, x, y) {
+        var heart = document.createElement('div');
+        heart.className = 'big-heart-pop';
+        heart.innerText = '❤️';
+        var rect = parent.getBoundingClientRect();
+        heart.style.left = (x - rect.left) + 'px';
+        heart.style.top = (y - rect.top) + 'px';
+        parent.appendChild(heart);
+
+        setTimeout(function () {
+            heart.remove();
+        }, 800);
+    }
+
     // 4. Batch Loading for Infinite Scroll
     function loadNextBatch() {
         if (images.length === 0) {
-            // Render placeholder card if no images uploaded
             var emptyCard = document.createElement('div');
             emptyCard.className = 'reel-card';
             emptyCard.style.padding = '20px';

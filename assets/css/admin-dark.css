@@ -814,6 +814,45 @@
     z-index: 2;
 }
 
+.rocketslide-thumb-user-badge {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    right: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 0, 0, 0.65);
+    backdrop-filter: blur(6px);
+    padding: 4px 8px;
+    border-radius: 20px;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 600;
+    z-index: 2;
+    overflow: hidden;
+}
+
+.rocketslide-thumb-user-badge span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.rocketslide-thumb-user-badge .thumb-avatar {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #ffffff;
+    flex-shrink: 0;
+}
+
+.rocketslide-thumb-user-badge .thumb-avatar-placeholder {
+    font-size: 12px;
+    line-height: 1;
+}
+
 /* Card Detail Area */
 .rocketslide-img-body {
     padding: 10px 12px;

@@ -178,14 +178,56 @@
             }
         });
 
+        // Avatar WP Media Picker for New Reel Form
+        var avatarUploader;
+        $('#rocketslide-select-avatar-btn').on('click', function (e) {
+            e.preventDefault();
+            if (avatarUploader) {
+                avatarUploader.open();
+                return;
+            }
+            avatarUploader = wp.media({
+                title: '👤 Choose User Profile Avatar',
+                button: { text: 'Use Avatar Image' },
+                multiple: false
+            });
+            avatarUploader.on('select', function () {
+                var attachment = avatarUploader.state().get('selection').first().toJSON();
+                $('#rocketslide-new-user-avatar').val(attachment.url);
+            });
+            avatarUploader.open();
+        });
+
+        // Avatar WP Media Picker for Individual Cards
+        $(document).on('click', '.rocketslide-pick-card-avatar-btn', function (e) {
+            e.preventDefault();
+            var $input = $(this).siblings('.rocketslide-card-avatar');
+            var cardAvatarPicker = wp.media({
+                title: '👤 Choose User Profile Avatar',
+                button: { text: 'Use Avatar Image' },
+                multiple: false
+            });
+            cardAvatarPicker.on('select', function () {
+                var attachment = cardAvatarPicker.state().get('selection').first().toJSON();
+                $input.val(attachment.url);
+            });
+            cardAvatarPicker.open();
+        });
+
         // 6. Upload & Process Image Form
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
 
-            var fileInput = $('#rocketslide-file-input')[0];
-            var mediaId   = $('#rocketslide-media-id').val();
-            var targetUrl = $('#rocketslide-new-target-url').val();
-            var timer     = $('#rocketslide-new-timer').val();
+            var fileInput      = $('#rocketslide-file-input')[0];
+            var mediaId        = $('#rocketslide-media-id').val();
+            var targetUrl      = $('#rocketslide-new-target-url').val();
+            var timer          = $('#rocketslide-new-timer').val();
+            var username       = $('#rocketslide-new-username').val();
+            var userAvatar     = $('#rocketslide-new-user-avatar').val();
+            var caption        = $('#rocketslide-new-caption').val();
+            var likesCount     = $('#rocketslide-new-likes').val();
+            var commentsCount  = $('#rocketslide-new-comments').val();
+            var sharesCount    = $('#rocketslide-new-shares').val();
 
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
                 showNotice('Please select an image file first via "Upload from Computer" or "WP Gallery".', true);
@@ -198,6 +240,12 @@
             formData.append('nonce', rocketslide_admin_vars.nonce);
             formData.append('target_url', targetUrl);
             formData.append('timer', timer);
+            formData.append('username', username);
+            formData.append('user_avatar', userAvatar);
+            formData.append('caption', caption);
+            formData.append('likes_count', likesCount);
+            formData.append('comments_count', commentsCount);
+            formData.append('shares_count', sharesCount);
 
             if (mediaId) {
                 formData.append('media_id', mediaId);
@@ -225,21 +273,57 @@
                         
                         $('#rocketslide-empty-state').remove();
                         var img = res.data.image;
+                        var avatarHtml = img.user_avatar ? `<img src="${img.user_avatar}" class="thumb-avatar" alt="Avatar">` : `<span class="thumb-avatar-placeholder">👤</span>`;
                         var cardHtml = `
                             <div class="rocketslide-img-card" data-id="${img.id}">
                                 <div class="rocketslide-img-thumb">
                                     <img src="${img.url}" alt="Reel Card">
                                     <span class="rocketslide-img-index">NEW</span>
                                     <span class="rocketslide-img-format-badge">WebP</span>
+                                    <div class="rocketslide-thumb-user-badge">
+                                        ${avatarHtml}
+                                        <span>${img.username || '@viral_reels'}</span>
+                                    </div>
                                 </div>
                                 <div class="rocketslide-img-body">
                                     <div>
                                         <label class="rocketslide-label">Target URL:</label>
                                         <input type="url" class="rocketslide-input rocketslide-card-target" value="${img.target_url}">
                                     </div>
+                                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+                                        <div>
+                                            <label class="rocketslide-label">Username:</label>
+                                            <input type="text" class="rocketslide-input rocketslide-card-username" value="${img.username || '@viral_reels'}">
+                                        </div>
+                                        <div>
+                                            <label class="rocketslide-label">Redirect Timer (s):</label>
+                                            <input type="number" class="rocketslide-input rocketslide-card-timer" value="${img.timer}" min="0">
+                                        </div>
+                                    </div>
                                     <div>
-                                        <label class="rocketslide-label">Redirect Timer (s):</label>
-                                        <input type="number" class="rocketslide-input rocketslide-card-timer" value="${img.timer}" min="0">
+                                        <label class="rocketslide-label">Avatar Image URL:</label>
+                                        <div style="display:flex; gap:6px;">
+                                            <input type="url" class="rocketslide-input rocketslide-card-avatar" value="${img.user_avatar || ''}" placeholder="Avatar URL">
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-secondary rocketslide-pick-card-avatar-btn" style="padding:4px 8px; font-size:11px;">🖼️</button>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <label class="rocketslide-label">Reel Caption:</label>
+                                        <input type="text" class="rocketslide-input rocketslide-card-caption" value="${img.caption || ''}">
+                                    </div>
+                                    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:6px;">
+                                        <div>
+                                            <label class="rocketslide-label">❤️ Likes:</label>
+                                            <input type="text" class="rocketslide-input rocketslide-card-likes" value="${img.likes_count || '142.8K'}">
+                                        </div>
+                                        <div>
+                                            <label class="rocketslide-label">💬 Comments:</label>
+                                            <input type="text" class="rocketslide-input rocketslide-card-comments" value="${img.comments_count || '3.4K'}">
+                                        </div>
+                                        <div>
+                                            <label class="rocketslide-label">↗️ Shares:</label>
+                                            <input type="text" class="rocketslide-input rocketslide-card-shares" value="${img.shares_count || '18.9K'}">
+                                        </div>
                                     </div>
                                     <div class="rocketslide-img-card-actions">
                                         <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn">💾 Save</button>
@@ -250,7 +334,7 @@
                         `;
                         $('#rocketslide-images-container').prepend(cardHtml);
                         $('#rocketslide-images-count, #rocketslide-stat-images-count').text(res.data.total);
-                        updatePagination();
+                        updateLoadMore();
                     } else {
                         showNotice(res.data || 'Image upload failed.', true);
                     }
@@ -265,17 +349,29 @@
         // 7. Save Individual Image Card Details
         $(document).on('click', '.rocketslide-save-card-btn', function (e) {
             e.preventDefault();
-            var $card     = $(this).closest('.rocketslide-img-card');
-            var cardId    = $card.data('id');
-            var targetUrl = $card.find('.rocketslide-card-target').val();
-            var timer     = $card.find('.rocketslide-card-timer').val();
+            var $card          = $(this).closest('.rocketslide-img-card');
+            var cardId         = $card.data('id');
+            var targetUrl      = $card.find('.rocketslide-card-target').val();
+            var timer          = $card.find('.rocketslide-card-timer').val();
+            var username       = $card.find('.rocketslide-card-username').val();
+            var userAvatar     = $card.find('.rocketslide-card-avatar').val();
+            var caption        = $card.find('.rocketslide-card-caption').val();
+            var likesCount     = $card.find('.rocketslide-card-likes').val();
+            var commentsCount  = $card.find('.rocketslide-card-comments').val();
+            var sharesCount    = $card.find('.rocketslide-card-shares').val();
 
             var data = {
                 action: 'rocketslide_update_image',
                 nonce: rocketslide_admin_vars.nonce,
                 id: cardId,
                 target_url: targetUrl,
-                timer: timer
+                timer: timer,
+                username: username,
+                user_avatar: userAvatar,
+                caption: caption,
+                likes_count: likesCount,
+                comments_count: commentsCount,
+                shares_count: sharesCount
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
