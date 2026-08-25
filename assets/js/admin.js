@@ -23,6 +23,45 @@
             $('#rocketslide-file-input').trigger('click');
         });
 
+        // Copy Live Landing Page URL Handler
+        $('#rocketslide-copy-live-url-btn').on('click', function (e) {
+            e.preventDefault();
+            var urlToCopy = $(this).data('url');
+            if (!urlToCopy) return;
+
+            var $btn = $(this);
+            var originalHtml = $btn.html();
+
+            function onCopySuccess() {
+                $btn.html('✅ Copied!').addClass('copied');
+                showNotice('🔗 Live Landing Page URL copied to clipboard!', false);
+                setTimeout(function () {
+                    $btn.html(originalHtml).removeClass('copied');
+                }, 2000);
+            }
+
+            if (navigator.clipboard && window.isSecureContext) {
+                navigator.clipboard.writeText(urlToCopy).then(onCopySuccess).catch(function () {
+                    fallbackCopy(urlToCopy);
+                });
+            } else {
+                fallbackCopy(urlToCopy);
+            }
+
+            function fallbackCopy(text) {
+                var $temp = $('<input>');
+                $('body').append($temp);
+                $temp.val(text).select();
+                try {
+                    document.execCommand('copy');
+                    onCopySuccess();
+                } catch (err) {
+                    showNotice('Failed to copy URL to clipboard', true);
+                }
+                $temp.remove();
+            }
+        });
+
         var mediaUploader;
 
         function openMediaModal() {
@@ -352,7 +391,6 @@
             var targetUrl      = $('#rocketslide-new-target-url').val();
             var username       = $('#rocketslide-new-username').val() || '@viral_reels';
             var userAvatar     = $('#rocketslide-new-user-avatar').val() || '';
-            var caption        = $('#rocketslide-new-caption').val() || 'Wait till the end! 😱🔥 #viral #trending #reels';
             var likesCount     = $('#rocketslide-new-likes').val() || '142.8K';
             var commentsCount  = $('#rocketslide-new-comments').val() || '3.4K';
             var sharesCount    = $('#rocketslide-new-shares').val() || '18.9K';
@@ -370,7 +408,6 @@
             formData.append('timer', timer);
             formData.append('username', username);
             formData.append('user_avatar', userAvatar);
-            formData.append('caption', caption);
             formData.append('likes_count', likesCount);
             formData.append('comments_count', commentsCount);
             formData.append('shares_count', sharesCount);

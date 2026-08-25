@@ -162,7 +162,7 @@
 
         var username       = imageItem.username || '@viral_reels_official';
         var userAvatar     = imageItem.user_avatar || imageItem.url || '';
-        var caption        = imageItem.caption || 'Wait till the end! 😱🔥 #viral #trending #reels';
+        var caption        = imageItem.caption || '';
         var likesCount     = imageItem.likes_count || '142.8K';
         var commentsCount  = imageItem.comments_count || '3.4K';
         var sharesCount    = imageItem.shares_count || '18.9K';
@@ -205,13 +205,15 @@
             ? `<img src="${userAvatar}" class="reel-avatar-img" alt="Avatar" style="width:28px; height:28px;">` 
             : `<div class="reel-avatar-placeholder" style="width:28px; height:28px; font-size:14px;">👤</div>`;
 
+        var captionMarkup = caption ? `<div class="reel-caption">${escapeHtml(caption)}</div>` : '';
+
         infoBlock.innerHTML = `
             <div class="reel-user-row">
                 ${avatarMarkup}
                 <span class="reel-username">${escapeHtml(username)}</span>
                 <button class="reel-follow-pill">Follow</button>
             </div>
-            <div class="reel-caption">${escapeHtml(caption)}</div>
+            ${captionMarkup}
             <div class="reel-music-row">
                 <span>🎵 Original Audio - ${escapeHtml(username)} &nbsp;&nbsp;&nbsp;&nbsp; 🎵 Original Audio - ${escapeHtml(username)}</span>
             </div>

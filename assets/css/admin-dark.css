@@ -1,40 +1,54 @@
 /*
  * ============================================================
- * ROCKETSLIDE 9:16 — CLEAN MINIMAL ADMIN STYLESHEET (v2.1)
- * Clean, responsive, minimal admin panel for WordPress manager.
+ * ROCKETSLIDE 9:16 — PREMIUM DARK ADMIN STYLESHEET (v3.5)
+ * Modern, vibrant, professional dark-mode admin panel.
  * ============================================================
  */
 
-/* ---- Google Font ---- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+/* ---- Google Fonts ---- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* ---- Design Tokens — Minimal Light / Slate Theme ---- */
+/* ---- Design Tokens — Premium Dark Theme ---- */
 :root {
-    --bg:            #f8fafc;
-    --surface:       #ffffff;
-    --surface-2:     #f1f5f9;
-    --border:        #e2e8f0;
-    --border-focus:  #2563eb;
+    --bg:            #0d1117;
+    --surface:       #161b22;
+    --surface-2:     #1c2330;
+    --surface-3:     #21262d;
+    --border:        #30363d;
+    --border-focus:  #58a6ff;
+    --border-glow:   rgba(88,166,255,0.35);
 
-    --text:          #0f172a;
-    --text-muted:    #64748b;
-    --text-dim:      #94a3b8;
+    --text:          #e6edf3;
+    --text-muted:    #8b949e;
+    --text-dim:      #484f58;
 
-    --blue:          #2563eb;
-    --blue-dark:     #1d4ed8;
-    --green:         #16a34a;
-    --red:           #dc2626;
-    --red-dim:       rgba(220,38,38,.08);
-    --orange:        #d97706;
-    --cyan:          #0284c7;
-    --purple:        #7c3aed;
+    --blue:          #58a6ff;
+    --blue-dark:     #388bfd;
+    --blue-glow:     rgba(88,166,255,0.25);
+    --green:         #3fb950;
+    --green-dim:     rgba(63,185,80,0.12);
+    --red:           #f85149;
+    --red-dim:       rgba(248,81,73,0.12);
+    --orange:        #f0883e;
+    --orange-dim:    rgba(240,136,62,0.12);
+    --cyan:          #39d353;
+    --purple:        #bc8cff;
+    --purple-dim:    rgba(188,140,255,0.12);
+    --pink:          #ff7b72;
 
-    --radius-sm:     6px;
-    --radius:        10px;
-    --radius-lg:     14px;
+    --grad-primary:  linear-gradient(135deg, #58a6ff 0%, #bc8cff 100%);
+    --grad-live:     linear-gradient(135deg, #3fb950 0%, #58a6ff 100%);
+    --grad-hot:      linear-gradient(135deg, #f85149 0%, #f0883e 100%);
+    --grad-header:   linear-gradient(135deg, #0d1117 0%, #161b22 50%, #1c2330 100%);
 
-    --shadow:        0 4px 12px rgba(0,0,0,.04);
-    --shadow-card:   0 1px 3px rgba(0,0,0,.05), 0 1px 2px rgba(0,0,0,.03);
+    --radius-sm:     8px;
+    --radius:        12px;
+    --radius-lg:     16px;
+    --radius-xl:     20px;
+
+    --shadow:        0 4px 24px rgba(0,0,0,0.4);
+    --shadow-card:   0 2px 8px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.04);
+    --shadow-glow:   0 0 20px rgba(88,166,255,0.15);
 }
 
 /* ---- Reset scoped ONLY to plugin wrapper ---- */
@@ -49,30 +63,41 @@
 .rocketslide-wrap {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--text);
-    background: transparent;
-    padding: 16px 16px 90px 16px;
+    background: var(--bg);
+    padding: 20px 20px 100px 20px;
     max-width: 1100px;
     width: 100%;
     box-sizing: border-box;
     overflow-x: hidden;
+    border-radius: var(--radius-lg);
 }
 
 /* ============================================================
-   HEADER BANNER — Pure White Minimal Card (No Dark Background)
+   HEADER BANNER — Premium Dark Gradient
    ============================================================ */
 .rocketslide-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background: #ffffff;
-    border: 1px solid var(--border);
+    background: linear-gradient(135deg, #161b22 0%, #1c2330 60%, #0d1117 100%);
+    border: 1px solid #30363d;
     border-radius: var(--radius-lg);
-    padding: 20px 24px;
-    margin-bottom: 22px;
-    box-shadow: var(--shadow-card);
+    padding: 22px 26px;
+    margin-bottom: 24px;
+    box-shadow: 0 4px 32px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.06);
     gap: 16px;
     flex-wrap: wrap;
     color: var(--text);
+    position: relative;
+    overflow: hidden;
+}
+
+.rocketslide-header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 2px;
+    background: var(--grad-primary);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .rocketslide-header-brand {
@@ -82,37 +107,40 @@
 }
 
 .rocketslide-header-icon {
-    width: 46px;
-    height: 46px;
-    background: linear-gradient(135deg, #2563eb 0%, #7c3aed 100%);
-    border-radius: 12px;
+    width: 52px;
+    height: 52px;
+    background: var(--grad-primary);
+    border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     color: #ffffff;
     flex-shrink: 0;
-    box-shadow: 0 6px 16px rgba(37,99,235,0.3);
-    transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+    box-shadow: 0 6px 20px rgba(88,166,255,0.4);
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
 }
 
 .rocketslide-header-icon:hover {
-    transform: scale(1.06);
-    box-shadow: 0 8px 22px rgba(37,99,235,0.45);
+    transform: scale(1.08) rotate(3deg);
+    box-shadow: 0 10px 28px rgba(88,166,255,0.55);
 }
 
 .rocketslide-header-icon svg {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     stroke: #ffffff;
     stroke-width: 2.2;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
 }
 
 .rocketslide-header-text h1 {
-    font-size: 18px;
-    font-weight: 800;
-    color: var(--text);
-    letter-spacing: -.2px;
+    font-size: 19px;
+    font-weight: 900;
+    background: var(--grad-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -.3px;
     line-height: 1.2;
     margin: 0;
 }
@@ -120,13 +148,13 @@
 .rocketslide-header-text p {
     font-size: 12.5px;
     color: var(--text-muted);
-    margin-top: 2px;
+    margin-top: 3px;
 }
 
 .rocketslide-header-meta {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
@@ -134,13 +162,13 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
+    background: rgba(88,166,255,0.08);
+    border: 1px solid rgba(88,166,255,0.2);
+    border-radius: 10px;
     padding: 7px 14px;
     font-size: 12px;
     color: var(--text-muted);
-    max-width: 250px;
+    max-width: 260px;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -154,41 +182,57 @@
 }
 
 /* ============================================================
-   STATS ROW — Compact Minimal Cards
+   STATS ROW — Premium Glowing Dark Cards
    ============================================================ */
 .rocketslide-stats-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 14px;
-    margin-bottom: 22px;
+    margin-bottom: 24px;
 }
 
 .rocketslide-stat-card {
-    background: #ffffff;
-    border: 1px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    gap: 5px;
+    box-shadow: var(--shadow-card);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.rocketslide-stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--grad-primary);
+    opacity: 0;
+    transition: opacity 0.2s ease;
 }
 
 .rocketslide-stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+    transform: translateY(-3px);
+    border-color: rgba(88,166,255,0.3);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), var(--shadow-glow);
+}
+
+.rocketslide-stat-card:hover::before {
+    opacity: 1;
 }
 
 .rocketslide-stat-card .stat-icon {
-    font-size: 20px;
-    margin-bottom: 2px;
+    font-size: 22px;
+    margin-bottom: 4px;
 }
 
 .rocketslide-stat-card .stat-value {
-    font-size: 18px;
+    font-size: 20px;
     font-weight: 800;
-    color: #0f172a;
+    color: var(--text);
     line-height: 1.2;
     white-space: nowrap;
     overflow: hidden;
@@ -197,7 +241,7 @@
 
 .rocketslide-stat-card .stat-label {
     font-size: 10px;
-    color: #64748b;
+    color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -205,14 +249,16 @@
 }
 
 /* ============================================================
-   DESKTOP TAB NAVIGATION — Modern Minimal Tabs
+   DESKTOP TAB NAVIGATION — Pill-Style Dark Tabs
    ============================================================ */
 .rocketslide-tabs-nav {
     display: flex;
-    gap: 4px;
-    border-bottom: 1px solid var(--border);
-    margin-bottom: 20px;
-    padding-bottom: 0;
+    gap: 6px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 6px;
+    margin-bottom: 22px;
     overflow-x: auto;
     scrollbar-width: none;
 }
@@ -224,28 +270,30 @@
 .rocketslide-tab-btn {
     display: flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 16px;
+    gap: 7px;
+    padding: 9px 16px;
     background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-radius: var(--radius-sm);
     color: var(--text-muted);
     font-size: 13px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     white-space: nowrap;
-    transition: color .15s, border-color .15s;
-    margin-bottom: -1px;
+    transition: all .2s ease;
+    margin-bottom: 0;
 }
 
 .rocketslide-tab-btn:hover {
     color: var(--text);
+    background: var(--surface-2);
 }
 
 .rocketslide-tab-btn.active {
-    color: var(--blue);
-    border-bottom-color: var(--blue);
+    color: #fff;
+    background: var(--grad-primary);
+    box-shadow: 0 4px 12px rgba(88,166,255,0.3);
 }
 
 /* ============================================================
@@ -266,22 +314,27 @@
 }
 
 /* ============================================================
-   CARDS — Clean White Cards with Subtle Borders
+   CARDS — Dark Glass Cards
    ============================================================ */
 .rocketslide-card {
     background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
-    padding: 20px 22px;
-    margin-bottom: 18px;
+    padding: 22px 24px;
+    margin-bottom: 20px;
     box-shadow: var(--shadow-card);
+    transition: border-color 0.2s ease;
+}
+
+.rocketslide-card:hover {
+    border-color: rgba(88,166,255,0.2);
 }
 
 .rocketslide-card-title {
     font-size: 15px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 4px;
+    margin-bottom: 6px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -328,14 +381,14 @@
 .rocketslide-textarea,
 .rocketslide-select {
     width: 100%;
-    background: #ffffff;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 9px 12px;
+    padding: 9px 13px;
     color: var(--text);
     font-size: 13px;
     font-family: 'Inter', sans-serif;
-    transition: border-color .15s, box-shadow .15s;
+    transition: border-color .2s, box-shadow .2s;
     outline: none;
 }
 
@@ -343,7 +396,8 @@
 .rocketslide-textarea:focus,
 .rocketslide-select:focus {
     border-color: var(--border-focus);
-    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+    box-shadow: 0 0 0 3px var(--blue-glow);
+    background: var(--surface-3);
 }
 
 .rocketslide-input::placeholder,
@@ -353,10 +407,20 @@
 
 .rocketslide-textarea {
     resize: vertical;
-    min-height: 100px;
-    line-height: 1.5;
+    min-height: 110px;
+    line-height: 1.6;
     font-size: 12.5px;
     font-family: 'SFMono-Regular', Consolas, monospace;
+}
+
+.rocketslide-select {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%238b949e' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 36px;
+    cursor: pointer;
 }
 
 .rocketslide-input-hint {
@@ -368,9 +432,9 @@
 }
 
 .rocketslide-input-hint code {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    padding: 1px 5px;
+    background: rgba(88,166,255,0.1);
+    border: 1px solid rgba(88,166,255,0.2);
+    padding: 1px 6px;
     border-radius: 4px;
     font-size: 11px;
     color: var(--blue);
@@ -385,6 +449,12 @@
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     overflow: hidden;
+    transition: border-color .2s;
+}
+
+.rocketslide-slug-row:focus-within {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--blue-glow);
 }
 
 .rocketslide-slug-prefix,
@@ -393,7 +463,7 @@
     color: var(--text-muted);
     font-size: 12.5px;
     white-space: nowrap;
-    background: #e2e8f0;
+    background: var(--surface-3);
     border-right: 1px solid var(--border);
 }
 
@@ -404,15 +474,16 @@
 
 .rocketslide-slug-row .rocketslide-input {
     border: none;
-    background: #ffffff;
+    background: transparent;
     border-radius: 0;
     padding: 9px 10px;
     flex: 1;
+    box-shadow: none !important;
 }
 
 .rocketslide-slug-row .rocketslide-input:focus {
-    box-shadow: none;
-    border-color: transparent;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 /* Two-column field row */
@@ -429,79 +500,121 @@
 }
 
 /* ============================================================
-   BUTTONS — Clean Minimal Buttons
+   BUTTONS — Premium Dark Buttons
    ============================================================ */
 .rocketslide-btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    gap: 6px;
-    padding: 8px 16px;
+    gap: 7px;
+    padding: 9px 18px;
     border-radius: var(--radius-sm);
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
     border: 1px solid transparent;
     text-decoration: none;
-    transition: background .15s, border-color .15s, transform .1s;
+    transition: all .2s ease;
     white-space: nowrap;
     line-height: 1;
+    letter-spacing: 0.1px;
 }
 
-.rocketslide-btn:active { transform: scale(.98); }
-.rocketslide-btn:disabled { opacity: .5; cursor: not-allowed; }
+.rocketslide-btn:active { transform: scale(.97); }
+.rocketslide-btn:disabled { opacity: .4; cursor: not-allowed; pointer-events: none; }
 
-/* Primary – Blue */
+/* Primary – Blue gradient */
 .rocketslide-btn-primary {
-    background: var(--blue);
+    background: var(--grad-primary);
     color: #ffffff;
-    border-color: var(--blue);
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(88,166,255,0.3);
 }
-.rocketslide-btn-primary:hover { background: var(--blue-dark); }
+.rocketslide-btn-primary:hover {
+    box-shadow: 0 6px 20px rgba(88,166,255,0.45);
+    transform: translateY(-1px);
+    color: #fff;
+}
 
-/* Secondary – Light Ghost */
+/* Secondary – Dark Ghost */
 .rocketslide-btn-secondary {
-    background: #ffffff;
-    color: var(--text);
+    background: var(--surface-2);
+    color: var(--text-muted);
     border-color: var(--border);
 }
-.rocketslide-btn-secondary:hover { background: var(--surface-2); border-color: #cbd5e1; }
-
-/* Success – Green */
-.rocketslide-btn-success {
-    background: rgba(22,163,74,.1);
-    color: var(--green);
-    border-color: rgba(22,163,74,.3);
+.rocketslide-btn-secondary:hover {
+    background: var(--surface-3);
+    color: var(--text);
+    border-color: rgba(88,166,255,0.3);
 }
-.rocketslide-btn-success:hover { background: var(--green); color: #fff; }
 
-/* Danger – Red */
+/* Success – Green glow */
+.rocketslide-btn-success {
+    background: var(--green-dim);
+    color: var(--green);
+    border-color: rgba(63,185,80,0.3);
+}
+.rocketslide-btn-success:hover {
+    background: var(--green);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(63,185,80,0.35);
+}
+
+/* Danger – Red glow */
 .rocketslide-btn-danger {
     background: var(--red-dim);
     color: var(--red);
-    border-color: rgba(220,38,38,.25);
+    border-color: rgba(248,81,73,0.25);
 }
-.rocketslide-btn-danger:hover { background: var(--red); color: #fff; }
+.rocketslide-btn-danger:hover {
+    background: var(--red);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(248,81,73,0.35);
+}
 
-/* Accent – Purple */
+/* Accent – Purple glow */
 .rocketslide-btn-accent {
-    background: rgba(124,58,237,.1);
+    background: var(--purple-dim);
     color: var(--purple);
-    border-color: rgba(124,58,237,.3);
+    border-color: rgba(188,140,255,0.3);
 }
-.rocketslide-btn-accent:hover { background: var(--purple); color: #fff; }
+.rocketslide-btn-accent:hover {
+    background: var(--purple);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(188,140,255,0.35);
+}
 
-/* Live Preview – gradient */
+/* Live Preview – Green-Blue gradient */
 .rocketslide-btn-live {
-    background: linear-gradient(135deg, var(--blue), var(--purple));
+    background: var(--grad-live);
     color: #fff;
     border-color: transparent;
-    box-shadow: 0 2px 8px rgba(37,99,235,.25);
+    box-shadow: 0 4px 14px rgba(63,185,80,0.3);
+    font-weight: 700;
 }
 .rocketslide-btn-live:hover {
-    box-shadow: 0 4px 14px rgba(37,99,235,.4);
+    box-shadow: 0 6px 20px rgba(63,185,80,0.45);
+    transform: translateY(-1px);
     color: #fff;
+}
+
+/* Copy Link Button */
+.rocketslide-btn-copy {
+    background: var(--surface-2);
+    color: var(--blue);
+    border: 1px solid rgba(88,166,255,0.25);
+    transition: all 0.2s ease;
+}
+.rocketslide-btn-copy:hover {
+    background: rgba(88,166,255,0.15);
+    border-color: var(--blue);
+    color: var(--blue);
+}
+.rocketslide-btn-copy.copied {
+    background: var(--green-dim) !important;
+    color: var(--green) !important;
+    border-color: rgba(63,185,80,0.4) !important;
 }
 
 /* Action bar */
@@ -525,16 +638,16 @@
     font-weight: 700;
 }
 
-.rocketslide-badge.verified  { background: rgba(22,163,74,.1); color: var(--green); border: 1px solid rgba(22,163,74,.3); }
-.rocketslide-badge.checking  { background: rgba(217,119,6,.1); color: var(--orange); border: 1px solid rgba(217,119,6,.3); }
-.rocketslide-badge.inactive  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(220,38,38,.25); }
+.rocketslide-badge.verified  { background: var(--green-dim); color: var(--green); border: 1px solid rgba(63,185,80,.3); }
+.rocketslide-badge.checking  { background: var(--orange-dim); color: var(--orange); border: 1px solid rgba(240,136,62,.3); }
+.rocketslide-badge.inactive  { background: var(--red-dim); color: var(--red); border: 1px solid rgba(248,81,73,.25); }
 
 /* Verification output box */
 .rocketslide-output-box {
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 12px 14px;
+    padding: 14px 16px;
     margin-top: 14px;
     font-family: 'SFMono-Regular', Consolas, monospace;
     font-size: 12px;
@@ -573,6 +686,50 @@
 .rocketslide-file-name:hover {
     color: var(--blue);
     text-decoration: underline;
+}
+
+/* ============================================================
+   USER PROFILE AVATAR PICKER (LARGE BUTTONS)
+   ============================================================ */
+.rocketslide-avatar-picker-wrap {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.rocketslide-avatar-picker-wrap .rocketslide-input {
+    flex: 1;
+    min-width: 0;
+    height: 42px;
+}
+
+.rocketslide-avatar-btn-group {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.rocketslide-avatar-btn {
+    height: 42px !important;
+    padding: 0 16px !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 6px !important;
+    white-space: nowrap !important;
+    border-radius: var(--radius-sm) !important;
+}
+
+.rocketslide-avatar-btn .dashicons {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+    line-height: 16px !important;
+    margin: 0 !important;
+    vertical-align: middle !important;
 }
 
 /* ============================================================
@@ -622,12 +779,13 @@
 }
 
 .rocketslide-cloaking-box code {
-    background: #e2e8f0;
+    background: rgba(88,166,255,0.1);
     color: var(--blue);
-    padding: 2px 6px;
+    padding: 2px 7px;
     border-radius: 4px;
     font-size: 11px;
     font-family: 'SFMono-Regular', Consolas, monospace;
+    border: 1px solid rgba(88,166,255,0.2);
     display: inline-block !important;
     margin: 2px 1px !important;
     word-break: break-all !important;
@@ -642,7 +800,7 @@
 .rocketslide-add-form-container {
     display: flex;
     flex-direction: column;
-    background: #f8fafc;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px 22px;
@@ -726,12 +884,12 @@
     padding: 6px 12px;
     font-size: 12.5px;
     font-weight: 600;
-    background: #ffffff;
+    background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
     color: var(--text);
     cursor: pointer;
-    transition: all .15s ease;
+    transition: all .2s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -743,23 +901,24 @@
     background: var(--blue);
     color: #ffffff;
     border-color: var(--blue);
+    box-shadow: 0 2px 8px var(--blue-glow);
 }
 
 .rocketslide-page-btn.active {
-    background: var(--blue);
+    background: var(--grad-primary);
     color: #ffffff;
-    border-color: var(--blue);
-    box-shadow: 0 2px 6px rgba(37,99,235,0.25);
+    border-color: transparent;
+    box-shadow: 0 2px 10px rgba(88,166,255,0.3);
 }
 
 .rocketslide-page-btn:disabled {
-    opacity: 0.4;
+    opacity: 0.3;
     cursor: not-allowed;
-    background: #f1f5f9;
+    background: var(--surface-3);
 }
 
 .rocketslide-img-card {
-    background: #ffffff;
+    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     overflow: hidden;
@@ -771,9 +930,9 @@
 }
 
 .rocketslide-img-card:hover {
-    border-color: var(--blue);
-    transform: translateY(-3px);
-    box-shadow: 0 6px 16px rgba(37,99,235,.15);
+    border-color: rgba(88,166,255,0.4);
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4), 0 0 0 1px rgba(88,166,255,0.15);
 }
 
 /* Strict 9:16 TikTok Aspect Ratio — Portrait Only */
@@ -870,7 +1029,8 @@
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: #ffffff;
+    background: var(--surface-2);
+    border-top: 1px solid var(--border);
 }
 
 .rocketslide-img-body .rocketslide-label {
@@ -884,7 +1044,7 @@
 .rocketslide-img-body .rocketslide-input {
     padding: 6px 8px;
     font-size: 11.5px;
-    background: #ffffff;
+    background: var(--surface-3);
     border-color: var(--border);
 }
 
@@ -981,13 +1141,13 @@
         right: 0 !important;
         width: 100% !important;
         width: 100vw !important;
-        background: #ffffff !important;
+        background: var(--surface) !important;
         border-top: 1px solid var(--border) !important;
         padding: 6px 0 calc(6px + env(safe-area-inset-bottom, 0px)) 0 !important;
         z-index: 999999 !important;
         justify-content: space-around !important;
         align-items: center !important;
-        box-shadow: 0 -4px 16px rgba(0,0,0,.08) !important;
+        box-shadow: 0 -8px 32px rgba(0,0,0,0.5) !important;
         box-sizing: border-box !important;
         margin: 0 !important;
     }
@@ -998,8 +1158,8 @@
         flex-direction: column !important;
         align-items: center !important;
         justify-content: center !important;
-        gap: 2px !important;
-        padding: 4px 2px !important;
+        gap: 3px !important;
+        padding: 6px 2px !important;
         background: none !important;
         border: none !important;
         color: var(--text-muted) !important;
@@ -1008,12 +1168,16 @@
         font-family: 'Inter', sans-serif !important;
         cursor: pointer !important;
         text-decoration: none !important;
-        transition: color .15s !important;
+        transition: color .2s !important;
         min-width: 0 !important;
     }
 
-    .rocketslide-mobile-nav-item .nav-icon { font-size: 18px !important; }
-    .rocketslide-mobile-nav-item.active    { color: var(--blue) !important; font-weight: 700 !important; }
+    .rocketslide-mobile-nav-item .nav-icon { font-size: 20px !important; }
+    .rocketslide-mobile-nav-item.active {
+        color: var(--blue) !important;
+        font-weight: 700 !important;
+        text-shadow: 0 0 12px rgba(88,166,255,0.5) !important;
+    }
 }
 
 /* ============================================================
@@ -1090,26 +1254,34 @@
 
     .rocketslide-header-meta {
         width: 100% !important;
-        display: flex !important;
-        flex-direction: column !important;
-        gap: 8px !important;
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 6px !important;
     }
 
-    .rocketslide-header-meta .rocketslide-btn,
-    .rocketslide-header-meta .rocketslide-live-url {
+    .rocketslide-live-url {
+        grid-column: 1 / -1 !important;
+        width: 100% !important;
+        justify-content: center !important;
+        padding: 6px 10px !important;
+        font-size: 11px !important;
+    }
+
+    .rocketslide-header-meta .rocketslide-btn {
         width: 100% !important;
         max-width: 100% !important;
         justify-content: center !important;
         text-align: center !important;
         box-sizing: border-box !important;
-        white-space: normal !important;
-        word-break: break-all !important;
+        white-space: nowrap !important;
         font-size: 11.5px !important;
-        padding: 7px 10px !important;
+        padding: 8px 10px !important;
+        height: 38px !important;
+        border-radius: 8px !important;
     }
 
-    .rocketslide-live-url {
-        font-size: 11px !important;
+    .rocketslide-header-meta #rocketslide-copy-live-url-btn {
+        grid-column: 1 / -1 !important;
     }
 
     .rocketslide-live-url code {
@@ -1182,6 +1354,26 @@
     .rocketslide-file-picker .rocketslide-btn {
         width: 100% !important;
         justify-content: center !important;
+    }
+
+    .rocketslide-avatar-picker-wrap {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-avatar-btn-group {
+        width: 100% !important;
+        display: flex !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-avatar-btn-group .rocketslide-avatar-btn {
+        flex: 1 !important;
+        width: 50% !important;
+        height: 42px !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
     }
 
     .rocketslide-file-name {
@@ -1361,4 +1553,63 @@
         padding: 8px 10px !important;
         font-size: 11.5px !important;
     }
+}
+
+/* ============================================================
+   WORDPRESS ADMIN BODY DARK OVERRIDE
+   ============================================================ */
+body.toplevel_page_rocketslide-settings {
+    background: #0d1117 !important;
+}
+
+#wpcontent,
+#wpbody,
+#wpbody-content {
+    background: #0d1117;
+}
+
+.wrap h1.wp-heading-inline {
+    display: none;
+}
+
+/* ============================================================
+   TOAST UPGRADES
+   ============================================================ */
+.rocketslide-toast {
+    border-radius: var(--radius) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.05) !important;
+    backdrop-filter: blur(12px) !important;
+}
+
+.rocketslide-toast.success {
+    background: linear-gradient(135deg, #3fb950, #2ea043) !important;
+    border: 1px solid rgba(63,185,80,0.4) !important;
+}
+
+.rocketslide-toast.error {
+    background: linear-gradient(135deg, #f85149, #da3633) !important;
+    border: 1px solid rgba(248,81,73,0.4) !important;
+}
+
+/* ============================================================
+   EMPTY STATE UPGRADED
+   ============================================================ */
+.rocketslide-empty-state {
+    background: var(--surface-2) !important;
+    border: 2px dashed rgba(88,166,255,0.2) !important;
+}
+
+/* ============================================================
+   LOADMORE BUTTON UPGRADED
+   ============================================================ */
+.rocketslide-loadmore-btn {
+    background: var(--grad-primary) !important;
+    box-shadow: 0 4px 16px rgba(88,166,255,0.3) !important;
+}
+
+.rocketslide-loadmore-btn:hover {
+    box-shadow: 0 6px 22px rgba(88,166,255,0.45) !important;
+    transform: translateY(-2px) !important;
 }

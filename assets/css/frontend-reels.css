@@ -59,8 +59,11 @@ html, body {
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
     -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: contain;
     scrollbar-width: none;
     position: relative;
+    will-change: scroll-position;
+    transform: translateZ(0);
 }
 
 /* On actual mobile devices — force true 100% width */

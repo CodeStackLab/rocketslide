@@ -42,6 +42,11 @@ $is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_
     <meta name="twitter:card" content="summary_large_image">
     <meta name="robots" content="index, follow">
 
+    <!-- High-Performance Image Preloading for 0ms Instant LCP -->
+    <?php if (!empty($images[0]['url'])) : ?>
+        <link rel="preload" as="image" href="<?php echo esc_url($images[0]['url']); ?>" fetchpriority="high">
+    <?php endif; ?>
+
     <!-- CSS Stylesheet -->
     <link rel="stylesheet" href="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . ROCKETSLIDE_VERSION); ?>">
 
