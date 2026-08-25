@@ -937,7 +937,7 @@
     position: relative;
     width: 100%;
     padding-top: 177.78%; /* 16/9 = 177.78% — exact 9:16 portrait ratio */
-    background: #0f172a;
+    background: #e2e8f0;
     overflow: hidden;
 }
 
@@ -1567,16 +1567,16 @@
 }
 
 /* ============================================================
-   WORDPRESS ADMIN BODY DARK OVERRIDE
+   WORDPRESS ADMIN BODY LIGHT OVERRIDE
    ============================================================ */
 body.toplevel_page_rocketslide-settings {
-    background: #0d1117 !important;
+    background: #f8fafc !important;
 }
 
 #wpcontent,
 #wpbody,
 #wpbody-content {
-    background: #0d1117;
+    background: #f8fafc;
 }
 
 .wrap h1.wp-heading-inline {
