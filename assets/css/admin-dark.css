@@ -850,8 +850,8 @@
 
 @media (max-width: 480px) {
     .rocketslide-img-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 10px;
+        grid-template-columns: 1fr;
+        gap: 14px;
     }
 }
 
@@ -988,19 +988,22 @@
     position: absolute;
     bottom: 8px;
     left: 8px;
-    right: 8px;
-    display: flex;
+    max-width: calc(100% - 16px);
+    display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(0, 0, 0, 0.65);
-    backdrop-filter: blur(6px);
-    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    padding: 4px 10px;
     border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     color: #ffffff;
     font-size: 11px;
     font-weight: 600;
     z-index: 2;
     overflow: hidden;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 .rocketslide-thumb-user-badge span {
@@ -1532,8 +1535,8 @@
     }
 
     .rocketslide-img-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 6px !important;
+        grid-template-columns: 1fr !important;
+        gap: 14px !important;
     }
 
     .rocketslide-img-card-actions {
