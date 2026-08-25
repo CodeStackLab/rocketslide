@@ -407,14 +407,7 @@ html, body {
 }
 
 .reel-music-row {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 12px;
-    color: #e2e8f0;
-    font-weight: 500;
-    overflow: hidden;
-    white-space: nowrap;
+    display: none !important;
 }
 
 .reel-music-row span {

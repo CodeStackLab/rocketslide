@@ -214,9 +214,6 @@
                 <button class="reel-follow-pill">Follow</button>
             </div>
             ${captionMarkup}
-            <div class="reel-music-row">
-                <span>🎵 Original Audio - ${escapeHtml(username)} &nbsp;&nbsp;&nbsp;&nbsp; 🎵 Original Audio - ${escapeHtml(username)}</span>
-            </div>
         `;
         card.appendChild(infoBlock);
 
