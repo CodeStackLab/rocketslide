@@ -131,7 +131,7 @@
 }
 
 .rocketslide-header-text h1 {
-    font-size: 19px;
+    font-size: 21px;
     font-weight: 900;
     background: var(--grad-primary);
     -webkit-background-clip: text;
@@ -143,7 +143,7 @@
 }
 
 .rocketslide-header-text p {
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: var(--text-muted);
     margin-top: 3px;
 }
@@ -163,7 +163,7 @@
     border: 1px solid rgba(88,166,255,0.2);
     border-radius: 10px;
     padding: 7px 14px;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
     max-width: 260px;
     overflow: hidden;
@@ -174,7 +174,7 @@
 .rocketslide-live-url code {
     color: var(--blue);
     font-weight: 700;
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-family: 'SFMono-Regular', Consolas, monospace;
 }
 
@@ -227,7 +227,7 @@
 }
 
 .rocketslide-stat-card .stat-value {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 800;
     color: var(--text);
     line-height: 1.2;
@@ -237,7 +237,7 @@
 }
 
 .rocketslide-stat-card .stat-label {
-    font-size: 10px;
+    font-size: 11.5px;
     color: var(--text-muted);
     font-weight: 700;
     text-transform: uppercase;
@@ -273,7 +273,7 @@
     border: none;
     border-radius: var(--radius-sm);
     color: var(--text-muted);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
@@ -328,7 +328,7 @@
 }
 
 .rocketslide-card-title {
-    font-size: 15px;
+    font-size: 16.5px;
     font-weight: 700;
     color: var(--text);
     margin-bottom: 6px;
@@ -338,7 +338,7 @@
 }
 
 .rocketslide-card-subtitle {
-    font-size: 12.5px;
+    font-size: 13.5px;
     color: var(--text-muted);
     margin-bottom: 18px;
     line-height: 1.5;
@@ -363,7 +363,7 @@
 
 .rocketslide-label {
     display: block;
-    font-size: 12px;
+    font-size: 13.5px;
     font-weight: 600;
     color: var(--text);
     margin-bottom: 6px;
@@ -381,9 +381,9 @@
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: var(--radius-sm);
-    padding: 9px 13px;
+    padding: 10px 14px;
     color: var(--text);
-    font-size: 13px;
+    font-size: 14px;
     font-family: 'Inter', sans-serif;
     transition: border-color .2s, box-shadow .2s;
     outline: none;
@@ -406,7 +406,7 @@
     resize: vertical;
     min-height: 110px;
     line-height: 1.6;
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-family: 'SFMono-Regular', Consolas, monospace;
 }
 
@@ -421,7 +421,7 @@
 }
 
 .rocketslide-input-hint {
-    font-size: 11.5px;
+    font-size: 12.5px;
     color: var(--text-muted);
     margin-top: 5px;
     display: block;
@@ -433,7 +433,7 @@
     border: 1px solid rgba(88,166,255,0.2);
     padding: 1px 6px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 12px;
     color: var(--blue);
     font-family: monospace;
 }
@@ -458,7 +458,7 @@
 .rocketslide-slug-suffix {
     padding: 9px 12px;
     color: var(--text-muted);
-    font-size: 12.5px;
+    font-size: 13.5px;
     white-space: nowrap;
     background: var(--surface-3);
     border-right: 1px solid var(--border);
@@ -504,9 +504,9 @@
     align-items: center;
     justify-content: center;
     gap: 7px;
-    padding: 9px 18px;
+    padding: 10px 20px;
     border-radius: var(--radius-sm);
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 600;
     font-family: 'Inter', sans-serif;
     cursor: pointer;
@@ -514,7 +514,7 @@
     text-decoration: none;
     transition: all .2s ease;
     white-space: nowrap;
-    line-height: 1;
+    line-height: 1.1;
     letter-spacing: 0.1px;
 }
 
@@ -629,9 +629,9 @@
     display: inline-flex;
     align-items: center;
     gap: 5px;
-    padding: 4px 10px;
+    padding: 5px 12px;
     border-radius: 20px;
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 700;
 }
 
@@ -647,7 +647,7 @@
     padding: 14px 16px;
     margin-top: 14px;
     font-family: 'SFMono-Regular', Consolas, monospace;
-    font-size: 12px;
+    font-size: 13px;
     color: var(--blue);
     white-space: pre-wrap;
     line-height: 1.6;
@@ -668,7 +668,7 @@
 }
 
 .rocketslide-file-name {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
     font-style: italic;
     flex: 1;
@@ -710,7 +710,7 @@
 .rocketslide-avatar-btn {
     height: 42px !important;
     padding: 0 16px !important;
-    font-size: 13px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     display: inline-flex !important;
     align-items: center !important;
@@ -741,7 +741,7 @@
 }
 
 .rocketslide-cloaking-box h4 {
-    font-size: 11.5px;
+    font-size: 12.5px;
     font-weight: 700;
     color: var(--text-muted);
     text-transform: uppercase;
@@ -759,7 +759,7 @@
     display: block !important;
     position: relative;
     padding-left: 22px;
-    font-size: 12px;
+    font-size: 13.5px;
     color: var(--text-muted);
     line-height: 1.7;
     margin-bottom: 8px;
@@ -771,7 +771,7 @@
     left: 0;
     top: 1px;
     color: var(--green);
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 700;
 }
 
@@ -780,7 +780,7 @@
     color: var(--blue);
     padding: 2px 7px;
     border-radius: 4px;
-    font-size: 11px;
+    font-size: 12px;
     font-family: 'SFMono-Regular', Consolas, monospace;
     border: 1px solid rgba(88,166,255,0.2);
     display: inline-block !important;
@@ -865,7 +865,7 @@
 }
 
 .rocketslide-pagination-info {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
     font-weight: 500;
 }
@@ -879,7 +879,7 @@
 
 .rocketslide-page-btn {
     padding: 6px 12px;
-    font-size: 12.5px;
+    font-size: 13.5px;
     font-weight: 600;
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -958,7 +958,7 @@
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(4px);
     color: #2563eb;
-    font-size: 10.5px;
+    font-size: 11.5px;
     font-weight: 700;
     padding: 2px 7px;
     border-radius: 5px;
@@ -974,9 +974,9 @@
     background: rgba(22, 163, 74, 0.15);
     border: 1px solid rgba(22, 163, 74, 0.4);
     color: #16a34a;
-    font-size: 9.5px;
+    font-size: 10.5px;
     font-weight: 700;
-    padding: 2px 5px;
+    padding: 2px 6px;
     border-radius: 4px;
     z-index: 2;
 }
@@ -996,7 +996,7 @@
     border-radius: 20px;
     border: 1px solid #cbd5e1;
     color: #0f172a;
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 700;
     z-index: 2;
     overflow: hidden;
@@ -1019,7 +1019,7 @@
 }
 
 .rocketslide-thumb-user-badge .thumb-avatar-placeholder {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 1;
 }
 
@@ -1034,7 +1034,7 @@
 }
 
 .rocketslide-img-body .rocketslide-label {
-    font-size: 10.5px;
+    font-size: 11.5px;
     font-weight: 700;
     margin-bottom: 2px;
     color: #475569;
@@ -1043,8 +1043,8 @@
 }
 
 .rocketslide-img-body .rocketslide-input {
-    padding: 8px 10px;
-    font-size: 12px;
+    padding: 9px 11px;
+    font-size: 13.5px;
     background: #f8fafc;
     border: 1px solid #cbd5e1;
     color: #0f172a;
@@ -1065,8 +1065,8 @@
 }
 
 .rocketslide-img-card-actions .rocketslide-btn {
-    padding: 7px 10px;
-    font-size: 11.5px;
+    padding: 8px 10px;
+    font-size: 12.5px;
     font-weight: 700;
     border-radius: 6px;
 }
@@ -1087,7 +1087,7 @@
 }
 
 .rocketslide-empty-state p {
-    font-size: 13px;
+    font-size: 14px;
     color: var(--text-muted);
 }
 
@@ -1106,7 +1106,7 @@
 
 .rocketslide-loadmore-btn {
     padding: 12px 28px;
-    font-size: 13.5px;
+    font-size: 14.5px;
     font-weight: 700;
     border-radius: 30px;
     background: linear-gradient(135deg, var(--blue), var(--purple)) !important;
@@ -1126,7 +1126,7 @@
 }
 
 .rocketslide-loadmore-info {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--text-muted);
     font-weight: 600;
     text-align: center;
