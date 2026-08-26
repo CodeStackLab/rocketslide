@@ -202,8 +202,8 @@
         infoBlock.className = 'reel-info-block';
 
         var avatarMarkup = userAvatar 
-            ? `<img src="${userAvatar}" class="reel-avatar-img" alt="Avatar" style="width:28px; height:28px;">` 
-            : `<div class="reel-avatar-placeholder" style="width:28px; height:28px; font-size:14px;">👤</div>`;
+            ? `<img src="${userAvatar}" class="reel-avatar-img" alt="Avatar" style="width:28px; height:28px; border-radius:50%; border:1.5px solid #ffffff;">` 
+            : `<div class="reel-avatar-placeholder" style="width:28px; height:28px; font-size:13px; border-radius:50%; border:1.5px solid #ffffff;">👤</div>`;
 
         var captionMarkup = caption ? `<div class="reel-caption">${escapeHtml(caption)}</div>` : '';
 
@@ -214,10 +214,16 @@
                 <button class="reel-follow-pill">Follow</button>
             </div>
             ${captionMarkup}
+            <div class="reel-audio-row">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="#ffffff" style="filter: drop-shadow(0 1px 3px rgba(0,0,0,0.8)); flex-shrink:0;">
+                    <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+                </svg>
+                <span class="reel-audio-title">Original Audio • ${escapeHtml(username.replace(/^@/, ''))}</span>
+            </div>
         `;
         card.appendChild(infoBlock);
 
-        // Right Sidebar Social Interaction Bar
+        // Right Sidebar Social Interaction Bar (Transparent Authentic SVGs)
         var actionSidebar = document.createElement('div');
         actionSidebar.className = 'reel-action-bar';
 
@@ -231,17 +237,25 @@
                 <div class="reel-follow-plus">+</div>
             </div>
             <button class="reel-action-btn action-like-btn">
-                <span class="reel-action-icon">🤍</span>
+                <span class="reel-action-icon">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                </span>
                 <span class="reel-action-count count-likes">${escapeHtml(likesCount)}</span>
             </button>
             <button class="reel-action-btn action-comment-btn">
-                <span class="reel-action-icon">💬</span>
+                <span class="reel-action-icon">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                        <path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/>
+                    </svg>
+                </span>
                 <span class="reel-action-count">${escapeHtml(commentsCount)}</span>
             </button>
             <button class="reel-action-btn action-share-btn">
-                <span class="reel-action-icon" style="display:flex; align-items:center; justify-content:center;">
-                    <svg viewBox="0 0 24 24" width="28" height="28" fill="currentColor" style="display:block; margin:0 auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));">
-                        <path d="M14 4v4.5C7 9.5 4 14.5 3 19.5c2.5-3.5 6-5.1 11-5.1V19l8-7.5L14 4z"/>
+                <span class="reel-action-icon">
+                    <svg viewBox="0 0 24 24" width="30" height="30" fill="#ffffff">
+                        <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
                     </svg>
                 </span>
                 <span class="reel-action-count">${escapeHtml(sharesCount)}</span>
