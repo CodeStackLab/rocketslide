@@ -1,14 +1,14 @@
 /*
  * ============================================================
- * ROCKETSLIDE 9:16 — PREMIUM DARK ADMIN STYLESHEET (v3.5)
- * Modern, vibrant, professional dark-mode admin panel.
+ * ROCKETSLIDE 9:16 — PREMIUM LIGHT ADMIN STYLESHEET (v3.5)
+ * Modern, vibrant, professional light-mode admin panel.
  * ============================================================
  */
 
 /* ---- Google Fonts ---- */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
 
-/* ---- Design Tokens — Premium Dark Theme ---- */
+/* ---- Design Tokens — Premium Light Theme ---- */
 :root {
     --bg:            #f8fafc;
     --surface:       #ffffff;

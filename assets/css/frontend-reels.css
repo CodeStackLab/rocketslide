@@ -220,7 +220,7 @@ html, body {
     justify-content: center;
     font-size: 18px;
     border: 2px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    box-shadow: 0 4px 12px rgba(15,23,42,0.15);
 }
 
 .reel-follow-plus {
@@ -230,7 +230,7 @@ html, body {
     transform: translateX(-50%);
     width: 18px;
     height: 18px;
-    background: #fe2c55;
+    background: #2563eb;
     color: #ffffff;
     border-radius: 50%;
     display: flex;
@@ -239,7 +239,7 @@ html, body {
     font-size: 12px;
     font-weight: 800;
     border: 1.5px solid #ffffff;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 6px rgba(15,23,42,0.15);
     pointer-events: none;
 }
 
@@ -247,45 +247,44 @@ html, body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 3px;
+    gap: 4px;
     background: none;
     border: none;
-    color: #ffffff;
+    color: #0f172a;
     pointer-events: none;
 }
 
-/* 100% Transparent Action Icon Container */
+/* Light Glass Action Icon Container */
 .reel-action-icon {
-    width: 44px;
-    height: 44px;
+    width: 42px;
+    height: 42px;
     border-radius: 50%;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    border: none !important;
-    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.92) !important;
+    backdrop-filter: blur(12px) !important;
+    -webkit-backdrop-filter: blur(12px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 4px 14px rgba(15, 23, 42, 0.12) !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 2px 6px rgba(0,0,0,0.6));
 }
 
 .reel-action-count {
     font-size: 11.5px;
-    font-weight: 700;
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    font-weight: 800;
+    color: #0f172a;
+    text-shadow: 0 1px 3px rgba(255,255,255,0.9);
     letter-spacing: 0.2px;
 }
 
-/* Dark Authentic Spinning Vinyl Disc */
+/* Bright Light Silver Spinning Music Disc */
 .reel-music-disc {
     width: 38px;
     height: 38px;
     border-radius: 50%;
-    background: radial-gradient(circle, #262626 0%, #000000 70%, #171717 100%);
+    background: linear-gradient(135deg, #ffffff 0%, #e2e8f0 100%);
     border: 3px solid #ffffff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+    box-shadow: 0 4px 12px rgba(15, 23, 42, 0.15);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -299,7 +298,7 @@ html, body {
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #fe2c55, #2563eb);
+    background: linear-gradient(135deg, #2563eb, #7c3aed);
     border: 2px solid #ffffff;
 }
 
@@ -309,7 +308,7 @@ html, body {
 }
 
 /* ============================================================
-   BOTTOM-LEFT AUTHOR & CAPTION INFO SECTION (100% TRANSPARENT FLOATING)
+   BOTTOM-LEFT AUTHOR & CAPTION INFO SECTION (LIGHT GLASS CARD)
    ============================================================ */
 .reel-info-block {
     position: absolute;
@@ -320,13 +319,13 @@ html, body {
     display: flex;
     flex-direction: column;
     gap: 6px;
-    background: transparent !important;
-    backdrop-filter: none !important;
-    -webkit-backdrop-filter: none !important;
-    padding: 0 !important;
-    border-radius: 0 !important;
-    border: none !important;
-    box-shadow: none !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(16px) !important;
+    -webkit-backdrop-filter: blur(16px) !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12) !important;
     pointer-events: none;
 }
 
@@ -340,29 +339,27 @@ html, body {
 .reel-username {
     font-size: 14.5px;
     font-weight: 800;
-    color: #ffffff;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.9);
+    color: #0f172a;
     letter-spacing: 0.2px;
 }
 
 .reel-follow-pill {
-    background: #fe2c55;
+    background: #2563eb;
     color: #ffffff;
-    border: 1px solid rgba(255,255,255,0.4);
+    border: none;
     padding: 4px 14px;
     border-radius: 18px;
     font-size: 11px;
     font-weight: 700;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    box-shadow: 0 2px 8px rgba(37,99,235,0.3);
     pointer-events: none;
 }
 
 .reel-caption {
     font-size: 13px;
     line-height: 1.35;
-    color: #ffffff;
+    color: #334155;
     font-weight: 500;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -373,11 +370,9 @@ html, body {
     display: flex;
     align-items: center;
     gap: 6px;
-    color: #ffffff;
+    color: #475569;
     font-size: 11.5px;
     font-weight: 600;
-    text-shadow: 0 1px 3px rgba(0,0,0,0.9);
-    opacity: 0.95;
     margin-top: 2px;
 }
 
@@ -391,26 +386,27 @@ html, body {
     }
 
     .reel-info-block {
-        left: 12px;
+        left: 10px;
         right: 66px;
         bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-        gap: 5px;
+        padding: 8px 10px !important;
+        gap: 4px;
     }
 
     .reel-action-bar {
         right: 8px;
         bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-        gap: 12px;
+        gap: 10px;
     }
 
     .reel-avatar-wrapper, .reel-avatar-img, .reel-avatar-placeholder {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
     }
 
     .reel-action-icon {
-        width: 40px;
-        height: 40px;
+        width: 38px;
+        height: 38px;
     }
 
     .reel-action-count {
@@ -440,17 +436,18 @@ html, body {
 @media (max-height: 700px) {
     .reel-info-block {
         bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+        padding: 6px 8px !important;
         gap: 4px;
     }
 
     .reel-action-bar {
         bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-        gap: 10px;
+        gap: 8px;
     }
 
     .reel-action-icon {
-        width: 36px;
-        height: 36px;
+        width: 34px;
+        height: 34px;
     }
 
     .reel-music-disc {
