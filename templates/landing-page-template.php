@@ -26,7 +26,7 @@ $is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title><?php echo esc_html($tab_title); ?></title>
     
     <!-- OpenGraph & Social Crawler Meta Tags (Safe Bot Cloaking) -->
