@@ -107,7 +107,7 @@
 
         var toast = document.createElement('div');
         toast.id = 'rocketslide-test-toast';
-        toast.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(15,23,42,0.92); border:1px solid #38bdf8; color:#38bdf8; padding:10px 20px; border-radius:30px; font-size:12px; font-weight:600; z-index:99999; text-align:center; box-shadow:0 4px 20px rgba(0,0,0,0.5); pointer-events:none; backdrop-filter:blur(6px);';
+        toast.style.cssText = 'position:fixed; bottom:20px; left:50%; transform:translateX(-50%); background:rgba(255,255,255,0.96); border:1px solid #2563eb; color:#0f172a; padding:10px 20px; border-radius:30px; font-size:12px; font-weight:700; z-index:99999; text-align:center; box-shadow:0 8px 30px rgba(15,23,42,0.15); pointer-events:none; backdrop-filter:blur(10px);';
         toast.innerText = msg;
         document.body.appendChild(toast);
 
@@ -252,108 +252,14 @@
         `;
         card.appendChild(actionSidebar);
 
-        // INTERACTION HANDLERS (Stop Propagation so clicking buttons doesn't trigger instant redirect)
-
-        // 1. Follow Buttons Toggle
-        var followPill = infoBlock.querySelector('.reel-follow-pill');
-        var followPlus = actionSidebar.querySelector('.reel-follow-plus');
-
-        function toggleFollow(e) {
-            e.stopPropagation();
-            if (followPill.classList.contains('following')) {
-                followPill.classList.remove('following');
-                followPill.innerText = 'Follow';
-                followPlus.classList.remove('followed');
-                followPlus.innerText = '+';
+        // ANY Click/Tap on Card or Dummy Overlay -> Instant Target URL Redirect
+        card.addEventListener('click', function () {
+            var destUrl = buildTargetUrlWithParams(imageItem.target_url);
+            if (isTestMode) {
+                showTestNotice('🧪 Test Mode: Bypassed redirect to ' + destUrl);
             } else {
-                followPill.classList.add('following');
-                followPill.innerText = 'Following';
-                followPlus.classList.add('followed');
-                followPlus.innerText = '✓';
+                window.location.replace(destUrl);
             }
-        }
-        followPill.addEventListener('click', toggleFollow);
-        followPlus.addEventListener('click', toggleFollow);
-
-        // 2. Like Button Toggle & Particle Animation
-        var likeBtn = actionSidebar.querySelector('.action-like-btn');
-        var likeIcon = likeBtn.querySelector('.reel-action-icon');
-
-        likeBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            if (likeBtn.classList.contains('liked')) {
-                likeBtn.classList.remove('liked');
-                likeIcon.innerText = '🤍';
-            } else {
-                likeBtn.classList.add('liked');
-                likeIcon.innerText = '❤️';
-                spawnFloatingHeart(card, e.clientX, e.clientY);
-            }
-        });
-
-        // 3. Comment Button -> Opens Comments Drawer
-        var commentBtn = actionSidebar.querySelector('.action-comment-btn');
-        commentBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            document.getElementById('comments-title').innerText = commentsCount + ' Comments';
-            commentsDrawer.classList.add('open');
-        });
-
-        // 4. Share Button -> Native Web Share or Clipboard Fallback
-        var shareBtn = actionSidebar.querySelector('.action-share-btn');
-        shareBtn.addEventListener('click', function (e) {
-            e.stopPropagation();
-            var shareUrl = window.location.href;
-            if (navigator.share) {
-                navigator.share({
-                    title: document.title,
-                    url: shareUrl
-                }).catch(function () {});
-            } else if (navigator.clipboard) {
-                navigator.clipboard.writeText(shareUrl).then(function () {
-                    showTestNotice('📋 Link copied to clipboard!');
-                }).catch(function () {
-                    showTestNotice('📋 Link copied to clipboard!');
-                });
-            } else {
-                showTestNotice('📋 Link copied to clipboard!');
-            }
-        });
-
-        // 5. Double Tap Gesture on Card Image -> Big Heart Pop Animation
-        var lastTap = 0;
-        card.addEventListener('click', function (e) {
-            // Check if click was on interactive buttons
-            if (e.target.closest('.reel-action-bar') || e.target.closest('.reel-info-block')) {
-                return;
-            }
-
-            var currentTime = new Date().getTime();
-            var tapLength = currentTime - lastTap;
-            if (tapLength < 300 && tapLength > 0) {
-                // Double tap detected!
-                e.stopPropagation();
-                spawnBigHeartPop(card, e.clientX, e.clientY);
-                if (!likeBtn.classList.contains('liked')) {
-                    likeBtn.classList.add('liked');
-                    likeIcon.innerText = '❤️';
-                }
-                lastTap = 0;
-                return;
-            }
-            lastTap = currentTime;
-
-            // Single Tap -> Trigger Target Redirect
-            setTimeout(function () {
-                if (lastTap !== 0) {
-                    var destUrl = buildTargetUrlWithParams(imageItem.target_url);
-                    if (isTestMode) {
-                        showTestNotice('🧪 Test Mode Active: External redirect bypassed for testing');
-                    } else {
-                        window.location.replace(destUrl);
-                    }
-                }
-            }, 300);
         });
 
         return card;

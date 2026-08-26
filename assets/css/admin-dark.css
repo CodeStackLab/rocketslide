@@ -955,14 +955,14 @@
     position: absolute;
     top: 6px;
     left: 6px;
-    background: rgba(15,23,42,.85);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(4px);
-    color: #38bdf8;
+    color: #2563eb;
     font-size: 10.5px;
     font-weight: 700;
     padding: 2px 7px;
     border-radius: 5px;
-    border: 1px solid rgba(56,189,248,.3);
+    border: 1px solid #cbd5e1;
     font-family: monospace;
     z-index: 2;
 }
@@ -971,9 +971,9 @@
     position: absolute;
     top: 6px;
     right: 6px;
-    background: rgba(22,163,74,.2);
-    border: 1px solid rgba(22,163,74,.4);
-    color: #ffffff;
+    background: rgba(22, 163, 74, 0.15);
+    border: 1px solid rgba(22, 163, 74, 0.4);
+    color: #16a34a;
     font-size: 9.5px;
     font-weight: 700;
     padding: 2px 5px;
@@ -989,18 +989,18 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(255, 255, 255, 0.95);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     padding: 4px 10px;
     border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    color: #ffffff;
+    border: 1px solid #cbd5e1;
+    color: #0f172a;
     font-size: 11px;
-    font-weight: 600;
+    font-weight: 700;
     z-index: 2;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .rocketslide-thumb-user-badge span {
