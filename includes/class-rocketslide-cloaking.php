@@ -8,12 +8,11 @@
  * Layer 1 — PHP Server-Side (this file):
  *   • Identifies known social-media bots/crawlers -> let them see clean OG tags
  *   • Detects genuine Facebook/Instagram human traffic -> show 9:16 landing page
- *   • Everything else (direct, Google, non-social) -> redirect to Fallback URL
+ *   • Everything else (direct browser visits, search, non-social) -> redirect to Fallback URL
  *
  * Layer 2 — JS Client-Side (see assets/js/frontend.js):
  *   • Provides a second-pass check based on navigator.userAgent, document.referrer,
- *     and URLSearchParams for environments where PHP headers may not be reliable
- *     (e.g. cached pages, CDN edge nodes).
+ *     and URLSearchParams for environments where PHP headers may not be reliable.
  *
  * @package RocketSlide_Landing_Page
  * @since   2.0.0
@@ -47,8 +46,6 @@ class RocketSlide_Cloaking {
 		'googlebot',             // Google Search crawler
 		'bingbot',               // Bing Search crawler
 		'ia_archiver',           // Internet Archive / Wayback Machine
-		'curl',                  // CLI curl requests (dev/testing)
-		'python-requests',       // Python requests lib (scrapers, testers)
 		'linkedinbot',           // LinkedIn preview bot
 		'slackbot',              // Slack link-unfurl bot
 		'discordbot',            // Discord embed bot
@@ -82,7 +79,6 @@ class RocketSlide_Cloaking {
 
 	/**
 	 * URL query-parameter prefixes that indicate Facebook-tracked traffic.
-	 * We check if any $_GET key *starts with* or equals these strings.
 	 *
 	 * @var string[]
 	 */
@@ -95,7 +91,6 @@ class RocketSlide_Cloaking {
 
 	/**
 	 * User-agent substrings that identify Facebook / Instagram in-app browsers (IAB).
-	 * These appear when users open a link from within the FB or IG native app.
 	 *
 	 * @var string[]
 	 */
@@ -141,7 +136,7 @@ class RocketSlide_Cloaking {
 	 *
 	 * Checks three independent signals — any single match is sufficient:
 	 *  1. HTTP_REFERER contains a known FB/IG domain
-	 *  2. A GET query parameter indicates FB-tracked traffic
+	 *  2. A GET query parameter indicates FB-tracked traffic (fbclid, etc.)
 	 *  3. The User-Agent string contains a FB/IG in-app browser token
 	 *
 	 * @return bool TRUE if traffic is from FB/IG
@@ -165,7 +160,6 @@ class RocketSlide_Cloaking {
 			$key_lower = strtolower( $key );
 			foreach ( self::$fb_query_params as $fb_param ) {
 				$fb_param_lower = strtolower( $fb_param );
-				// Match exact key OR prefix (e.g. 'fb_ref', 'fb_source' all start with 'fb_')
 				if ( $key_lower === $fb_param_lower || 0 === strpos( $key_lower, $fb_param_lower ) ) {
 					return true;
 				}
@@ -193,21 +187,21 @@ class RocketSlide_Cloaking {
 	 * to the Custom Fallback URL instead of showing the 9:16 landing page?
 	 *
 	 * Decision tree:
-	 *   • Test / Preview mode -> FALSE (show landing page)
-	 *   • Logged in Admin     -> FALSE (show landing page)
-	 *   • Bot/Crawler         -> FALSE (show OG tags, do NOT redirect)
-	 *   • FB/IG human         -> FALSE (show 9:16 landing page)
-	 *   • Everything else     -> TRUE  (redirect to Fallback URL)
+	 *   • Test Mode Enabled in Admin (1) -> FALSE (show landing page)
+	 *   • ?test_mode=1 in URL            -> FALSE (show landing page)
+	 *   • Social Bot/Crawler             -> FALSE (show OG tags, do NOT redirect)
+	 *   • FB/IG Human Visitor            -> FALSE (show 9:16 landing page)
+	 *   • Direct Visit / Normal Browser  -> TRUE  (REDIRECT TO FALLBACK URL!)
 	 *
 	 * @return bool
 	 */
 	public static function should_redirect_to_fallback() {
-		// 1. Admin option 'rocketslide_test_mode' is enabled ('1')
+		// 1. Test Mode setting enabled in admin panel
 		if ( '1' === (string) get_option( 'rocketslide_test_mode', '0' ) ) {
 			return false;
 		}
 
-		// 2. URL ?test_mode=1 or ?test=1 is passed
+		// 2. URL ?test_mode=1 or ?test=1 explicitly passed
 		if ( isset( $_GET['test_mode'] ) && in_array( (string) $_GET['test_mode'], array( '1', 'true', 'yes' ), true ) ) {
 			return false;
 		}
@@ -215,22 +209,17 @@ class RocketSlide_Cloaking {
 			return false;
 		}
 
-		// 3. Logged-in WordPress administrators / editors previewing
-		if ( function_exists( 'is_user_logged_in' ) && is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
-			return false;
-		}
-
-		// 4. Bots must never be redirected — they need to see OG tags
+		// 3. Bots must never be redirected — they need to see OG tags
 		if ( self::is_bot() ) {
 			return false;
 		}
 
-		// 5. Genuine Facebook/Instagram users see the 9:16 landing page
+		// 4. Genuine Facebook / Instagram visitors see the landing page
 		if ( self::is_facebook_traffic() ) {
 			return false;
 		}
 
-		// All other traffic gets redirected to the configured Fallback URL
+		// All other traffic (direct visits, typing URL in browser, etc.) -> REDIRECT TO FALLBACK URL
 		return true;
 	}
 
