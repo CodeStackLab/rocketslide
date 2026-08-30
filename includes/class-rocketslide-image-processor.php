@@ -2,18 +2,15 @@
 /**
  * class-rocketslide-image-processor.php
  *
- * IMAGE UPLOAD & AUTOMATIC WebP CONVERSION ENGINE
- * ================================================
+ * IMAGE UPLOAD & AUTOMATIC 540x960 WebP CONVERSION ENGINE
+ * ============================================================
  *
  * Handles server-side processing of every uploaded reel image:
- *   1. Receives a local filesystem path (from file upload or WP Media Library).
- *   2. Uses WordPress's wp_get_image_editor() abstraction to support either
- *      PHP GD or PHP Imagick, whichever is installed on the server.
- *   3. Crops & resizes the image to exactly 540 × 960 px (9:16 ratio).
- *   4. Converts to WebP at 75% quality.
- *   5. Saves the optimised image to wp-content/uploads/rocketslide/.
- *   6. Falls back gracefully to JPEG at 85% quality if the server does not
- *      support WebP output (very old GD builds without webp support).
+ *   1. Accepts direct file upload ($_FILES) or WP Media Library attachment ID.
+ *   2. Uses WordPress wp_get_image_editor() (GD or Imagick).
+ *   3. Crops & resizes to 540x960 px (9:16 vertical format).
+ *   4. Converts to WebP (75% quality) or falls back to JPEG (85% quality).
+ *   5. Saves to wp-content/uploads/rocketslide/.
  *
  * @package RocketSlide_Landing_Page
  * @since   2.0.0
@@ -26,83 +23,117 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class RocketSlide_Image_Processor {
 
-	/** @const int   Target width for 9:16 vertical resolution (TikTok HD) */
-	const TARGET_WIDTH  = 1080;
+	/** Target width for 9:16 vertical resolution */
+	const TARGET_WIDTH  = 540;
 
-	/** @const int   Target height for 9:16 vertical resolution (TikTok HD) */
-	const TARGET_HEIGHT = 1920;
+	/** Target height for 9:16 vertical resolution */
+	const TARGET_HEIGHT = 960;
 
-	/** @const int   WebP compression quality (0–100) */
-	const WEBP_QUALITY  = 75;
+	/** WebP compression quality */
+	const WEBP_QUALITY  = 80;
 
-	/** @const int   JPEG fallback quality (used only when WebP is unavailable) */
+	/** JPEG fallback quality */
 	const JPEG_FALLBACK_QUALITY = 85;
 
 	/**
 	 * Ensure the upload directory exists.
-	 * Called on plugin activation and on every AJAX upload request.
 	 */
 	public static function ensure_upload_dir() {
 		$dir = rocketslide_uploads_dir();
 		if ( ! file_exists( $dir ) ) {
 			wp_mkdir_p( $dir );
+
+			$htaccess = $dir . '.htaccess';
+			if ( ! file_exists( $htaccess ) ) {
+				@file_put_contents( $htaccess, "Options -Indexes\n" );
+			}
 		}
 	}
 
 	/**
-	 * Main entry point — process and optimise a single source image.
+	 * Process an uploaded $_FILES['image_file'] array.
 	 *
-	 * Steps performed:
-	 *  1. Validate the source file exists.
-	 *  2. Open with WP Image Editor (GD or Imagick, whichever is available).
-	 *  3. Resize + hard-crop to 540 × 960 px.
-	 *  4. Save as WebP (75% quality) → or fallback to JPEG (85% quality).
-	 *  5. Return an array with the public URL and the local file path.
-	 *
-	 * @param  string       $source_path  Absolute path to the source image file.
+	 * @param  array $file_array $_FILES['image_file']
 	 * @return array|WP_Error
-	 *         Success: array( 'url' => string, 'path' => string, 'format' => 'webp'|'jpeg' )
-	 *         Failure: WP_Error object with descriptive message.
 	 */
-	public static function process_image( $source_path ) {
-		// — — — Step 1: Validate source file — — —
-		if ( empty( $source_path ) || ! file_exists( $source_path ) ) {
+	public static function process_uploaded_file( $file_array ) {
+		if ( empty( $file_array ) || ! isset( $file_array['tmp_name'] ) || empty( $file_array['tmp_name'] ) ) {
+			return new WP_Error( 'rocketslide_no_file', 'No image file was uploaded.' );
+		}
+
+		if ( isset( $file_array['error'] ) && $file_array['error'] !== UPLOAD_ERR_OK ) {
+			return new WP_Error( 'rocketslide_upload_error', 'File upload error code: ' . $file_array['error'] );
+		}
+
+		$tmp_path  = $file_array['tmp_name'];
+		$orig_name = isset( $file_array['name'] ) ? $file_array['name'] : 'image.jpg';
+
+		// Verify it is a valid image using getimagesize
+		$image_info = @getimagesize( $tmp_path );
+		if ( ! $image_info ) {
+			return new WP_Error( 'rocketslide_invalid_image', 'Uploaded file is not a valid image.' );
+		}
+
+		return self::process_image( $tmp_path, $orig_name );
+	}
+
+	/**
+	 * Process from WP Media Library Attachment ID.
+	 *
+	 * @param  int $attachment_id
+	 * @return array|WP_Error
+	 */
+	public static function process_from_attachment_id( $attachment_id ) {
+		$attachment_path = get_attached_file( (int) $attachment_id );
+
+		if ( ! $attachment_path || ! file_exists( $attachment_path ) ) {
 			return new WP_Error(
-				'rocketslide_file_not_found',
-				sprintf( 'Source image not found: %s', esc_html( $source_path ) )
+				'rocketslide_attachment_not_found',
+				sprintf( 'Attachment ID %d could not be found on server disk.', $attachment_id )
 			);
 		}
 
-		// Confirm the file is actually an image (basic MIME check via WP)
-		$mime = wp_check_filetype( $source_path );
-		if ( ! $mime['type'] || 0 !== strpos( $mime['type'], 'image/' ) ) {
-			return new WP_Error( 'rocketslide_not_image', 'The uploaded file is not a valid image.' );
+		return self::process_image( $attachment_path, basename( $attachment_path ) );
+	}
+
+	/**
+	 * Alias for process_from_attachment_id
+	 */
+	public static function process_media_attachment( $attachment_id ) {
+		return self::process_from_attachment_id( $attachment_id );
+	}
+
+	/**
+	 * Process and crop image to 540x960 WebP.
+	 *
+	 * @param  string $source_path Absolute path to image
+	 * @param  string $orig_name   Original filename for reference
+	 * @return array|WP_Error
+	 */
+	public static function process_image( $source_path, $orig_name = '' ) {
+		if ( empty( $source_path ) || ! file_exists( $source_path ) ) {
+			return new WP_Error( 'rocketslide_file_missing', 'Source image file not found.' );
 		}
 
-		// — — — Step 2: Open with WP Image Editor — — —
-		$editor = wp_get_image_editor( $source_path );
-		if ( is_wp_error( $editor ) ) {
-			return $editor; // Propagate the error (e.g. "No editor could be selected")
-		}
-
-		// — — — Step 3: Resize & hard-crop to 540 × 960 — — —
-		//
-		// The third parameter `true` tells WP to CROP (not just scale).
-		// This guarantees the output is exactly 540 × 960 regardless of the
-		// source image's original aspect ratio.
-		$result = $editor->resize( self::TARGET_WIDTH, self::TARGET_HEIGHT, true );
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		// Ensure the upload directory is ready
 		self::ensure_upload_dir();
 
-		// — — — Step 4 & 5: Try WebP first, then JPEG fallback — — —
-		$unique_suffix = time() . '_' . wp_generate_password( 8, false, false );
+		// Open with WordPress image editor (GD or Imagick)
+		$editor = wp_get_image_editor( $source_path );
+		if ( is_wp_error( $editor ) ) {
+			return $editor;
+		}
 
-		// --- Attempt 1: Save as WebP ---
-		$webp_filename = 'reel_' . $unique_suffix . '.webp';
+		// Resize & hard crop to 540x960 (9:16 ratio)
+		$resize_result = $editor->resize( self::TARGET_WIDTH, self::TARGET_HEIGHT, true );
+		if ( is_wp_error( $resize_result ) ) {
+			return $resize_result;
+		}
+
+		$unique_id = uniqid( 'img_' );
+		$suffix    = time() . '_' . wp_generate_password( 6, false, false );
+
+		// Attempt 1: WebP format
+		$webp_filename = 'reel_' . $suffix . '.webp';
 		$webp_path     = rocketslide_uploads_dir() . $webp_filename;
 		$webp_url      = rocketslide_uploads_url() . $webp_filename;
 
@@ -111,14 +142,15 @@ class RocketSlide_Image_Processor {
 
 		if ( ! is_wp_error( $saved ) && file_exists( $webp_path ) ) {
 			return array(
+				'id'     => $unique_id,
 				'url'    => $webp_url,
 				'path'   => $webp_path,
 				'format' => 'webp',
 			);
 		}
 
-		// --- Attempt 2: Fallback to JPEG if WebP not supported ---
-		$jpg_filename = 'reel_' . $unique_suffix . '.jpg';
+		// Attempt 2: Fallback to JPEG if WebP is unsupported on host
+		$jpg_filename = 'reel_' . $suffix . '.jpg';
 		$jpg_path     = rocketslide_uploads_dir() . $jpg_filename;
 		$jpg_url      = rocketslide_uploads_url() . $jpg_filename;
 
@@ -130,53 +162,33 @@ class RocketSlide_Image_Processor {
 		}
 
 		return array(
+			'id'     => $unique_id,
 			'url'    => $jpg_url,
 			'path'   => $jpg_path,
-			'format' => 'jpeg', // Flagged so admin UI can show correct badge
+			'format' => 'jpeg',
 		);
 	}
 
 	/**
-	 * Resolve a WP Media Library attachment ID to its local filesystem path,
-	 * then pass it through process_image().
+	 * Delete a physically stored RocketSlide image file.
 	 *
-	 * @param  int          $attachment_id  WP Attachment post ID.
-	 * @return array|WP_Error
-	 */
-	public static function process_from_attachment_id( $attachment_id ) {
-		$attachment_path = get_attached_file( (int) $attachment_id );
-
-		if ( ! $attachment_path ) {
-			return new WP_Error(
-				'rocketslide_attachment_not_found',
-				sprintf( 'Attachment ID %d could not be resolved to a local file.', $attachment_id )
-			);
-		}
-
-		return self::process_image( $attachment_path );
-	}
-
-	/**
-	 * Delete a physically stored RocketSlide image from the uploads/rocketslide/ directory.
-	 *
-	 * @param  string  $file_path  Absolute path to the image file.
-	 * @return bool    TRUE if the file was deleted (or didn't exist), FALSE on failure.
+	 * @param  string $file_path Absolute path to the file
+	 * @return bool
 	 */
 	public static function delete_image( $file_path ) {
 		if ( empty( $file_path ) ) {
 			return false;
 		}
 
-		// Security: ensure the file is actually inside the RocketSlide upload directory
 		$upload_dir = rocketslide_uploads_dir();
 		if ( 0 !== strpos( realpath( dirname( $file_path ) ), realpath( $upload_dir ) ) ) {
-			return false; // Refuse to delete files outside our designated folder
+			return false; // Prevent deletion outside rocketslide uploads folder
 		}
 
 		if ( file_exists( $file_path ) ) {
 			return (bool) @unlink( $file_path );
 		}
 
-		return true; // File already gone — consider it a success
+		return true;
 	}
 }

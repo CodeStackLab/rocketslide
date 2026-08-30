@@ -230,7 +230,7 @@ class RocketSlide_Admin {
                 <div class="rocketslide-card">
                     <div class="rocketslide-card-header">
                         <h3 class="rocketslide-card-title"><span class="dashicons dashicons-plus-alt2" style="color:#2563eb;"></span> Add New 9:16 Reel Image</h3>
-                        <p class="rocketslide-card-subtitle">Upload any image. The built-in GD/Imagick processor automatically crops and converts it to high-performance <strong>540&times;960 WebP</strong> format.</p>
+                        <p class="rocketslide-card-subtitle">Upload any image. The built-in processor automatically crops and converts it to high-performance <strong>540&times;960 WebP</strong> format.</p>
                     </div>
 
                     <form id="rocketslide-add-image-form" class="rocketslide-form">
@@ -536,22 +536,23 @@ class RocketSlide_Admin {
             wp_send_json_error('Target URL is required.');
         }
 
-        $processor = new RocketSlide_Image_Processor();
+        $result = null;
 
         if ($media_id > 0) {
-            $result = $processor->process_media_attachment($media_id);
+            $result = RocketSlide_Image_Processor::process_from_attachment_id($media_id);
         } elseif (!empty($_FILES['image_file']['tmp_name'])) {
-            $result = $processor->process_uploaded_file($_FILES['image_file']);
+            $result = RocketSlide_Image_Processor::process_uploaded_file($_FILES['image_file']);
         } else {
-            wp_send_json_error('No image provided.');
+            wp_send_json_error('Please select an image file or choose from Media Library.');
         }
 
-        if (is_wp_error($result)) {
-            wp_send_json_error($result->get_error_message());
+        if (!$result || is_wp_error($result)) {
+            $err_msg = is_wp_error($result) ? $result->get_error_message() : 'Error processing image.';
+            wp_send_json_error($err_msg);
         }
 
         $new_item = array(
-            'id'             => $result['id'],
+            'id'             => !empty($result['id']) ? $result['id'] : uniqid('img_'),
             'url'            => $result['url'],
             'path'           => $result['path'],
             'target_url'     => $target_url,
@@ -625,19 +626,16 @@ class RocketSlide_Admin {
         }
 
         $images = get_option('rocketslide_images', array());
-        $deleted_path = '';
-
         $filtered = array();
+
         foreach ($images as $img) {
             if ($img['id'] === $id) {
-                $deleted_path = isset($img['path']) ? $img['path'] : '';
+                if (!empty($img['path'])) {
+                    RocketSlide_Image_Processor::delete_image($img['path']);
+                }
             } else {
                 $filtered[] = $img;
             }
-        }
-
-        if (!empty($deleted_path) && file_exists($deleted_path) && strpos($deleted_path, 'sample-') === false) {
-            @unlink($deleted_path);
         }
 
         update_option('rocketslide_images', $filtered);
