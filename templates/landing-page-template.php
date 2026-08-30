@@ -66,8 +66,108 @@ $cache_bust  = time();
         <link rel="preload" as="image" href="<?php echo esc_url($images[0]['url']); ?>" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- Inline Critical CSS: Force Instant Play Button Removal & Fast Smooth Layout -->
+    <!-- Critical Inlined CSS: Guaranteed Zero Gap & Full-Bleed Edge-to-Edge -->
     <style>
+        * {
+            box-sizing: border-box !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            -webkit-tap-highlight-color: transparent !important;
+        }
+        html, body {
+            width: 100% !important;
+            height: 100% !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            background-color: #000000 !important;
+            color: #ffffff !important;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+            overflow: hidden !important;
+            user-select: none !important;
+            -webkit-user-select: none !important;
+            position: fixed !important;
+            inset: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .reels-main-wrapper {
+            width: 100% !important;
+            height: 100% !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            display: flex !important;
+            justify-content: center !important;
+            align-items: center !important;
+            background: #000000 !important;
+            overflow: hidden !important;
+            position: fixed !important;
+            inset: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+        .reels-container {
+            width: 100% !important;
+            max-width: 480px !important;
+            height: 100% !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            background-color: #000000 !important;
+            overflow-y: scroll !important;
+            scroll-snap-type: y mandatory !important;
+            scroll-behavior: smooth !important;
+            -webkit-overflow-scrolling: touch !important;
+            overscroll-behavior-y: contain !important;
+            scrollbar-width: none !important;
+            position: relative !important;
+            transform: translate3d(0, 0, 0) !important;
+            -webkit-transform: translate3d(0, 0, 0) !important;
+            will-change: scroll-position !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            gap: 0 !important;
+        }
+        .reels-container::-webkit-scrollbar {
+            display: none !important;
+        }
+        .reel-card {
+            width: 100% !important;
+            height: 100% !important;
+            height: 100vh !important;
+            height: 100dvh !important;
+            scroll-snap-align: start !important;
+            scroll-snap-stop: always !important;
+            position: relative !important;
+            display: block !important;
+            background-color: #000000 !important;
+            cursor: pointer !important;
+            overflow: hidden !important;
+            flex-shrink: 0 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            transform: translate3d(0, 0, 0) !important;
+            -webkit-transform: translate3d(0, 0, 0) !important;
+        }
+        .reel-img {
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover !important;
+            object-position: center !important;
+            display: block !important;
+            pointer-events: none !important;
+            z-index: 1 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+            border: none !important;
+            transform: translate3d(0, 0, 0) !important;
+            -webkit-transform: translate3d(0, 0, 0) !important;
+        }
+        /* Hard-kill any play overlays, progress bars, blur bars, or dark vignette gradients */
+        .reel-img-blur-bg,
+        .reel-overlay-gradient,
         .reel-play-overlay,
         [class*="play-overlay"],
         [class*="play-btn"],
@@ -77,6 +177,20 @@ $cache_bust  = time();
             visibility: hidden !important;
             opacity: 0 !important;
             pointer-events: none !important;
+            width: 0 !important;
+            height: 0 !important;
+        }
+        @media (max-width: 768px) {
+            .reels-container,
+            .reel-card,
+            .reel-img {
+                max-width: 100% !important;
+                width: 100% !important;
+                height: 100% !important;
+                height: 100vh !important;
+                height: 100dvh !important;
+                object-fit: cover !important;
+            }
         }
     </style>
 
