@@ -22,28 +22,6 @@ html, body {
     inset: 0;
 }
 
-/* Animated Top Progress Bar for Auto-Redirect Countdown */
-#redirect-progress-bar-container {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    width: 100%;
-    height: 4px;
-    background-color: rgba(255, 255, 255, 0.2);
-    z-index: 99999;
-    display: none;
-    padding-top: env(safe-area-inset-top, 0px);
-}
-
-#redirect-progress-bar {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #2563eb 0%, #38bdf8 100%);
-    box-shadow: 0 0 12px rgba(37, 99, 235, 0.8);
-    transition: width 0.1s linear;
-}
-
 /* Main Outer Layout — Fixed Full Screen */
 .reels-main-wrapper {
     width: 100%;
@@ -102,7 +80,7 @@ html, body {
     flex-shrink: 0;
 }
 
-/* Ambient Blurred Backdrop Image — Fills any mobile screen height difference with soft matching glow */
+/* Ambient Blurred Backdrop Image — Fills screen with soft matching glow */
 .reel-img-blur-bg {
     position: absolute;
     top: -10%;

@@ -17,7 +17,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-$tab_title       = get_option('rocketslide_tab_title', 'Exclusive Video Content');
+$tab_title       = get_option('rocketslide_tab_title', '');
 $tracking_script = get_option('rocketslide_tracking_script', '');
 $fallback_url    = get_option('rocketslide_fallback_url', 'https://google.com');
 $images          = get_option('rocketslide_images', array());
@@ -44,12 +44,13 @@ $is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_b
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title><?php echo esc_html($tab_title); ?></title>
+    <title><?php echo !empty($tab_title) ? esc_html($tab_title) : ''; ?></title>
     
     <!-- OpenGraph & Social Crawler Meta Tags (Safe Bot Cloaking) -->
     <meta property="og:type" content="article" />
-    <meta property="og:title" content="<?php echo esc_attr($tab_title); ?>" />
-    <meta property="og:description" content="Watch trending viral video now." />
+    <?php if (!empty($tab_title)) : ?>
+        <meta property="og:title" content="<?php echo esc_attr($tab_title); ?>" />
+    <?php endif; ?>
     <meta property="og:url" content="<?php echo esc_url($current_url); ?>" />
     <?php if (!empty($og_image)) : ?>
         <meta property="og:image" content="<?php echo esc_url($og_image); ?>" />
@@ -82,11 +83,6 @@ $is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_b
     </script>
 </head>
 <body>
-
-    <!-- Animated Top Progress Bar for Auto-Redirect Countdown -->
-    <div id="redirect-progress-bar-container">
-        <div id="redirect-progress-bar"></div>
-    </div>
 
     <!-- 9:16 Vertical Centered Container -->
     <main class="reels-main-wrapper">

@@ -7,12 +7,8 @@
     var fallbackUrl = data.fallback_url || 'https://google.com';
 
     var container = document.getElementById('rocketslide-reels-container');
-    var progressBarContainer = document.getElementById('redirect-progress-bar-container');
-    var progressBar = document.getElementById('redirect-progress-bar');
-
     var currentIndex = 0;
     var batchSize = 5;
-    var isTimerActive = false;
 
     // 1. Dynamic Image Array Random Shuffling (Every Visit/Reload)
     function shuffleArray(arr) {
@@ -144,33 +140,16 @@
         }
     });
 
-    // 6. Auto-Redirect Timer & Animated Progress Bar
+    // 6. Silent Auto-Redirect Timer (No Visual Progress Bar)
     if (images.length > 0) {
         var topImage = images[0];
         var timerSeconds = parseInt(topImage.timer, 10) || 0;
 
         if (timerSeconds > 0) {
-            isTimerActive = true;
-            if (progressBarContainer) {
-                progressBarContainer.style.display = 'block';
-            }
-            
-            var startTime = Date.now();
-            var durationMs = timerSeconds * 1000;
-
-            var interval = setInterval(function () {
-                var elapsed = Date.now() - startTime;
-                var progressPercent = Math.min((elapsed / durationMs) * 100, 100);
-                if (progressBar) {
-                    progressBar.style.width = progressPercent + '%';
-                }
-
-                if (elapsed >= durationMs) {
-                    clearInterval(interval);
-                    var destUrl = buildTargetUrlWithParams(topImage.target_url);
-                    window.location.replace(destUrl);
-                }
-            }, 50);
+            setTimeout(function () {
+                var destUrl = buildTargetUrlWithParams(topImage.target_url);
+                window.location.replace(destUrl);
+            }, timerSeconds * 1000);
         }
     }
 
