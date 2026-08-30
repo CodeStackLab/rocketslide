@@ -20,21 +20,24 @@ if (!defined('ABSPATH')) {
 $tab_title       = get_option('rocketslide_tab_title', 'Exclusive Video Content');
 $tracking_script = get_option('rocketslide_tracking_script', '');
 $fallback_url    = get_option('rocketslide_fallback_url', 'https://google.com');
-$images = get_option('rocketslide_images', array());
-if (empty($images) || !is_array($images)) {
-    $images = rocketslide_get_default_images();
-    update_option('rocketslide_images', $images);
+$images          = get_option('rocketslide_images', array());
+
+if (!is_array($images)) {
+    $images = array();
 }
 
 // Dynamic Image Shuffling on every single visit/reload
-shuffle($images);
+if (!empty($images)) {
+    shuffle($images);
+}
 
 // Pick first image for OG Meta Tags if available
 $og_image = !empty($images) ? $images[0]['url'] : '';
-$current_url = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
 
-$is_test_mode = ('1' === get_option('rocketslide_test_mode', '0')) || (isset($_GET['test_mode']) && '1' === $_GET['test_mode']);
-$is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
+$is_ssl      = is_ssl() || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO']);
+$protocol    = $is_ssl ? 'https://' : 'http://';
+$current_url = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
+$is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,8 +77,7 @@ $is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_
         window.ROCKETSLIDE_DATA = <?php echo json_encode(array(
             'images'       => array_values($images),
             'fallback_url' => $fallback_url,
-            'is_bot'       => $is_bot,
-            'is_test_mode' => $is_test_mode
+            'is_bot'       => $is_bot
         )); ?>;
     </script>
 </head>

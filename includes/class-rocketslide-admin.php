@@ -155,9 +155,8 @@ class RocketSlide_Admin {
         $tracking_script = get_option('rocketslide_tracking_script', '');
         $images          = get_option('rocketslide_images', array());
 
-        if (empty($images) || !is_array($images)) {
-            $images = rocketslide_get_default_images();
-            update_option('rocketslide_images', $images);
+        if (!is_array($images)) {
+            $images = array();
         }
 
         $landing_page_url = home_url('/' . trim($slug, '/') . '/');
@@ -180,7 +179,7 @@ class RocketSlide_Admin {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Live Page
                     </a>
                     <button type="button" id="rocketslide-copy-live-url-btn" class="rocketslide-btn rocketslide-btn-copy" data-url="<?php echo esc_url($landing_page_url); ?>">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2 2v1"/></svg> Copy Link
                     </button>
                 </div>
             </div>

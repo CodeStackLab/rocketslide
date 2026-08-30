@@ -50,55 +50,12 @@ function rocketslide_uploads_url() {
 }
 
 /**
- * Returns default sample reel images if user has not uploaded custom images yet.
+ * Returns default images array (empty by default so user has full control).
  *
  * @return array
  */
 function rocketslide_get_default_images() {
-	return array(
-		array(
-			'id'             => 'sample_1',
-			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-1.webp',
-			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-1.webp',
-			'target_url'     => 'https://google.com',
-			'timer'          => 0,
-			'username'       => '@viral_reels_official',
-			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-1.webp',
-			'caption'        => 'Wait till the end! #viral #trending #reels',
-			'likes_count'    => '142.8K',
-			'comments_count' => '3.4K',
-			'shares_count'   => '18.9K',
-			'created_at'     => time()
-		),
-		array(
-			'id'             => 'sample_2',
-			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-2.webp',
-			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-2.webp',
-			'target_url'     => 'https://bing.com',
-			'timer'          => 0,
-			'username'       => '@top_trends_daily',
-			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-2.webp',
-			'caption'        => 'You won\'t believe this happened... #foryou #fyp',
-			'likes_count'    => '98.5K',
-			'comments_count' => '2.1K',
-			'shares_count'   => '11.4K',
-			'created_at'     => time()
-		),
-		array(
-			'id'             => 'sample_3',
-			'url'            => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-3.webp',
-			'path'           => ROCKETSLIDE_PLUGIN_DIR . 'assets/images/sample-3.webp',
-			'target_url'     => 'https://yahoo.com',
-			'timer'          => 0,
-			'username'       => '@reels_hub_vids',
-			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-3.webp',
-			'caption'        => 'Tap anywhere to watch full video!',
-			'likes_count'    => '215.3K',
-			'comments_count' => '5.9K',
-			'shares_count'   => '29.7K',
-			'created_at'     => time()
-		),
-	);
+	return array();
 }
 
 // ============================================================
@@ -168,8 +125,7 @@ final class RocketSlide_Landing_Page {
 				'rocketslide_tab_title'        => 'Exclusive Video Content',
 				'rocketslide_fallback_url'     => 'https://google.com',
 				'rocketslide_tracking_script'  => '',
-				'rocketslide_test_mode'        => '0',
-				'rocketslide_images'           => rocketslide_get_default_images(),
+				'rocketslide_images'           => array(),
 			);
 
 			foreach ( $defaults as $key => $value ) {
@@ -211,8 +167,7 @@ final class RocketSlide_Landing_Page {
 			'rocketslide_tab_title'        => 'Exclusive Video Content',
 			'rocketslide_fallback_url'     => 'https://google.com',
 			'rocketslide_tracking_script'  => '',
-			'rocketslide_test_mode'        => '0',
-			'rocketslide_images'           => rocketslide_get_default_images(),
+			'rocketslide_images'           => array(),
 		);
 		foreach ( $defaults as $key => $value ) {
 			if ( false === get_option( $key ) ) {
