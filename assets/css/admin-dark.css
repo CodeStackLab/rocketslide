@@ -589,65 +589,74 @@
     flex-wrap: wrap;
 }
 
-/* Slug Row - 100% Fully Responsive and Spacious */
+/* Slug Row - Compact, Standard Input Height (42px) on All Devices */
 .rocketslide-slug-row {
-    display: flex;
-    align-items: stretch;
-    background: #ffffff;
-    border: 1.5px solid var(--border);
-    border-radius: 8px;
-    overflow: hidden;
-    width: 100%;
-    max-width: 720px;
-    box-sizing: border-box;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    display: flex !important;
+    align-items: center !important;
+    background: #ffffff !important;
+    border: 1.5px solid var(--border) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    max-width: 600px !important;
+    height: 42px !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
 }
 
 .rocketslide-slug-row:focus-within {
-    border-color: var(--blue);
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    border-color: var(--blue) !important;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
 }
 
 .rocketslide-slug-prefix {
-    padding: 10px 14px;
-    background: var(--surface-2);
-    font-size: 13.5px;
-    color: var(--text-muted);
-    font-family: monospace;
-    white-space: nowrap;
-    border-right: 1px solid var(--border);
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    user-select: none;
+    padding: 0 10px !important;
+    height: 100% !important;
+    background: var(--surface-2) !important;
+    font-size: 12.5px !important;
+    color: var(--text-muted) !important;
+    font-family: monospace !important;
+    white-space: nowrap !important;
+    border-right: 1px solid var(--border) !important;
+    flex-shrink: 1 !important;
+    max-width: 65% !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: flex !important;
+    align-items: center !important;
+    user-select: none !important;
 }
 
 .rocketslide-slug-row .rocketslide-input {
     border: none !important;
     border-radius: 0 !important;
-    flex: 1 1 200px !important;
-    min-width: 140px !important;
-    width: auto !important;
-    padding: 10px 14px !important;
-    font-size: 14.5px !important;
+    flex: 1 1 auto !important;
+    min-width: 50px !important;
+    width: 100% !important;
+    height: 100% !important;
+    padding: 0 10px !important;
+    font-size: 14px !important;
     font-weight: 600 !important;
     font-family: monospace !important;
     background: #ffffff !important;
     color: var(--text-main) !important;
     box-shadow: none !important;
+    outline: none !important;
+    margin: 0 !important;
 }
 
 .rocketslide-slug-suffix {
-    padding: 10px 14px;
-    background: var(--surface-2);
-    font-size: 14.5px;
-    font-weight: 700;
-    color: var(--text-muted);
-    border-left: 1px solid var(--border);
-    flex-shrink: 0;
-    display: flex;
-    align-items: center;
-    user-select: none;
+    padding: 0 10px !important;
+    height: 100% !important;
+    background: var(--surface-2) !important;
+    font-size: 14px !important;
+    font-weight: 700 !important;
+    color: var(--text-muted) !important;
+    border-left: 1px solid var(--border) !important;
+    flex-shrink: 0 !important;
+    display: flex !important;
+    align-items: center !important;
+    user-select: none !important;
 }
 
 /* Toast Notifications - Always High Z-Index & Clear of Bottom Nav */
@@ -879,28 +888,6 @@
 }
 
 @media (max-width: 600px) {
-    .rocketslide-slug-row {
-        flex-direction: column !important;
-        align-items: stretch !important;
-    }
-
-    .rocketslide-slug-prefix {
-        border-right: none !important;
-        border-bottom: 1px solid var(--border) !important;
-        font-size: 12.5px !important;
-        padding: 8px 12px !important;
-    }
-
-    .rocketslide-slug-row .rocketslide-input {
-        width: 100% !important;
-        padding: 10px 12px !important;
-        font-size: 14px !important;
-    }
-
-    .rocketslide-slug-suffix {
-        display: none !important;
-    }
-
     .rocketslide-img-thumb {
         height: 440px !important;
         max-height: 440px !important;
