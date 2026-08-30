@@ -115,31 +115,6 @@
     gap: 14px;
 }
 
-.rocketslide-header-icon {
-    width: 52px;
-    height: 52px;
-    background: var(--grad-primary);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #ffffff;
-    flex-shrink: 0;
-    box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
-    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
-}
-
-.rocketslide-header-icon:hover {
-    transform: scale(1.08) rotate(4deg);
-    box-shadow: 0 8px 24px rgba(37, 99, 235, 0.45);
-}
-
-.rocketslide-header-icon svg {
-    width: 28px;
-    height: 28px;
-    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
-}
-
 .rocketslide-header-text h1 {
     font-size: 20px;
     font-weight: 800;
@@ -372,8 +347,8 @@
 }
 
 .rocketslide-preview-thumb {
-    width: 44px;
-    height: 60px;
+    width: 46px;
+    height: 70px;
     object-fit: cover;
     border-radius: 6px;
     border: 2px solid #2563eb;
@@ -558,12 +533,12 @@
 }
 
 /* ============================================================
-   MANAGED REELS CARD GRID (COMPACT THUMBNAILS)
+   MANAGED REELS CARD GRID (ENHANCED PROPORTIONAL HEIGHT)
    ============================================================ */
 .rocketslide-img-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: 18px;
     margin-top: 18px;
 }
 
@@ -575,14 +550,20 @@
     box-shadow: var(--shadow-card);
     display: flex;
     flex-direction: column;
+    transition: transform 0.2s, box-shadow 0.2s;
 }
 
-/* Reduced Compact Thumbnail Height */
+.rocketslide-img-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* Proportional Desktop Image Thumbnail Height */
 .rocketslide-img-thumb {
     position: relative;
     width: 100%;
-    height: 200px;
-    max-height: 200px;
+    height: 280px;
+    max-height: 280px;
     background: #0f172a;
     overflow: hidden;
 }
@@ -601,9 +582,9 @@
     left: 8px;
     background: rgba(15, 23, 42, 0.85);
     color: #ffffff;
-    padding: 2px 7px;
-    border-radius: 5px;
-    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
     font-weight: 700;
 }
 
@@ -613,32 +594,32 @@
     right: 8px;
     background: rgba(22, 163, 74, 0.9);
     color: #ffffff;
-    padding: 2px 7px;
-    border-radius: 5px;
-    font-size: 10.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
     font-weight: 700;
 }
 
 .rocketslide-img-body {
-    padding: 12px;
+    padding: 14px;
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
     background: #ffffff;
     border-top: 1px solid #e2e8f0;
 }
 
 .rocketslide-img-body .rocketslide-label {
-    font-size: 11.5px;
+    font-size: 12px;
     font-weight: 700;
     color: #475569;
     margin-bottom: 2px;
 }
 
 .rocketslide-img-body .rocketslide-input {
-    font-size: 12.5px;
-    padding: 6px 10px;
-    height: 36px;
+    font-size: 13px;
+    padding: 8px 12px;
+    height: 38px;
     border-radius: 6px;
 }
 
@@ -650,8 +631,8 @@
 }
 
 .rocketslide-img-card-actions .rocketslide-btn {
-    height: 34px;
-    font-size: 11.5px;
+    height: 36px;
+    font-size: 12px;
     font-weight: 700;
 }
 
@@ -932,40 +913,46 @@
         gap: 14px !important;
     }
 
-    /* 2-Column Compact Cards on Mobile */
+    /* 1-Column Full Width Clean Cards on Mobile (One By One) */
     .rocketslide-img-grid {
-        grid-template-columns: repeat(2, 1fr) !important;
-        gap: 10px !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
     }
 
+    /* Proportional Mobile Image Thumbnail Height */
     .rocketslide-img-thumb {
-        height: 160px !important;
-        max-height: 160px !important;
+        height: 320px !important;
+        max-height: 320px !important;
     }
 
     .rocketslide-img-body {
-        padding: 8px !important;
-        gap: 4px !important;
+        padding: 14px !important;
+        gap: 8px !important;
     }
 
     .rocketslide-img-body .rocketslide-label {
-        font-size: 10.5px !important;
+        font-size: 12.5px !important;
     }
 
     .rocketslide-img-body .rocketslide-input {
-        font-size: 11.5px !important;
-        padding: 4px 6px !important;
-        height: 32px !important;
+        font-size: 13.5px !important;
+        padding: 8px 12px !important;
+        height: 40px !important;
     }
 
     .rocketslide-img-card-actions .rocketslide-btn {
-        height: 30px !important;
-        font-size: 10.5px !important;
-        padding: 0 4px !important;
+        height: 38px !important;
+        font-size: 12.5px !important;
+        padding: 0 12px !important;
     }
 }
 
 @media (max-width: 540px) {
+    .rocketslide-img-thumb {
+        height: 300px !important;
+        max-height: 300px !important;
+    }
+
     .rocketslide-card-title {
         font-size: 15.5px !important;
     }
