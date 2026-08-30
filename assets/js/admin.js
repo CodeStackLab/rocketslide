@@ -1,223 +1,192 @@
+/**
+ * admin.js
+ *
+ * MODERN LIGHT-MODE AJAX ADMIN DASHBOARD ENGINE
+ * ============================================
+ * Handles tab switching, image upload & media modal, individual card updates,
+ * analytics script saving & verification, fallback URL & cloaking configuration.
+ *
+ * @package RocketSlide_Landing_Page
+ * @since   2.0.0
+ */
+
 (function ($) {
     'use strict';
 
     $(document).ready(function () {
 
-        // 1. Navigation Tab Switching
-        $('.rocketslide-tab-btn, .rocketslide-mobile-nav-item').on('click', function (e) {
-            var targetTab = $(this).data('tab');
-            if (!targetTab) return;
-
-            e.preventDefault();
-
-            $('.rocketslide-tab-btn, .rocketslide-mobile-nav-item').removeClass('active');
-            $('[data-tab="' + targetTab + '"]').addClass('active');
-
-            $('.rocketslide-tab-panel').removeClass('active');
-            $('#' + targetTab).addClass('active');
-        });
-
-        // 2. Direct Computer File Picker & WP Media Gallery Selector
-        $('#rocketslide-upload-computer-btn').on('click', function (e) {
-            e.preventDefault();
-            $('#rocketslide-file-input').trigger('click');
-        });
-
-        // Copy Live Landing Page URL Handler
-        $('#rocketslide-copy-live-url-btn').on('click', function (e) {
-            e.preventDefault();
-            var urlToCopy = $(this).data('url');
-            if (!urlToCopy) return;
-
-            var $btn = $(this);
-            var originalHtml = $btn.html();
-
-            function onCopySuccess() {
-                $btn.html('✓ Copied!').addClass('copied');
-                showNotice('🔗 Live Landing Page URL copied to clipboard!', false);
-                setTimeout(function () {
-                    $btn.html(originalHtml).removeClass('copied');
-                }, 2000);
-            }
-
-            if (navigator.clipboard && window.isSecureContext) {
-                navigator.clipboard.writeText(urlToCopy).then(onCopySuccess).catch(function () {
-                    fallbackCopy(urlToCopy);
-                });
-            } else {
-                fallbackCopy(urlToCopy);
-            }
-
-            function fallbackCopy(text) {
-                var $temp = $('<input>');
-                $('body').append($temp);
-                $temp.val(text).select();
-                try {
-                    document.execCommand('copy');
-                    onCopySuccess();
-                } catch (err) {
-                    showNotice('Failed to copy URL to clipboard', true);
-                }
-                $temp.remove();
-            }
-        });
-
-        var mediaUploader;
-
-        function openMediaModal() {
-            if (mediaUploader) {
-                mediaUploader.open();
-                return;
-            }
-
-            mediaUploader = wp.media({
-                title: '🖼️ Select or Upload 9:16 Reel Image (Local File or Media Gallery)',
-                button: { text: 'Select & Auto-Crop to 9:16 WebP' },
-                multiple: false
-            });
-
-            mediaUploader.on('select', function () {
-                var attachment = mediaUploader.state().get('selection').first().toJSON();
-                $('#rocketslide-media-id').val(attachment.id);
-                $('#rocketslide-file-input').val('');
-                $('#rocketslide-file-name').html('✓ Gallery: <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
-
-                // Render Live Thumbnail Preview
-                if (attachment.url) {
-                    $('#rocketslide-image-preview-thumb').attr('src', attachment.url);
-                    $('#rocketslide-image-preview-wrapper').css('display', 'flex');
-                }
-            });
-
-            mediaUploader.open();
-        }
-
-        $('#rocketslide-select-media-btn, #rocketslide-file-name').on('click', function (e) {
-            e.preventDefault();
-            openMediaModal();
-        });
-
-        // File input change listener (Computer Upload)
-        $('#rocketslide-file-input').on('change', function () {
-            var file = this.files[0];
-            if (file) {
-                $('#rocketslide-media-id').val('');
-                $('#rocketslide-file-name').html('✓ PC File: <strong style="color:var(--blue);">' + file.name + '</strong>');
-
-                // Render Local Computer Image Preview
-                var reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#rocketslide-image-preview-thumb').attr('src', e.target.result);
-                    $('#rocketslide-image-preview-wrapper').css('display', 'flex');
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-
-        // Helper Notification Toast
-        function showNotice(message, isError) {
-            var toastClass = isError ? 'error' : 'success';
-            var toast = $('<div class="rocketslide-toast ' + toastClass + '">' + message + '</div>');
+        // 1. Toast Notification Helper
+        function showNotice(msg, isError) {
+            $('.rocketslide-toast').remove();
+            var toast = $('<div class="rocketslide-toast ' + (isError ? 'error' : 'success') + '">' + msg + '</div>');
             $('body').append(toast);
             setTimeout(function () {
-                toast.fadeOut(400, function () { toast.remove(); });
-            }, 3000);
+                toast.fadeOut(300, function () { $(this).remove(); });
+            }, 3500);
         }
 
-        // 3. Save Settings Handler (Fallback, Title, Slug, Tracking)
-        $('#rocketslide-save-settings-btn, #rocketslide-save-fallback-btn, #rocketslide-save-tracking-btn').on('click', function (e) {
+        // 2. Tab Navigation Handling (Desktop & Mobile)
+        function switchTab(tabId) {
+            $('.rocketslide-tab-btn').removeClass('active');
+            $('.rocketslide-tab-btn[data-tab="' + tabId + '"]').addClass('active');
+
+            $('.rocketslide-mobile-nav-item').removeClass('active');
+            $('.rocketslide-mobile-nav-item[data-tab="' + tabId + '"]').addClass('active');
+
+            $('.rocketslide-tab-panel').removeClass('active');
+            $('#' + tabId).addClass('active');
+        }
+
+        $(document).on('click', '.rocketslide-tab-btn, .rocketslide-mobile-nav-item', function (e) {
+            e.preventDefault();
+            var tabId = $(this).data('tab');
+            if (tabId) {
+                switchTab(tabId);
+            }
+        });
+
+        // 3. Copy Live Landing Page URL Button
+        $('#rocketslide-copy-live-url-btn').on('click', function (e) {
+            e.preventDefault();
+            var url = $(this).data('url');
+            if (!url) return;
+
+            var $btn = $(this);
+            navigator.clipboard.writeText(url).then(function () {
+                $btn.addClass('copied').html('<span class="dashicons dashicons-yes"></span> Copied!');
+                showNotice('Landing page URL copied to clipboard!', false);
+                setTimeout(function () {
+                    $btn.removeClass('copied').html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link');
+                }, 2500);
+            }).catch(function () {
+                showNotice('Failed to copy URL automatically.', true);
+            });
+        });
+
+        // 4. Save General Settings (Slug, Tab Title, etc.)
+        $('#rocketslide-save-settings-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
-            var originalText = $btn.html();
-            $btn.prop('disabled', true).html('⏳ Saving...');
+            $btn.prop('disabled', true).text('Saving...');
+
+            var data = {
+                action: 'rocketslide_save_settings',
+                nonce: rocketslide_admin_vars.nonce,
+                tab_title: $('#rocketslide-tab-title').val(),
+                slug: $('#rocketslide-slug').val()
+            };
+
+            $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
+                $btn.prop('disabled', false).text('💾 Save All Settings');
+                if (res.success) {
+                    showNotice(res.data.message || 'Settings saved!', false);
+                } else {
+                    showNotice(res.data || 'Error saving settings.', true);
+                }
+            });
+        });
+
+        // Save Cloaking & Test Mode Settings
+        $('#rocketslide-save-fallback-btn').on('click', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            $btn.prop('disabled', true).text('Saving...');
 
             var data = {
                 action: 'rocketslide_save_settings',
                 nonce: rocketslide_admin_vars.nonce,
                 fallback_url: $('#rocketslide-fallback-url').val(),
-                test_mode: $('#rocketslide-test-mode').val(),
-                tab_title: $('#rocketslide-tab-title').val(),
-                slug: $('#rocketslide-slug').val(),
+                test_mode: $('#rocketslide-test-mode').val()
+            };
+
+            $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
+                $btn.prop('disabled', false).text('💾 Save Cloaking & Test Settings');
+                if (res.success) {
+                    showNotice(res.data.message || 'Cloaking settings saved!', false);
+                } else {
+                    showNotice(res.data || 'Error saving fallback URL.', true);
+                }
+            });
+        });
+
+        // Save Tracking Script Tag
+        $('#rocketslide-save-tracking-btn').on('click', function (e) {
+            e.preventDefault();
+            var $btn = $(this);
+            $btn.prop('disabled', true).text('Saving...');
+
+            var data = {
+                action: 'rocketslide_save_settings',
+                nonce: rocketslide_admin_vars.nonce,
                 tracking_script: $('#rocketslide-tracking-script').val()
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).html(originalText);
+                $btn.prop('disabled', false).text('💾 Save Script Tag');
                 if (res.success) {
-                    showNotice(res.data.message, false);
-                    checkTrackingVerification();
+                    showNotice(res.data.message || 'Tracking script saved!', false);
+                    var hasVal = Boolean($('#rocketslide-tracking-script').val().trim());
+                    $('#rocketslide-publytics-status')
+                        .attr('class', 'rocketslide-status-badge ' + (hasVal ? 'verified' : 'inactive'))
+                        .text(hasVal ? '⚡ Snippet Configured' : '⚪ Inactive');
                 } else {
-                    showNotice(res.data.data || 'Failed to save settings', true);
+                    showNotice(res.data || 'Error saving tracking script.', true);
                 }
             });
         });
 
-        // 4. Verify Publytics / Tracking Script Engine
-        function checkTrackingVerification() {
-            var $badge = $('#rocketslide-publytics-status');
-            $badge.removeClass('verified inactive').addClass('checking').html('🔄 Checking...');
-
-            var data = {
-                action: 'rocketslide_verify_publytics',
-                nonce: rocketslide_admin_vars.nonce
-            };
-
-            $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                if (res.success) {
-                    $badge.removeClass('checking inactive').addClass('verified').html('⚡ Status: Verified (HTTP 200 OK)');
-                    $('#rocketslide-verification-output').show().text(res.data.message + '\nDomain: ' + (res.data.domain || 'All') + '\nScript: ' + res.data.script_url);
-                } else {
-                    $badge.removeClass('checking verified').addClass('inactive').html('⚪ Status: Inactive / Unverified');
-                    $('#rocketslide-verification-output').show().text('Error: ' + res.data);
-                }
-            });
-        }
-
-        $('#rocketslide-verify-tracking-btn').on('click', function (e) {
+        // 5. Image Upload - Local Computer File Picker Trigger
+        $('#rocketslide-upload-computer-btn').on('click', function (e) {
             e.preventDefault();
-            checkTrackingVerification();
+            $('#rocketslide-file-input').trigger('click');
         });
 
-        // Trigger initial verification on load if tracking snippet exists
-        if ($('#rocketslide-tracking-script').val().trim() !== '') {
-            checkTrackingVerification();
-        }
+        $('#rocketslide-file-input').on('change', function (e) {
+            var file = this.files[0];
+            if (file) {
+                $('#rocketslide-file-name').text(file.name);
+                $('#rocketslide-media-id').val('');
 
-        // 5. Fire Live Test Traffic Analytics Event
-        $('#rocketslide-test-traffic-btn').on('click', function (e) {
+                var reader = new FileReader();
+                reader.onload = function (evt) {
+                    $('#rocketslide-image-preview-thumb').attr('src', evt.target.result);
+                    $('#rocketslide-image-preview-wrapper').fadeIn(200);
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // Image Upload - WP Media Library Picker Trigger
+        var mediaFrame;
+        $('#rocketslide-select-media-btn, #rocketslide-file-name').on('click', function (e) {
             e.preventDefault();
-            var scriptVal = $('#rocketslide-tracking-script').val().trim();
-            if (!scriptVal) {
-                showNotice('Please enter a tracking script first', true);
+            if (mediaFrame) {
+                mediaFrame.open();
                 return;
             }
 
-            try {
-                var parser = new DOMParser();
-                var doc = parser.parseFromString(scriptVal, 'text/html');
-                var scriptEl = doc.querySelector('script');
+            mediaFrame = wp.media({
+                title: 'Select 9:16 Reel Image',
+                button: { text: 'Use this Image' },
+                multiple: false,
+                library: { type: 'image' }
+            });
 
-                if (scriptEl) {
-                    var newScript = document.createElement('script');
-                    Array.from(scriptEl.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value));
-                    newScript.innerHTML = scriptEl.innerHTML;
-                    document.head.appendChild(newScript);
+            mediaFrame.on('select', function () {
+                var attachment = mediaFrame.state().get('selection').first().toJSON();
+                $('#rocketslide-media-id').val(attachment.id);
+                $('#rocketslide-file-name').text(attachment.filename || attachment.title);
+                $('#rocketslide-file-input').val('');
 
-                    newScript.onload = function () {
-                        if (typeof window.publytics === 'function') {
-                            window.publytics('pageview');
-                        }
-                        showNotice('🚀 Live Analytics Event Fired Successfully!', false);
-                    };
-                } else {
-                    showNotice('No valid <script> tag found in snippet', true);
-                }
-            } catch (err) {
-                showNotice('Error firing event: ' + err.message, true);
-            }
+                var previewUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
+                $('#rocketslide-image-preview-thumb').attr('src', previewUrl);
+                $('#rocketslide-image-preview-wrapper').fadeIn(200);
+            });
+
+            mediaFrame.open();
         });
 
-        // 6. Upload & Process Image Form
+        // 6. Add & Process New Reel Image (Auto 540x960 WebP)
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
 
@@ -226,8 +195,8 @@
             var targetUrl = $('#rocketslide-new-target-url').val();
             var timer     = $('#rocketslide-new-timer').val() || 0;
 
-            if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
-                showNotice('Please select an image file first via "Upload from Computer" or "Choose from WP Gallery".', true);
+            if (!mediaId && (!fileInput.files || !fileInput.files[0])) {
+                showNotice('Please select an image file to upload.', true);
                 return;
             }
 
@@ -239,12 +208,12 @@
 
             if (mediaId) {
                 formData.append('media_id', mediaId);
-            } else if (fileInput.files.length > 0) {
+            } else if (fileInput.files && fileInput.files[0]) {
                 formData.append('image_file', fileInput.files[0]);
             }
 
             var $btn = $('#rocketslide-add-image-btn');
-            $btn.prop('disabled', true).html('⏳ Saving & Converting WebP...');
+            $btn.prop('disabled', true).html('⏳ Converting WebP...');
 
             $.ajax({
                 url: rocketslide_admin_vars.ajax_url,
@@ -253,7 +222,7 @@
                 contentType: false,
                 processData: false,
                 success: function (res) {
-                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)');
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop Reel');
                     if (res.success) {
                         showNotice(res.data.message, false);
                         $('#rocketslide-add-image-form')[0].reset();
@@ -280,8 +249,8 @@
                                         <input type="number" min="0" class="rocketslide-input rocketslide-card-timer" value="${img.timer || 0}">
                                     </div>
                                     <div class="rocketslide-img-card-actions" style="margin-top:12px;">
-                                        <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
-                                        <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
+                                        <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved"></span> Save</button>
+                                        <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash"></span> Delete</button>
                                     </div>
                                 </div>
                             </div>
@@ -294,7 +263,7 @@
                     }
                 },
                 error: function () {
-                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)');
+                    $btn.prop('disabled', false).html('<span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop Reel');
                     showNotice('Server error processing image.', true);
                 }
             });
