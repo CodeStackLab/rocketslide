@@ -43,28 +43,14 @@
         }
     }
 
-    // 3. Render Clean 9:16 Reel Card (No Play Button Ever)
+    // 3. Render Seamless 9:16 Full-Bleed Reel Card (Zero Gap, Edge-to-Edge)
     function createReelCard(imageItem, index) {
         var card = document.createElement('div');
         card.className = 'reel-card';
         card.setAttribute('data-target-url', imageItem.target_url || fallbackUrl);
         card.setAttribute('data-timer', imageItem.timer || 0);
 
-        // 1. Ambient Blurred Backdrop Image
-        var bgBlur = document.createElement('img');
-        bgBlur.className = 'reel-img-blur-bg';
-        bgBlur.src = imageItem.url;
-        bgBlur.alt = '';
-        bgBlur.setAttribute('aria-hidden', 'true');
-        if (index < 2) {
-            bgBlur.setAttribute('loading', 'eager');
-        } else {
-            bgBlur.setAttribute('loading', 'lazy');
-            bgBlur.setAttribute('decoding', 'async');
-        }
-        card.appendChild(bgBlur);
-
-        // 2. Foreground 9:16 Image (100% Full Viewport Fit, Never Cropped)
+        // Foreground 9:16 Full-Bleed Image (Edge-to-edge, cover mode)
         var img = document.createElement('img');
         img.className = 'reel-img';
         img.src = imageItem.url;
@@ -72,16 +58,12 @@
 
         if (index < 2) {
             img.setAttribute('loading', 'eager');
+            img.setAttribute('fetchpriority', 'high');
         } else {
             img.setAttribute('loading', 'lazy');
             img.setAttribute('decoding', 'async');
         }
         card.appendChild(img);
-
-        // 3. Subtle Vignette Gradient
-        var gradient = document.createElement('div');
-        gradient.className = 'reel-overlay-gradient';
-        card.appendChild(gradient);
 
         // ANY Click/Tap on Card -> Instant Target URL Redirect
         card.addEventListener('click', function () {
