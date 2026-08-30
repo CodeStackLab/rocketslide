@@ -143,7 +143,7 @@
     background: var(--surface-3);
 }
 
-/* Stats Row */
+/* Stats Row (Desktop) */
 .rocketslide-stats-row {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -628,19 +628,18 @@
     width: 100%;
 }
 
-/* Domain Preview Box (Top) */
+/* Domain Preview Box (Top) - Stacked Vertically on Mobile / Small screens */
 .rocketslide-domain-preview-box {
     display: flex;
-    align-items: center;
-    gap: 8px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
     background: var(--surface-2);
     border: 1px solid var(--border);
     border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 12.5px;
-    color: var(--text-muted);
-    word-break: break-all;
+    padding: 9px 12px;
     width: 100%;
+    box-sizing: border-box;
     margin-bottom: 4px;
 }
 
@@ -650,25 +649,28 @@
     font-size: 11px;
     text-transform: uppercase;
     letter-spacing: 0.3px;
-    flex-shrink: 0;
 }
 
 .rocketslide-domain-preview-box code {
     background: #ffffff;
     border: 1px solid var(--border);
-    padding: 2px 8px;
-    border-radius: 5px;
+    padding: 6px 10px;
+    border-radius: 6px;
     font-family: monospace;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 700;
     color: #0f172a;
+    width: 100%;
+    display: block;
+    box-sizing: border-box;
     word-break: break-all;
+    line-height: 1.4;
 }
 
 /* Separate Full-Width Slug Input */
 .rocketslide-slug-input-wrapper {
     width: 100%;
-    margin: 2px 0;
+    margin: 4px 0;
 }
 
 .rocketslide-slug-input-wrapper .rocketslide-input {
@@ -683,32 +685,38 @@
     color: var(--text-main) !important;
 }
 
-/* Live Preview Pill */
+/* Live Preview Pill - Stacked Vertically */
 .rocketslide-live-preview-pill {
     display: flex;
-    align-items: center;
-    gap: 6px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
     background: #f0fdf4;
     border: 1px solid #bbf7d0;
     border-radius: 8px;
-    padding: 8px 12px;
-    font-size: 12px;
-    color: #166534;
-    word-break: break-all;
-    margin-top: 4px;
+    padding: 9px 12px;
     width: 100%;
+    box-sizing: border-box;
+    margin-top: 4px;
 }
 
 .rocketslide-live-preview-pill span {
-    font-weight: 600;
-    flex-shrink: 0;
+    font-weight: 700;
+    color: #166534;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
 }
 
 .rocketslide-live-preview-pill strong {
     font-family: monospace;
     color: #15803d;
-    font-size: 12.5px;
+    font-size: 13px;
+    font-weight: 800;
+    width: 100%;
+    display: block;
     word-break: break-all;
+    line-height: 1.4;
 }
 
 /* Toast Notifications - Always High Z-Index & Clear of Bottom Nav */
@@ -838,20 +846,23 @@
         border-radius: 6px !important;
     }
 
-    /* Ultra-Compact 4-Pill Horizontal/Grid Stats Row on Mobile */
+    /* 2x2 Clean Balanced Mobile Stats Grid (Zero Overflow/Clipping on 300px+) */
     .rocketslide-stats-row {
-        grid-template-columns: repeat(4, 1fr) !important;
-        gap: 6px !important;
-        margin-bottom: 8px !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 8px !important;
+        margin-bottom: 10px !important;
+        width: 100% !important;
     }
 
     .rocketslide-stat-card {
-        padding: 6px 4px !important;
-        border-radius: 6px !important;
+        padding: 8px 8px !important;
+        border-radius: 8px !important;
         align-items: center !important;
         text-align: center !important;
-        min-height: 52px !important;
+        min-height: 48px !important;
         justify-content: center !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
     }
 
     .rocketslide-stat-card .stat-icon {
@@ -859,19 +870,18 @@
     }
 
     .rocketslide-stat-card .stat-value {
-        font-size: 13px !important;
+        font-size: 14px !important;
         font-weight: 800 !important;
-        line-height: 1.1 !important;
+        line-height: 1.2 !important;
     }
 
     .rocketslide-stat-card .stat-label {
-        font-size: 8px !important;
-        letter-spacing: 0.2px !important;
+        font-size: 9.5px !important;
+        letter-spacing: 0.3px !important;
         margin-top: 2px !important;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis !important;
-        max-width: 100% !important;
+        white-space: normal !important;
+        text-align: center !important;
+        line-height: 1.2 !important;
     }
 
     .rocketslide-tabs-nav {
