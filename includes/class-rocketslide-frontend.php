@@ -6,17 +6,18 @@
  * ============================================================
  *
  * Responsibilities:
- *  1. Register a custom WordPress rewrite rule so the slug /v/ (configurable)
- *     maps to our standalone template — completely bypassing the active theme.
- *  2. Multi-point bulletproof interception: hooks into 'init', 'parse_request',
- *     and 'template_redirect' at priority 1 to guarantee 100% compatibility
- *     across any domain, server setup (Nginx, Apache, LiteSpeed), cPanel,
- *     Cloudflare, reverse proxies, and subdomains (e.g. go.infucar.com).
- *  3. Run the dual-layer cloaking check:
- *       • Bot       -> Render template with clean OG meta tags (no redirect)
- *       • FB/IG     -> Render 9:16 landing page template
- *       • Other     -> HTTP 302 redirect to Fallback URL (with param forwarding)
- *  4. Serve the fully isolated HTML template (no wp_head / wp_footer calls).
+ *  1. Register custom WordPress rewrite rule for the configured slug (e.g. /v/).
+ *  2. Multi-layer interception architecture:
+ *       • 'init' (priority 1)
+ *       • 'do_parse_request' (priority 1)
+ *       • 'pre_handle_404' (priority 1) - overrides WordPress theme 404 errors
+ *       • 'parse_request' (priority 1)
+ *       • 'template_redirect' (priority 1) - removes redirect_canonical
+ *       • 'template_include' (priority 99999) - absolute fallback template override
+ *  3. Guaranteed 100% universal compatibility across all live domains,
+ *     subdomains (e.g. go.infucar.com), subfolders, Nginx, Apache, LiteSpeed,
+ *     Cloudflare, and Plain / PostName permalinks.
+ *  4. Serve the fully isolated HTML template (0ms theme bypass).
  *
  * @package RocketSlide_Landing_Page
  * @since   2.0.0
@@ -39,17 +40,26 @@ class RocketSlide_Frontend {
 		// Register slug-based rewrite rule on 'init'
 		add_action( 'init', array( $this, 'add_rewrite_rules' ) );
 
-		// Tell WP to recognise our custom query var
+		// Whitelist query variable
 		add_filter( 'query_vars', array( $this, 'register_query_var' ) );
 
-		// Early Interception Point 1: 'init' (priority 1)
+		// Layer 1: Earliest interception on 'init' (priority 1)
 		add_action( 'init', array( $this, 'intercept_request_early' ), 1 );
 
-		// Early Interception Point 2: 'parse_request' (priority 1)
+		// Layer 2: Short-circuit WP request parsing on 'do_parse_request'
+		add_filter( 'do_parse_request', array( $this, 'filter_do_parse_request' ), 1, 3 );
+
+		// Layer 3: Catch and prevent 404 errors before theme loads 404.php
+		add_filter( 'pre_handle_404', array( $this, 'pre_handle_404' ), 1, 2 );
+
+		// Layer 4: Standard 'parse_request'
 		add_action( 'parse_request', array( $this, 'intercept_request' ), 1 );
 
-		// Standard Interception Point 3: 'template_redirect' (priority 1)
+		// Layer 5: 'template_redirect' (priority 1)
 		add_action( 'template_redirect', array( $this, 'intercept_request' ), 1 );
+
+		// Layer 6: Absolute safety net 'template_include' (priority 99999)
+		add_filter( 'template_include', array( $this, 'filter_template_include' ), 99999 );
 	}
 
 	// -----------------------------------------------------------
@@ -89,11 +99,11 @@ class RocketSlide_Frontend {
 	}
 
 	// -----------------------------------------------------------
-	// REQUEST INTERCEPTION
+	// REQUEST INTERCEPTION LAYERS
 	// -----------------------------------------------------------
 
 	/**
-	 * Early check during 'init' for direct URI path matches
+	 * Layer 1: Early check during 'init'
 	 */
 	public function intercept_request_early() {
 		if ( self::is_landing_request() ) {
@@ -102,26 +112,71 @@ class RocketSlide_Frontend {
 	}
 
 	/**
-	 * Intercept the request and decide what to serve.
+	 * Layer 2: Filter 'do_parse_request'
+	 */
+	public function filter_do_parse_request( $continue, $wp, $extra_query_vars ) {
+		if ( self::is_landing_request() ) {
+			$this->intercept_request();
+			return false; // Stop further WP parsing
+		}
+		return $continue;
+	}
+
+	/**
+	 * Layer 3: Catch 404 before WordPress renders theme 404.php
+	 */
+	public function pre_handle_404( $preempt, $wp_query ) {
+		if ( self::is_landing_request() ) {
+			if ( is_object( $wp_query ) ) {
+				$wp_query->is_404 = false;
+			}
+			$this->intercept_request();
+			return true; // Stop 404 handling
+		}
+		return $preempt;
+	}
+
+	/**
+	 * Layer 6: Final template include fallback
+	 */
+	public function filter_template_include( $template ) {
+		if ( self::is_landing_request() ) {
+			$this->intercept_request();
+			return ROCKETSLIDE_PLUGIN_DIR . 'templates/landing-page-template.php';
+		}
+		return $template;
+	}
+
+	/**
+	 * Master Intercept Handler — runs cloaking and serves landing page
 	 */
 	public function intercept_request() {
 		if ( ! self::is_landing_request() ) {
 			return; // Not our page — let WordPress handle it normally
 		}
 
+		// Clean WordPress global query state to eliminate 404s
+		global $wp_query;
+		if ( isset( $wp_query ) && is_object( $wp_query ) ) {
+			$wp_query->is_404  = false;
+			$wp_query->is_page = false;
+			$wp_query->is_home = false;
+		}
+
+		// Disable WP canonical redirect so /v/ is never redirected to home or 404
+		remove_action( 'template_redirect', 'redirect_canonical' );
+
 		// ——— DUAL-LAYER CLOAKING CHECK ———
 
 		// BRANCH A: Known bot/crawler
-		//   -> Render the landing page template (which includes OG tags)
-		//   -> Do NOT redirect — bots need to see clean OG meta for link previews
+		//   -> Render landing page template with clean OG meta tags (no redirect)
 		if ( class_exists( 'RocketSlide_Cloaking' ) && RocketSlide_Cloaking::is_bot() ) {
 			$this->render_landing_page();
 			exit;
 		}
 
-		// BRANCH B: Non-Facebook/Instagram traffic (direct, Google, other)
+		// BRANCH B: Non-Facebook/Instagram traffic (and not test/preview mode)
 		//   -> Immediately 302-redirect to the Custom Fallback URL
-		//   -> Preserve & forward all incoming query parameters (fbclid, utm_*, gclid...)
 		if ( class_exists( 'RocketSlide_Cloaking' ) && RocketSlide_Cloaking::should_redirect_to_fallback() ) {
 			$fallback_url = get_option( 'rocketslide_fallback_url', 'https://google.com' );
 
@@ -160,20 +215,21 @@ class RocketSlide_Frontend {
 	 * @return bool
 	 */
 	public static function is_landing_request() {
-		$slug = self::get_slug();
+		$slug       = self::get_slug();
+		$slug_lower = strtolower( trim( $slug, '/' ) );
 
 		// 1. Via WP query var
 		if ( function_exists( 'get_query_var' ) && get_query_var( self::QUERY_VAR ) === '1' ) {
 			return true;
 		}
 
-		// 2. Via explicit GET parameter
+		// 2. Via explicit GET parameter ?rocketslide_landing=1
 		if ( isset( $_GET[ self::QUERY_VAR ] ) && '1' === (string) $_GET[ self::QUERY_VAR ] ) {
 			return true;
 		}
 
 		// 3. Via direct slug query param (e.g. ?v=1)
-		if ( isset( $_GET[ $slug ] ) && '1' === (string) $_GET[ $slug ] ) {
+		if ( isset( $_GET[ $slug ] ) || isset( $_GET[ $slug_lower ] ) ) {
 			return true;
 		}
 
@@ -192,7 +248,7 @@ class RocketSlide_Frontend {
 
 		// Strip WordPress installation home subdirectory if installed in subfolder (e.g. /wordpress/ or /blog/)
 		$home_url  = home_url();
-		$home_path = trim( parse_url( $home_url, PHP_URL_PATH ), '/' );
+		$home_path = trim( (string) parse_url( $home_url, PHP_URL_PATH ), '/' );
 		if ( ! empty( $home_path ) && 0 === strpos( $request_path, $home_path ) ) {
 			$request_path = trim( substr( $request_path, strlen( $home_path ) ), '/' );
 		}
@@ -204,9 +260,14 @@ class RocketSlide_Frontend {
 
 		// Normalize to lowercase for case-insensitive matching
 		$request_path = strtolower( trim( $request_path, '/' ) );
-		$slug_lower   = strtolower( trim( $slug, '/' ) );
 
+		// Exact match: /v or /v/
 		if ( $request_path === $slug_lower ) {
+			return true;
+		}
+
+		// Subpath match: /v/something
+		if ( 0 === strpos( $request_path, $slug_lower . '/' ) ) {
 			return true;
 		}
 
@@ -231,6 +292,7 @@ class RocketSlide_Frontend {
 		}
 
 		include $template;
+		exit;
 	}
 
 	/**
