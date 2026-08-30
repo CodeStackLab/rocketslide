@@ -14,7 +14,7 @@
  *  - Publytics tracking script management.
  *
  * @package RocketSlide_Landing_Page
- * @since   2.0.0
+ * @since   3.7.0
  */
 
 if (!defined('ABSPATH')) {
@@ -98,14 +98,14 @@ class RocketSlide_Admin {
             'rocketslide-admin-css',
             ROCKETSLIDE_PLUGIN_URL . 'assets/css/admin-dark.css',
             array('dashicons'),
-            ROCKETSLIDE_VERSION
+            time() // Cache buster
         );
 
         wp_enqueue_script(
             'rocketslide-admin-js',
             ROCKETSLIDE_PLUGIN_URL . 'assets/js/admin.js',
             array('jquery'),
-            ROCKETSLIDE_VERSION,
+            time(),
             true
         );
 
@@ -150,7 +150,7 @@ class RocketSlide_Admin {
         }
 
         $slug            = get_option('rocketslide_slug', 'v');
-        $tab_title       = get_option('rocketslide_tab_title', 'Exclusive Video Content');
+        $tab_title       = get_option('rocketslide_tab_title', '');
         $fallback_url    = get_option('rocketslide_fallback_url', 'https://google.com');
         $tracking_script = get_option('rocketslide_tracking_script', '');
         $images          = get_option('rocketslide_images', array());
@@ -171,10 +171,6 @@ class RocketSlide_Admin {
                     </div>
                 </div>
                 <div class="rocketslide-header-meta">
-                    <div class="rocketslide-live-url" style="display:none;">
-                        <span>Route:</span>
-                        <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code>
-                    </div>
                     <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="rocketslide-btn rocketslide-btn-live">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Live Page
                     </a>
@@ -375,10 +371,10 @@ class RocketSlide_Admin {
                     <div class="rocketslide-cloaking-box">
                         <h4>Active Filter Signals:</h4>
                         <ul>
-                            <li><span class="check">&#10003;</span> Referrer Verification: <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
-                            <li><span class="check">&#10003;</span> URL Tracking Signals: <code>fbclid</code>, <code>fb_ref</code>, <code>fb_source</code></li>
-                            <li><span class="check">&#10003;</span> In-App Browser User-Agents: <code>FBAN</code>, <code>FBAV</code>, <code>FB_IAB</code>, <code>FBIOS</code>, <code>FB4A</code>, <code>Instagram</code></li>
-                            <li><span class="check">&#10003;</span> Crawler OpenGraph Bypass: <code>facebookexternalhit</code>, <code>facebot</code>, <code>whatsapp</code>, <code>telegrambot</code>, <code>twitterbot</code>, <code>googlebot</code></li>
+                            <li><span class="check">&#10003;</span> <strong>Referrer Verification:</strong> <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
+                            <li><span class="check">&#10003;</span> <strong>URL Tracking Signals:</strong> <code>fbclid</code>, <code>fb_ref</code>, <code>fb_source</code></li>
+                            <li><span class="check">&#10003;</span> <strong>In-App Browser User-Agents:</strong> <code>FBAN</code>, <code>FBAV</code>, <code>FB_IAB</code>, <code>FBIOS</code>, <code>FB4A</code>, <code>Instagram</code></li>
+                            <li><span class="check">&#10003;</span> <strong>Crawler OpenGraph Bypass:</strong> <code>facebookexternalhit</code>, <code>facebot</code>, <code>whatsapp</code>, <code>telegrambot</code>, <code>twitterbot</code>, <code>googlebot</code></li>
                         </ul>
                     </div>
 
@@ -398,7 +394,7 @@ class RocketSlide_Admin {
                     
                     <div class="rocketslide-field" style="margin-top:16px;">
                         <label class="rocketslide-label">Browser Tab Title</label>
-                        <input type="text" id="rocketslide-tab-title" class="rocketslide-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Exclusive Video Content">
+                        <input type="text" id="rocketslide-tab-title" class="rocketslide-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Leave blank for clean title">
                         <span class="rocketslide-input-hint">Displays in the browser tab and OpenGraph title when shared.</span>
                     </div>
 
