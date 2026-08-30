@@ -98,7 +98,7 @@ class RocketSlide_Admin {
             'rocketslide-admin-css',
             ROCKETSLIDE_PLUGIN_URL . 'assets/css/admin-dark.css',
             array('dashicons'),
-            time() // Cache buster
+            time()
         );
 
         wp_enqueue_script(
@@ -258,7 +258,7 @@ class RocketSlide_Admin {
                             </div>
                         </div>
 
-                        <div class="rocketslide-form-grid-2" style="margin-top:16px;">
+                        <div class="rocketslide-form-grid-2" style="margin-top:14px;">
                             <div class="rocketslide-field">
                                 <div class="rocketslide-label-wrapper">
                                     <label class="rocketslide-label"><span class="dashicons dashicons-admin-links"></span> Target Redirect URL <span class="req">*</span></label>
@@ -278,7 +278,7 @@ class RocketSlide_Admin {
                             </div>
                         </div>
 
-                        <div style="margin-top:18px;">
+                        <div style="margin-top:16px;">
                             <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary rocketslide-btn-submit">
                                 <span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop Reel
                             </button>
@@ -287,7 +287,7 @@ class RocketSlide_Admin {
                 </div>
 
                 <!-- Existing Managed Cards Grid -->
-                <div class="rocketslide-card" style="margin-top:20px;">
+                <div class="rocketslide-card" style="margin-top:16px;">
                     <div class="rocketslide-card-header">
                         <h3 class="rocketslide-card-title"><span class="dashicons dashicons-format-video" style="color:#2563eb;"></span> Managed Reel Cards ( <span id="rocketslide-images-count-title"><?php echo count($images); ?></span> )</h3>
                         <p class="rocketslide-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
@@ -342,7 +342,7 @@ class RocketSlide_Admin {
                     <h3 class="rocketslide-card-title"><span class="dashicons dashicons-chart-bar" style="color:#2563eb;"></span> Publytics &amp; Custom Tracking Header Snippet</h3>
                     <p class="rocketslide-card-subtitle">Paste your raw <code>&lt;script&gt;</code> analytics tag. It will be injected directly into the <code>&lt;head&gt;</code> of the 9:16 landing page.</p>
 
-                    <div class="rocketslide-field" style="margin-top:16px;">
+                    <div class="rocketslide-field" style="margin-top:14px;">
                         <label class="rocketslide-label">Tracking Code Snippet</label>
                         <textarea id="rocketslide-tracking-script" class="rocketslide-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.manual.min.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
                         <span class="rocketslide-input-hint">Supports Publytics, Google Analytics 4, Meta Pixel, TikTok Pixel, or any custom tracker.</span>
@@ -362,7 +362,7 @@ class RocketSlide_Admin {
                     <h3 class="rocketslide-card-title"><span class="dashicons dashicons-shield" style="color:#2563eb;"></span> Advanced Dual-Layer Traffic Cloaking Engine</h3>
                     <p class="rocketslide-card-subtitle">Genuine Facebook &amp; Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
 
-                    <div class="rocketslide-field" style="margin-top:16px;">
+                    <div class="rocketslide-field" style="margin-top:14px;">
                         <label class="rocketslide-label">Custom Fallback Redirect URL <span class="req">*</span></label>
                         <input type="url" id="rocketslide-fallback-url" class="rocketslide-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
                         <span class="rocketslide-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
@@ -392,20 +392,37 @@ class RocketSlide_Admin {
                     <h3 class="rocketslide-card-title"><span class="dashicons dashicons-admin-generic" style="color:#2563eb;"></span> General Landing Page Configuration</h3>
                     <p class="rocketslide-card-subtitle">Customize the landing page permalink route and browser title.</p>
                     
-                    <div class="rocketslide-field" style="margin-top:16px;">
+                    <div class="rocketslide-field" style="margin-top:14px;">
                         <label class="rocketslide-label">Browser Tab Title</label>
                         <input type="text" id="rocketslide-tab-title" class="rocketslide-input" value="<?php echo esc_attr($tab_title); ?>" placeholder="Leave blank for clean title">
                         <span class="rocketslide-input-hint">Displays in the browser tab and OpenGraph title when shared.</span>
                     </div>
 
-                    <div class="rocketslide-field" style="margin-top:14px;">
-                        <label class="rocketslide-label">Custom Landing Page Slug / Route</label>
-                        <div class="rocketslide-slug-row">
-                            <span class="rocketslide-slug-prefix"><?php echo esc_url(home_url('/')); ?></span>
-                            <input type="text" id="rocketslide-slug" class="rocketslide-input" value="<?php echo esc_attr($slug); ?>" placeholder="v">
-                            <span class="rocketslide-slug-suffix">/</span>
+                    <!-- Custom Slug / Route - Clean Dedicated Domain & Slug Layout -->
+                    <div class="rocketslide-field" style="margin-top:16px;">
+                        <div class="rocketslide-label-wrapper">
+                            <label class="rocketslide-label"><span class="dashicons dashicons-admin-links"></span> Custom Landing Page Slug / Route</label>
+                            <span class="rocketslide-sublabel-pill">URL Route</span>
                         </div>
-                        <span class="rocketslide-input-hint">Default slug is <code>v</code> (e.g., <code>yoursite.com/v/</code>). Changing this automatically updates WordPress rewrite rules.</span>
+                        
+                        <!-- Top Domain Box -->
+                        <div class="rocketslide-domain-preview-box">
+                            <span class="domain-label">Website Domain:</span>
+                            <code id="rocketslide-base-domain"><?php echo esc_url(home_url('/')); ?></code>
+                        </div>
+
+                        <!-- Separate Full-Width Slug Input -->
+                        <div class="rocketslide-slug-input-wrapper">
+                            <input type="text" id="rocketslide-slug" class="rocketslide-input" value="<?php echo esc_attr($slug); ?>" placeholder="e.g. v or ghh" autocomplete="off" spellcheck="false">
+                        </div>
+
+                        <!-- Live Full URL Preview Pill -->
+                        <div class="rocketslide-live-preview-pill">
+                            <span>Full Live URL:</span>
+                            <strong id="rocketslide-slug-live-preview"><?php echo esc_url(home_url('/' . trim($slug, '/') . '/')); ?></strong>
+                        </div>
+
+                        <span class="rocketslide-input-hint">Default slug is <code>v</code>. When you change the slug (e.g. <code>ghh</code>), the landing page immediately opens at that route.</span>
                     </div>
 
                     <div class="rocketslide-actions">

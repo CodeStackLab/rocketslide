@@ -352,7 +352,7 @@
 .rocketslide-field {
     display: flex;
     flex-direction: column;
-    gap: 5px;
+    gap: 6px;
     width: 100%;
     box-sizing: border-box;
 }
@@ -414,6 +414,7 @@
     font-size: 11.5px;
     color: var(--text-muted);
     line-height: 1.4;
+    margin-top: 2px;
 }
 
 /* Managed Reel Images Grid */
@@ -627,74 +628,87 @@
     width: 100%;
 }
 
-/* Slug Row - Compact, Standard Input Height (42px) on All Devices */
-.rocketslide-slug-row {
-    display: flex !important;
-    align-items: center !important;
-    background: #ffffff !important;
-    border: 1.5px solid var(--border) !important;
-    border-radius: 8px !important;
-    overflow: hidden !important;
+/* Domain Preview Box (Top) */
+.rocketslide-domain-preview-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--surface-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12.5px;
+    color: var(--text-muted);
+    word-break: break-all;
+    width: 100%;
+    margin-bottom: 4px;
+}
+
+.rocketslide-domain-preview-box .domain-label {
+    font-weight: 700;
+    color: var(--text-muted);
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    flex-shrink: 0;
+}
+
+.rocketslide-domain-preview-box code {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-family: monospace;
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #0f172a;
+    word-break: break-all;
+}
+
+/* Separate Full-Width Slug Input */
+.rocketslide-slug-input-wrapper {
+    width: 100%;
+    margin: 2px 0;
+}
+
+.rocketslide-slug-input-wrapper .rocketslide-input {
     width: 100% !important;
-    max-width: 600px !important;
-    height: 42px !important;
-    box-sizing: border-box !important;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease !important;
-}
-
-.rocketslide-slug-row:focus-within {
-    border-color: var(--blue) !important;
-    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15) !important;
-}
-
-.rocketslide-slug-prefix {
-    padding: 0 8px !important;
-    height: 100% !important;
-    background: var(--surface-2) !important;
-    font-size: 11.5px !important;
-    color: var(--text-muted) !important;
-    font-family: monospace !important;
-    white-space: nowrap !important;
-    border-right: 1px solid var(--border) !important;
-    flex-shrink: 1 !important;
-    max-width: 60% !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    display: flex !important;
-    align-items: center !important;
-    user-select: none !important;
-}
-
-.rocketslide-slug-row .rocketslide-input {
-    border: none !important;
-    border-radius: 0 !important;
-    flex: 1 1 auto !important;
-    min-width: 40px !important;
-    width: 100% !important;
-    height: 100% !important;
-    padding: 0 8px !important;
-    font-size: 13.5px !important;
+    font-size: 14.5px !important;
     font-weight: 600 !important;
     font-family: monospace !important;
+    padding: 10px 12px !important;
+    border: 1.5px solid var(--border) !important;
+    border-radius: 8px !important;
     background: #ffffff !important;
     color: var(--text-main) !important;
-    box-shadow: none !important;
-    outline: none !important;
-    margin: 0 !important;
 }
 
-.rocketslide-slug-suffix {
-    padding: 0 8px !important;
-    height: 100% !important;
-    background: var(--surface-2) !important;
-    font-size: 13.5px !important;
-    font-weight: 700 !important;
-    color: var(--text-muted);
-    border-left: 1px solid var(--border) !important;
-    flex-shrink: 0 !important;
-    display: flex !important;
-    align-items: center !important;
-    user-select: none !important;
+/* Live Preview Pill */
+.rocketslide-live-preview-pill {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: #f0fdf4;
+    border: 1px solid #bbf7d0;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 12px;
+    color: #166534;
+    word-break: break-all;
+    margin-top: 4px;
+    width: 100%;
+}
+
+.rocketslide-live-preview-pill span {
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.rocketslide-live-preview-pill strong {
+    font-family: monospace;
+    color: #15803d;
+    font-size: 12.5px;
+    word-break: break-all;
 }
 
 /* Toast Notifications - Always High Z-Index & Clear of Bottom Nav */

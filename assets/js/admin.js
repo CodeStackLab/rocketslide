@@ -58,7 +58,15 @@
             });
         });
 
-        // 4. Save Settings AJAX Handlers
+        // 4. Dynamic Live Slug Typing Preview
+        $('#rocketslide-slug').on('input', function () {
+            var rawSlug = $(this).val().toLowerCase().replace(/[^a-z0-9-_]/g, '');
+            var baseDomain = $('#rocketslide-base-domain').text().replace(/\/+$/, '') + '/';
+            var fullUrl = baseDomain + (rawSlug ? rawSlug + '/' : '');
+            $('#rocketslide-slug-live-preview').text(fullUrl);
+        });
+
+        // 5. Save Settings AJAX Handlers
         $('#rocketslide-save-settings-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
@@ -123,7 +131,7 @@
             });
         });
 
-        // 5. Dual Upload Mode: Computer Local File OR Media Library
+        // 6. Dual Upload Mode: Computer Local File OR Media Library
         $('#rocketslide-upload-computer-btn').on('click', function () {
             $('#rocketslide-file-input').trigger('click');
         });
@@ -174,7 +182,7 @@
             mediaFrame.open();
         });
 
-        // 6. Form Submission: Upload & Crop Image AJAX
+        // 7. Form Submission: Upload & Crop Image AJAX
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
 
@@ -261,7 +269,7 @@
             });
         });
 
-        // 7. Save Individual Image Card Details
+        // 8. Save Individual Image Card Details
         $(document).on('click', '.rocketslide-save-card-btn', function (e) {
             e.preventDefault();
             var $card     = $(this).closest('.rocketslide-img-card');
@@ -286,7 +294,7 @@
             });
         });
 
-        // 8. Delete Image Card
+        // 9. Delete Image Card
         $(document).on('click', '.rocketslide-delete-card-btn', function (e) {
             e.preventDefault();
             if (!confirm('Are you sure you want to delete this 9:16 reel image?')) return;
@@ -317,7 +325,7 @@
             });
         });
 
-        // 9. Load More Reels System: 4 Images on Mobile (<768px), 8 Images on Desktop (>=768px)
+        // 10. Load More Reels System: 4 Images on Mobile (<768px), 8 Images on Desktop (>=768px)
         function getBatchStep() {
             return $(window).width() < 768 ? 4 : 8;
         }
