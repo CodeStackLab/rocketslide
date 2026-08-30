@@ -49,14 +49,28 @@
         }
     }
 
-    // 3. Render Clean 9:16 Reel Card (Clean, Fast, Responsive)
+    // 3. Render Clean 9:16 Reel Card (100% Fit, Never Cropped on Any Mobile Screen)
     function createReelCard(imageItem, index) {
         var card = document.createElement('div');
         card.className = 'reel-card';
         card.setAttribute('data-target-url', imageItem.target_url || fallbackUrl);
         card.setAttribute('data-timer', imageItem.timer || 0);
 
-        // 9:16 Full Screen Image
+        // 1. Ambient Blurred Backdrop Image (Fills screen without empty borders)
+        var bgBlur = document.createElement('img');
+        bgBlur.className = 'reel-img-blur-bg';
+        bgBlur.src = imageItem.url;
+        bgBlur.alt = '';
+        bgBlur.setAttribute('aria-hidden', 'true');
+        if (index < 2) {
+            bgBlur.setAttribute('loading', 'eager');
+        } else {
+            bgBlur.setAttribute('loading', 'lazy');
+            bgBlur.setAttribute('decoding', 'async');
+        }
+        card.appendChild(bgBlur);
+
+        // 2. Foreground 9:16 Image (100% Full Viewport Fit, Never Cropped)
         var img = document.createElement('img');
         img.className = 'reel-img';
         img.src = imageItem.url;
@@ -68,15 +82,14 @@
             img.setAttribute('loading', 'lazy');
             img.setAttribute('decoding', 'async');
         }
-
         card.appendChild(img);
 
-        // Subtle Linear Gradient Shadow for depth
+        // 3. Subtle Linear Gradient Shadow for depth
         var gradient = document.createElement('div');
         gradient.className = 'reel-overlay-gradient';
         card.appendChild(gradient);
 
-        // Center Glassmorphism Play Button Overlay
+        // 4. Center Glassmorphism Play Button Overlay
         var playOverlay = document.createElement('div');
         playOverlay.className = 'reel-play-overlay';
         playOverlay.innerHTML = `
