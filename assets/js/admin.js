@@ -87,7 +87,7 @@
             });
         });
 
-        // Save Cloaking & Test Mode Settings
+        // Save Cloaking Settings
         $('#rocketslide-save-fallback-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
@@ -96,12 +96,11 @@
             var data = {
                 action: 'rocketslide_save_settings',
                 nonce: rocketslide_admin_vars.nonce,
-                fallback_url: $('#rocketslide-fallback-url').val(),
-                test_mode: $('#rocketslide-test-mode').val()
+                fallback_url: $('#rocketslide-fallback-url').val()
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking &amp; Test Settings');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking Settings');
                 if (res.success) {
                     showNotice(res.data.message || 'Cloaking settings saved!', false);
                 } else {
