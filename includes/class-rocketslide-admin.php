@@ -175,7 +175,7 @@ class RocketSlide_Admin {
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg> Live Page
                     </a>
                     <button type="button" id="rocketslide-copy-live-url-btn" class="rocketslide-btn rocketslide-btn-copy" data-url="<?php echo esc_url($landing_page_url); ?>">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2 2v1"/></svg> Copy Link
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link
                     </button>
                 </div>
             </div>
@@ -368,17 +368,68 @@ class RocketSlide_Admin {
                         <span class="rocketslide-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
                     </div>
 
-                    <div class="rocketslide-cloaking-box">
-                        <h4>Active Filter Signals:</h4>
-                        <ul>
-                            <li><span class="check">&#10003;</span> <strong>Referrer Verification:</strong> <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
-                            <li><span class="check">&#10003;</span> <strong>URL Tracking Signals:</strong> <code>fbclid</code>, <code>fb_ref</code>, <code>fb_source</code></li>
-                            <li><span class="check">&#10003;</span> <strong>In-App Browser User-Agents:</strong> <code>FBAN</code>, <code>FBAV</code>, <code>FB_IAB</code>, <code>FBIOS</code>, <code>FB4A</code>, <code>Instagram</code></li>
-                            <li><span class="check">&#10003;</span> <strong>Crawler OpenGraph Bypass:</strong> <code>facebookexternalhit</code>, <code>facebot</code>, <code>whatsapp</code>, <code>telegrambot</code>, <code>twitterbot</code>, <code>googlebot</code></li>
-                        </ul>
+                    <!-- Modern Responsive Cloaking Signals Grid -->
+                    <div style="margin-top:16px;">
+                        <h4 style="font-size:13.5px; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Active Filter Signals:</h4>
+                        <div class="rocketslide-cloaking-signals-grid">
+                            <div class="rocketslide-signal-card">
+                                <div class="signal-header">
+                                    <span class="signal-badge-icon">&#10003;</span>
+                                    <span class="signal-title">Referrer Verification</span>
+                                </div>
+                                <div class="signal-tags">
+                                    <code>facebook.com</code>
+                                    <code>fb.me</code>
+                                    <code>instagram.com</code>
+                                    <code>fb.gg</code>
+                                </div>
+                            </div>
+
+                            <div class="rocketslide-signal-card">
+                                <div class="signal-header">
+                                    <span class="signal-badge-icon">&#10003;</span>
+                                    <span class="signal-title">URL Tracking Signals</span>
+                                </div>
+                                <div class="signal-tags">
+                                    <code>fbclid</code>
+                                    <code>fb_ref</code>
+                                    <code>fb_source</code>
+                                </div>
+                            </div>
+
+                            <div class="rocketslide-signal-card">
+                                <div class="signal-header">
+                                    <span class="signal-badge-icon">&#10003;</span>
+                                    <span class="signal-title">In-App Browser User-Agents</span>
+                                </div>
+                                <div class="signal-tags">
+                                    <code>FBAN</code>
+                                    <code>FBAV</code>
+                                    <code>FB_IAB</code>
+                                    <code>FBIOS</code>
+                                    <code>FB4A</code>
+                                    <code>Instagram</code>
+                                </div>
+                            </div>
+
+                            <div class="rocketslide-signal-card">
+                                <div class="signal-header">
+                                    <span class="signal-badge-icon">&#10003;</span>
+                                    <span class="signal-title">Crawler OpenGraph Bypass</span>
+                                </div>
+                                <div class="signal-tags">
+                                    <code>facebookexternalhit</code>
+                                    <code>facebot</code>
+                                    <code>whatsapp</code>
+                                    <code>telegrambot</code>
+                                    <code>twitterbot</code>
+                                    <code>googlebot</code>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="rocketslide-actions">
+                    <div class="rocketslide-actions" style="margin-top:16px;">
                         <button type="button" id="rocketslide-save-fallback-btn" class="rocketslide-btn rocketslide-btn-primary">
                             <span class="dashicons dashicons-saved"></span> Save Cloaking Settings
                         </button>
@@ -407,7 +458,7 @@ class RocketSlide_Admin {
                         
                         <!-- Top Domain Box -->
                         <div class="rocketslide-domain-preview-box">
-                            <span class="domain-label">Website Domain:</span>
+                            <span class="domain-label">Website Domain</span>
                             <code id="rocketslide-base-domain"><?php echo esc_url(home_url('/')); ?></code>
                         </div>
 
@@ -418,14 +469,14 @@ class RocketSlide_Admin {
 
                         <!-- Live Full URL Preview Pill -->
                         <div class="rocketslide-live-preview-pill">
-                            <span>Full Live URL:</span>
+                            <span>Full Live URL</span>
                             <strong id="rocketslide-slug-live-preview"><?php echo esc_url(home_url('/' . trim($slug, '/') . '/')); ?></strong>
                         </div>
 
                         <span class="rocketslide-input-hint">Default slug is <code>v</code>. When you change the slug (e.g. <code>ghh</code>), the landing page immediately opens at that route.</span>
                     </div>
 
-                    <div class="rocketslide-actions">
+                    <div class="rocketslide-actions" style="margin-top:16px;">
                         <button type="button" id="rocketslide-save-settings-btn" class="rocketslide-btn rocketslide-btn-primary">
                             <span class="dashicons dashicons-saved"></span> Save All Settings
                         </button>

@@ -551,71 +551,69 @@
     transform: translateY(-2px);
 }
 
-/* Cloaking Box & Active Filter Signals */
-.rocketslide-cloaking-box {
+/* Cloaking Signals Grid (Clean Responsive Card Layout) */
+.rocketslide-cloaking-signals-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin: 10px 0;
+    width: 100%;
+}
+
+.rocketslide-signal-card {
     background: var(--surface-2);
     border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px;
-    margin: 14px 0;
-    width: 100%;
+    border-radius: 8px;
+    padding: 10px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
     box-sizing: border-box;
 }
 
-.rocketslide-cloaking-box h4 {
-    font-size: 13.5px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-    color: var(--text-main);
-}
-
-.rocketslide-cloaking-box ul {
-    list-style: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
+.rocketslide-signal-card .signal-header {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+    align-items: center;
+    gap: 6px;
 }
 
-.rocketslide-cloaking-box li {
-    font-size: 12.5px !important;
-    line-height: 1.6 !important;
-    color: var(--text-main) !important;
-    display: block !important;
-    position: relative !important;
-    padding-left: 22px !important;
-    word-break: normal !important;
-    overflow-wrap: break-word !important;
-    margin: 0 !important;
-}
-
-.rocketslide-cloaking-box .check {
-    color: var(--green);
+.rocketslide-signal-card .signal-badge-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: #dcfce7;
+    color: #16a34a;
+    border-radius: 50%;
+    font-size: 11px;
     font-weight: 800;
-    position: absolute;
-    left: 0;
-    top: 0;
-    font-size: 13px;
+    flex-shrink: 0;
 }
 
-.rocketslide-cloaking-box strong {
+.rocketslide-signal-card .signal-title {
+    font-size: 12px;
     font-weight: 700;
     color: var(--text-main);
-    display: inline;
 }
 
-.rocketslide-cloaking-box code {
-    background: #e2e8f0 !important;
+.rocketslide-signal-card .signal-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.rocketslide-signal-card code {
+    background: #ffffff !important;
+    border: 1px solid var(--border) !important;
     color: #1e293b !important;
     padding: 2px 6px !important;
     border-radius: 4px !important;
-    font-size: 11.5px !important;
+    font-size: 11px !important;
     font-family: monospace !important;
+    line-height: 1.3 !important;
+    margin: 0 !important;
     display: inline-block !important;
-    white-space: nowrap !important;
-    margin: 2px 1px !important;
-    border: 1px solid #cbd5e1 !important;
 }
 
 .rocketslide-actions {
@@ -628,7 +626,7 @@
     width: 100%;
 }
 
-/* Domain Preview Box (Top) - Stacked Vertically on Mobile / Small screens */
+/* Domain Preview Box (Top) - Stacked Vertically */
 .rocketslide-domain-preview-box {
     display: flex;
     flex-direction: column;
@@ -774,21 +772,21 @@
         box-sizing: border-box !important;
     }
 
-    /* Generous Bottom Padding so content is never blocked by bottom nav */
+    /* Generous Bottom Padding so content & Save buttons are NEVER covered by the bottom nav bar */
     .rocketslide-wrap {
-        padding: 6px 6px calc(75px + env(safe-area-inset-bottom, 0px)) 6px !important;
+        padding: 6px 6px calc(95px + env(safe-area-inset-bottom, 0px)) 6px !important;
         margin: 0 !important;
         width: 100% !important;
         max-width: 100% !important;
     }
 
     .rocketslide-tab-panel {
-        padding-bottom: 20px !important;
+        padding-bottom: 35px !important;
     }
 
     /* Floating Toast on Mobile - Floats Safely Above Fixed Nav Bar */
     .rocketslide-toast {
-        bottom: 70px !important;
+        bottom: 74px !important;
         left: 10px !important;
         right: 10px !important;
         width: calc(100% - 20px) !important;
@@ -882,6 +880,16 @@
         white-space: normal !important;
         text-align: center !important;
         line-height: 1.2 !important;
+    }
+
+    /* 1-Column Responsive Cloaking Signals Grid on Mobile */
+    .rocketslide-cloaking-signals-grid {
+        grid-template-columns: 1fr !important;
+        gap: 8px !important;
+    }
+
+    .rocketslide-signal-card {
+        padding: 8px 10px !important;
     }
 
     .rocketslide-tabs-nav {
