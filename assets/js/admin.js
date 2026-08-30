@@ -1,22 +1,9 @@
-/**
- * admin.js
- *
- * MODERN LIGHT-MODE AJAX ADMIN DASHBOARD ENGINE
- * ============================================
- * Handles tab switching, image upload & media modal, individual card updates,
- * analytics script saving & verification, fallback URL & cloaking configuration,
- * and responsive load more reels system (4 on mobile, 8 on desktop).
- *
- * @package RocketSlide_Landing_Page
- * @since   2.0.0
- */
-
 (function ($) {
     'use strict';
 
     $(document).ready(function () {
 
-        // 1. Toast Notification Helper
+        // 1. Toast Notification Helper (Floating & Clean)
         function showNotice(msg, isError) {
             $('.rocketslide-toast').remove();
             var toast = $('<div class="rocketslide-toast ' + (isError ? 'error' : 'success') + '">' + msg + '</div>');
@@ -35,7 +22,14 @@
             $('.rocketslide-mobile-nav-item[data-tab="' + tabId + '"]').addClass('active');
 
             $('.rocketslide-tab-panel').removeClass('active');
-            $('#' + tabId).addClass('active');
+            var $targetPanel = $('#' + tabId);
+            $targetPanel.addClass('active');
+
+            // On mobile, auto-scroll directly to tab panel content
+            if ($(window).width() < 820 && $targetPanel.length) {
+                var offsetTop = $targetPanel.offset().top - 50;
+                $('html, body').animate({ scrollTop: Math.max(0, offsetTop) }, 250);
+            }
         }
 
         $(document).on('click', '.rocketslide-tab-btn, .rocketslide-mobile-nav-item', function (e) {
@@ -58,13 +52,13 @@
                 showNotice('Landing page URL copied to clipboard!', false);
                 setTimeout(function () {
                     $btn.removeClass('copied').html('<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> Copy Link');
-                }, 2500);
+                }, 2000);
             }).catch(function () {
                 showNotice('Failed to copy URL automatically.', true);
             });
         });
 
-        // 4. Save General Settings (Slug, Tab Title, etc.)
+        // 4. Save Settings AJAX Handlers
         $('#rocketslide-save-settings-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
@@ -80,14 +74,13 @@
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
                 $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save All Settings');
                 if (res.success) {
-                    showNotice(res.data.message || 'Settings saved successfully!', false);
+                    showNotice(res.data.message, false);
                 } else {
-                    showNotice(res.data || 'Error saving settings.', true);
+                    showNotice(res.data || 'Error saving settings', true);
                 }
             });
         });
 
-        // Save Cloaking Settings
         $('#rocketslide-save-fallback-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
@@ -102,14 +95,13 @@
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
                 $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking Settings');
                 if (res.success) {
-                    showNotice(res.data.message || 'Cloaking settings saved!', false);
+                    showNotice(res.data.message, false);
                 } else {
-                    showNotice(res.data || 'Error saving fallback URL.', true);
+                    showNotice(res.data || 'Error saving fallback URL', true);
                 }
             });
         });
 
-        // Save Tracking Script Tag
         $('#rocketslide-save-tracking-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
@@ -124,41 +116,37 @@
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
                 $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Script Tag');
                 if (res.success) {
-                    showNotice(res.data.message || 'Tracking script saved!', false);
-                    var hasVal = Boolean($('#rocketslide-tracking-script').val().trim());
-                    $('#rocketslide-publytics-status')
-                        .attr('class', 'rocketslide-status-badge ' + (hasVal ? 'verified' : 'inactive'))
-                        .html(hasVal ? '&#9889; Snippet Configured' : '&#9675; Inactive');
+                    showNotice(res.data.message, false);
                 } else {
-                    showNotice(res.data || 'Error saving tracking script.', true);
+                    showNotice(res.data || 'Error saving tracking script', true);
                 }
             });
         });
 
-        // 5. Image Upload - Local Computer File Picker Trigger
-        $('#rocketslide-upload-computer-btn').on('click', function (e) {
-            e.preventDefault();
+        // 5. Dual Upload Mode: Computer Local File OR Media Library
+        $('#rocketslide-upload-computer-btn').on('click', function () {
             $('#rocketslide-file-input').trigger('click');
         });
 
-        $('#rocketslide-file-input').on('change', function (e) {
+        $('#rocketslide-file-input').on('change', function () {
             var file = this.files[0];
             if (file) {
                 $('#rocketslide-file-name').text(file.name);
-                $('#rocketslide-media-id').val('');
+                $('#rocketslide-media-id').val(''); // Clear media ID
 
+                // Preview Thumbnail
                 var reader = new FileReader();
-                reader.onload = function (evt) {
-                    $('#rocketslide-image-preview-thumb').attr('src', evt.target.result);
-                    $('#rocketslide-image-preview-wrapper').fadeIn(200);
+                reader.onload = function (e) {
+                    $('#rocketslide-image-preview-thumb').attr('src', e.target.result);
+                    $('#rocketslide-image-preview-wrapper').slideDown(200);
                 };
                 reader.readAsDataURL(file);
             }
         });
 
-        // Image Upload - WP Media Library Picker Trigger
+        // WP Media Library Frame
         var mediaFrame;
-        $('#rocketslide-select-media-btn, #rocketslide-file-name').on('click', function (e) {
+        $('#rocketslide-select-media-btn').on('click', function (e) {
             e.preventDefault();
             if (mediaFrame) {
                 mediaFrame.open();
@@ -166,7 +154,7 @@
             }
 
             mediaFrame = wp.media({
-                title: 'Select 9:16 Reel Image',
+                title: 'Select Image for RocketSlide 9:16 Reel',
                 button: { text: 'Use this Image' },
                 multiple: false,
                 library: { type: 'image' }
@@ -175,28 +163,28 @@
             mediaFrame.on('select', function () {
                 var attachment = mediaFrame.state().get('selection').first().toJSON();
                 $('#rocketslide-media-id').val(attachment.id);
-                $('#rocketslide-file-name').text(attachment.filename || attachment.title);
-                $('#rocketslide-file-input').val('');
+                $('#rocketslide-file-input').val(''); // Clear local file input
+                $('#rocketslide-file-name').text(attachment.filename || 'Media Library item selected');
 
-                var previewUrl = attachment.sizes && attachment.sizes.medium ? attachment.sizes.medium.url : attachment.url;
-                $('#rocketslide-image-preview-thumb').attr('src', previewUrl);
-                $('#rocketslide-image-preview-wrapper').fadeIn(200);
+                var previewSrc = attachment.sizes && attachment.sizes.thumbnail ? attachment.sizes.thumbnail.url : attachment.url;
+                $('#rocketslide-image-preview-thumb').attr('src', previewSrc);
+                $('#rocketslide-image-preview-wrapper').slideDown(200);
             });
 
             mediaFrame.open();
         });
 
-        // 6. Add & Process New Reel Image (Auto 540x960 WebP)
+        // 6. Form Submission: Upload & Crop Image AJAX
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
 
-            var fileInput = $('#rocketslide-file-input')[0];
-            var mediaId   = $('#rocketslide-media-id').val();
             var targetUrl = $('#rocketslide-new-target-url').val();
             var timer     = $('#rocketslide-new-timer').val() || 0;
+            var mediaId   = $('#rocketslide-media-id').val();
+            var fileInput = document.getElementById('rocketslide-file-input');
 
-            if (!mediaId && (!fileInput.files || !fileInput.files[0])) {
-                showNotice('Please select an image file to upload.', true);
+            if (!targetUrl) {
+                showNotice('Target redirect URL is required.', true);
                 return;
             }
 
@@ -206,9 +194,13 @@
             formData.append('target_url', targetUrl);
             formData.append('timer', timer);
 
-            if (mediaId) {
+            if (mediaId && mediaId > 0) {
                 formData.append('media_id', mediaId);
-            } else if (fileInput.files && fileInput.files[0]) {
+            } else {
+                if (!fileInput.files || !fileInput.files[0]) {
+                    showNotice('Please select an image file or choose from Media Library.', true);
+                    return;
+                }
                 formData.append('image_file', fileInput.files[0]);
             }
 
