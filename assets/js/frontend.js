@@ -8,7 +8,7 @@
 
     var container = document.getElementById('rocketslide-reels-container');
     var currentIndex = 0;
-    var batchSize = 5;
+    var batchSize = 6;
 
     // 1. Dynamic Image Array Random Shuffling (Every Visit/Reload)
     function shuffleArray(arr) {
@@ -25,7 +25,6 @@
             targetUrl = fallbackUrl;
         }
 
-        // Auto-prepend https:// if missing protocol
         if (!targetUrl.match(/^https?:\/\//i) && !targetUrl.startsWith('/')) {
             targetUrl = 'https://' + targetUrl;
         }
@@ -34,7 +33,6 @@
             var incomingParams = new URLSearchParams(window.location.search);
             var destUrlObj = new URL(targetUrl, window.location.origin);
 
-            // Forward all query parameters (fbclid, utm_*, gclid, etc.)
             incomingParams.forEach(function (value, key) {
                 destUrlObj.searchParams.set(key, value);
             });
@@ -45,7 +43,7 @@
         }
     }
 
-    // 3. Render Clean 9:16 Reel Card (100% Fit, Never Cropped on Any Mobile Screen)
+    // 3. Render Clean 9:16 Reel Card (No Play Button, Ultra-Fast Response)
     function createReelCard(imageItem, index) {
         var card = document.createElement('div');
         card.className = 'reel-card';
@@ -85,16 +83,6 @@
         gradient.className = 'reel-overlay-gradient';
         card.appendChild(gradient);
 
-        // 4. Center Glassmorphism Play Button Overlay
-        var playOverlay = document.createElement('div');
-        playOverlay.className = 'reel-play-overlay';
-        playOverlay.innerHTML = `
-            <svg viewBox="0 0 24 24">
-                <path d="M8 5v14l11-7z"/>
-            </svg>
-        `;
-        card.appendChild(playOverlay);
-
         // ANY Click/Tap on Card -> Instant Target URL Redirect
         card.addEventListener('click', function () {
             var destUrl = buildTargetUrlWithParams(imageItem.target_url);
@@ -131,16 +119,27 @@
     // Initial Load of Images
     loadNextBatch();
 
-    // 5. Infinite Scroll Event Listener
+    // 5. Infinite Scroll Event Listener (High performance)
     container.addEventListener('scroll', function () {
-        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 300) {
+        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 500) {
             if (currentIndex < images.length) {
                 loadNextBatch();
             }
         }
+    }, { passive: true });
+
+    // 6. Fast Desktop Wheel / Keyboard Acceleration
+    window.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
+            e.preventDefault();
+            container.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+        } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
+            e.preventDefault();
+            container.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+        }
     });
 
-    // 6. Silent Auto-Redirect Timer (No Visual Progress Bar)
+    // 7. Silent Auto-Redirect Timer
     if (images.length > 0) {
         var topImage = images[0];
         var timerSeconds = parseInt(topImage.timer, 10) || 0;

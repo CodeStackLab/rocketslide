@@ -1,4 +1,4 @@
-/* RocketSlide 9:16 Reels Vertical Clean Layout Stylesheet */
+/* RocketSlide 9:16 Reels Vertical Clean Fast-Scrolling Layout */
 * {
     box-sizing: border-box;
     margin: 0;
@@ -38,7 +38,7 @@ html, body {
     inset: 0;
 }
 
-/* 9:16 Full Container — Strict 1-Screen Snapping */
+/* 9:16 Full Container — Ultra-Fast Smooth Scroll Snapping */
 .reels-container {
     width: 100%;
     max-width: 480px;
@@ -49,12 +49,14 @@ html, body {
     background-color: #000000;
     overflow-y: scroll;
     scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: contain;
     scrollbar-width: none;
     position: relative;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
     will-change: scroll-position;
-    transform: translateZ(0);
 }
 
 .reels-container::-webkit-scrollbar {
@@ -69,7 +71,6 @@ html, body {
     height: 100dvh;
     height: -webkit-fill-available;
     scroll-snap-align: start;
-    scroll-snap-stop: always;
     position: relative;
     display: flex;
     justify-content: center;
@@ -78,26 +79,32 @@ html, body {
     cursor: pointer;
     overflow: hidden;
     flex-shrink: 0;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
 }
 
-/* Ambient Blurred Backdrop Image — Fills screen with soft matching glow */
+/* Ambient Backdrop Image — Hardware-accelerated smooth rendering */
 .reel-img-blur-bg {
     position: absolute;
-    top: -10%;
-    left: -10%;
-    width: 120%;
-    height: 120%;
+    top: -5%;
+    left: -5%;
+    width: 110%;
+    height: 110%;
     object-fit: cover;
     object-position: center;
-    filter: blur(28px) brightness(0.65);
-    -webkit-filter: blur(28px) brightness(0.65);
-    transform: scale(1.1);
-    opacity: 0.8;
+    filter: blur(20px) brightness(0.6);
+    -webkit-filter: blur(20px) brightness(0.6);
+    opacity: 0.75;
     pointer-events: none;
     z-index: 1;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
+    will-change: transform;
 }
 
-/* Foreground Main Image — 100% FIT, NEVER CROPPED ON ANY MOBILE HEIGHT */
+/* Foreground Main Image — 100% Full Viewport Fit, Never Cropped */
 .reel-img {
     position: relative;
     width: 100%;
@@ -109,6 +116,8 @@ html, body {
     display: block;
     pointer-events: none;
     z-index: 2;
+    transform: translate3d(0, 0, 0);
+    -webkit-transform: translate3d(0, 0, 0);
 }
 
 /* Subtle Vignette Gradient for Depth */
@@ -117,48 +126,9 @@ html, body {
     inset: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.12) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.35) 100%);
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.08) 0%, transparent 20%, transparent 80%, rgba(0, 0, 0, 0.25) 100%);
     pointer-events: none;
     z-index: 3;
-}
-
-/* Glassmorphism Center Play Overlay Icon */
-.reel-play-overlay {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 72px;
-    height: 72px;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 2.5px solid #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 4;
-    pointer-events: none;
-    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
-    transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.2s ease;
-}
-
-.reel-play-overlay svg {
-    width: 34px;
-    height: 34px;
-    fill: #2563eb;
-    margin-left: 4px;
-    filter: drop-shadow(0 2px 4px rgba(37, 99, 235, 0.35));
-}
-
-.reel-card:hover .reel-play-overlay {
-    transform: translate(-50%, -50%) scale(1.1);
-    background: #ffffff;
-}
-
-.reel-card:active .reel-play-overlay {
-    transform: translate(-50%, -50%) scale(0.95);
 }
 
 /* Mobile Devices Full Screen Optimization */
@@ -184,17 +154,5 @@ html, body {
         width: 100% !important;
         height: 100% !important;
         object-fit: contain !important;
-    }
-}
-
-@media (max-width: 480px) {
-    .reel-play-overlay {
-        width: 66px;
-        height: 66px;
-    }
-
-    .reel-play-overlay svg {
-        width: 30px;
-        height: 30px;
     }
 }
