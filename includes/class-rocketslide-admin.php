@@ -83,22 +83,25 @@ class RocketSlide_Admin {
 
         $wp_admin_bar->add_node(array(
             'id'    => 'rocketslide-settings',
-            'title' => '📱 RocketSlide 9:16 Settings',
+            'title' => '🚀 RocketSlide 9:16',
             'href'  => admin_url('admin.php?page=rocketslide'),
         ));
     }
 
     /**
-     * Add admin menu item with smartphone icon
+     * Add admin menu item with custom Rocket SVG icon
      */
     public function add_admin_menu() {
+        $svg_icon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L7 16l.5-.5c.74.59 1.84.51 2.55-.2l5-5c2.61-2.61 3.5-7.5 3.5-7.5s-4.89.89-7.5 3.5l-5 5c-.71.71-.79 1.81-.2 2.55L5.5 14.5 5 14c-.59.74-.51 1.84.2 2.55z"/><circle cx="14" cy="10" r="1.5" fill="currentColor"/><path d="M2.5 21.5l3-3"/></svg>';
+        $menu_icon = 'data:image/svg+xml;base64,' . base64_encode($svg_icon);
+
         add_menu_page(
             'RocketSlide 9:16 Manager',
             'RocketSlide 9:16',
             'manage_options',
             'rocketslide',
             array($this, 'render_admin_page'),
-            'dashicons-smartphone',
+            $menu_icon,
             30
         );
     }
@@ -162,10 +165,11 @@ class RocketSlide_Admin {
             <div class="rocketslide-header">
                 <div class="rocketslide-header-brand">
                     <div class="rocketslide-header-icon">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L7 16l.5-.5c.74.59 1.84.51 2.55-.2l5-5c2.61-2.61 3.5-7.5 3.5-7.5s-4.89.89-7.5 3.5l-5 5c-.71.71-.79 1.81-.2 2.55L5.5 14.5 5 14c-.59.74-.51 1.84.2 2.55z"></path>
-                            <path d="M15 9l-3 3"></path>
-                            <path d="M9 15l-3 3"></path>
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L7 16l.5-.5c.74.59 1.84.51 2.55-.2l5-5c2.61-2.61 3.5-7.5 3.5-7.5s-4.89.89-7.5 3.5l-5 5c-.71.71-.79 1.81-.2 2.55L5.5 14.5 5 14c-.59.74-.51 1.84.2 2.55z" fill="rgba(255,255,255,0.15)"/>
+                            <circle cx="14" cy="10" r="1.5" fill="#ffffff" stroke="none"/>
+                            <path d="M10 14l-2 2" stroke="#ffffff"/>
+                            <path d="M2.5 21.5l3-3" stroke="#facc15" stroke-width="2.5"/>
                         </svg>
                     </div>
                     <div class="rocketslide-header-text">
@@ -185,11 +189,11 @@ class RocketSlide_Admin {
                         Test Preview
                     </a>
                     <a href="<?php echo esc_url($landing_page_url); ?>" target="_blank" class="rocketslide-btn rocketslide-btn-live">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon fill="currentColor" points="10 8 16 12 10 16 10 8"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon fill="currentColor" points="10 8 16 12 10 16 10 8"/></svg>
                         Live Page
                     </a>
                     <button type="button" id="rocketslide-copy-live-url-btn" class="rocketslide-btn rocketslide-btn-copy" data-url="<?php echo esc_url($landing_page_url); ?>" title="Copy Live Landing Page URL">
-                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
                         Copy Link
                     </button>
                 </div>
