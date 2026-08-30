@@ -4,7 +4,8 @@
  * MODERN LIGHT-MODE AJAX ADMIN DASHBOARD ENGINE
  * ============================================
  * Handles tab switching, image upload & media modal, individual card updates,
- * analytics script saving & verification, fallback URL & cloaking configuration.
+ * analytics script saving & verification, fallback URL & cloaking configuration,
+ * and responsive load more reels system (4 on mobile, 8 on desktop).
  *
  * @package RocketSlide_Landing_Page
  * @since   2.0.0
@@ -244,11 +245,11 @@
                                         <label class="rocketslide-label">Target URL:</label>
                                         <input type="url" class="rocketslide-input rocketslide-card-target" value="${img.target_url}">
                                     </div>
-                                    <div style="margin-top:8px;">
+                                    <div style="margin-top:6px;">
                                         <label class="rocketslide-label">Timer (s):</label>
                                         <input type="number" min="0" class="rocketslide-input rocketslide-card-timer" value="${img.timer || 0}">
                                     </div>
-                                    <div class="rocketslide-img-card-actions" style="margin-top:12px;">
+                                    <div class="rocketslide-img-card-actions" style="margin-top:10px;">
                                         <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved"></span> Save</button>
                                         <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash"></span> Delete</button>
                                     </div>
@@ -325,9 +326,12 @@
             });
         });
 
-        // 9. Load More Reels System (8 Cards Default, 8 Per Load)
-        var visibleCount = 8;
-        var stepCount = 8;
+        // 9. Load More Reels System: 4 Images on Mobile (<768px), 8 Images on Desktop (>=768px)
+        function getBatchStep() {
+            return $(window).width() < 768 ? 4 : 8;
+        }
+
+        var visibleCount = getBatchStep();
 
         function updateLoadMore() {
             var $cards = $('#rocketslide-images-container .rocketslide-img-card');
@@ -358,7 +362,7 @@
                     '📥 Load More Reels (' + remainingCount + ' Remaining)'
                 );
                 $('#rocketslide-loadmore-wrapper').show();
-            } else if (totalCards > stepCount) {
+            } else if (totalCards > getBatchStep()) {
                 $('#rocketslide-loadmore-btn').hide();
                 $('#rocketslide-loadmore-wrapper').show();
             } else {
@@ -367,7 +371,7 @@
         }
 
         $(document).on('click', '#rocketslide-loadmore-btn', function () {
-            visibleCount += stepCount;
+            visibleCount += getBatchStep();
             updateLoadMore();
         });
 
