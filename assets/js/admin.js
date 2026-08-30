@@ -78,9 +78,9 @@
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).text('💾 Save All Settings');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save All Settings');
                 if (res.success) {
-                    showNotice(res.data.message || 'Settings saved!', false);
+                    showNotice(res.data.message || 'Settings saved successfully!', false);
                 } else {
                     showNotice(res.data || 'Error saving settings.', true);
                 }
@@ -101,7 +101,7 @@
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).text('💾 Save Cloaking & Test Settings');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking &amp; Test Settings');
                 if (res.success) {
                     showNotice(res.data.message || 'Cloaking settings saved!', false);
                 } else {
@@ -123,13 +123,13 @@
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).text('💾 Save Script Tag');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Script Tag');
                 if (res.success) {
                     showNotice(res.data.message || 'Tracking script saved!', false);
                     var hasVal = Boolean($('#rocketslide-tracking-script').val().trim());
                     $('#rocketslide-publytics-status')
                         .attr('class', 'rocketslide-status-badge ' + (hasVal ? 'verified' : 'inactive'))
-                        .text(hasVal ? '⚡ Snippet Configured' : '⚪ Inactive');
+                        .html(hasVal ? '&#9889; Snippet Configured' : '&#9675; Inactive');
                 } else {
                     showNotice(res.data || 'Error saving tracking script.', true);
                 }
@@ -214,7 +214,7 @@
             }
 
             var $btn = $('#rocketslide-add-image-btn');
-            $btn.prop('disabled', true).html('⏳ Converting WebP...');
+            $btn.prop('disabled', true).html('Converting WebP...');
 
             $.ajax({
                 url: rocketslide_admin_vars.ajax_url,
@@ -316,7 +316,7 @@
                         $card.remove();
                         $('#rocketslide-images-count, #rocketslide-stat-images-count').text(res.data.total);
                         if (res.data.total === 0) {
-                            $('#rocketslide-images-container').html('<div class="rocketslide-empty-state" id="rocketslide-empty-state"><div class="empty-icon">🖼️</div><p>No 9:16 reel images added yet.</p></div>');
+                            $('#rocketslide-images-container').html('<div class="rocketslide-empty-state" id="rocketslide-empty-state"><div class="empty-icon"><span class="dashicons dashicons-format-image" style="font-size:36px; width:36px; height:36px;"></span></div><p>No 9:16 reel images added yet.</p></div>');
                         }
                         updateLoadMore();
                     });
@@ -359,7 +359,7 @@
 
             if (remainingCount > 0) {
                 $('#rocketslide-loadmore-btn').show().html(
-                    '📥 Load More Reels (' + remainingCount + ' Remaining)'
+                    '<span class="dashicons dashicons-arrow-down-alt2"></span> Load More Reels (' + remainingCount + ' Remaining)'
                 );
                 $('#rocketslide-loadmore-wrapper').show();
             } else if (totalCards > getBatchStep()) {

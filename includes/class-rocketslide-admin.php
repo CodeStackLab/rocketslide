@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * class-rocketslide-admin.php
  *
@@ -83,7 +83,7 @@ class RocketSlide_Admin {
 
         $wp_admin_bar->add_node(array(
             'id'    => 'rocketslide-settings',
-            'title' => 'ðŸš€ RocketSlide 9:16',
+            'title' => 'RocketSlide 9:16',
             'href'  => admin_url('admin.php?page=rocketslide'),
         ));
     }
@@ -161,20 +161,12 @@ class RocketSlide_Admin {
         $test_preview_url = add_query_arg('test_mode', '1', $landing_page_url);
         ?>
         <div class="rocketslide-wrap">
-            <!-- Header Banner -->
+            <!-- Header Banner (Top logo removed as requested) -->
             <div class="rocketslide-header">
                 <div class="rocketslide-header-brand">
-                    <div class="rocketslide-header-icon">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.71.79-1.81.2-2.55L7 16l.5-.5c.74.59 1.84.51 2.55-.2l5-5c2.61-2.61 3.5-7.5 3.5-7.5s-4.89.89-7.5 3.5l-5 5c-.71.71-.79 1.81-.2 2.55L5.5 14.5 5 14c-.59.74-.51 1.84.2 2.55z" fill="rgba(255,255,255,0.15)"/>
-                            <circle cx="14" cy="10" r="1.5" fill="#ffffff" stroke="none"/>
-                            <path d="M10 14l-2 2" stroke="#ffffff"/>
-                            <path d="M2.5 21.5l3-3" stroke="#facc15" stroke-width="2.5"/>
-                        </svg>
-                    </div>
                     <div class="rocketslide-header-text">
                         <h1>RocketSlide 9:16 Engine</h1>
-                        <p>Vertical Landing Page &amp; Cloaker &mdash; v<?php echo ROCKETSLIDE_VERSION; ?></p>
+                        <p>Vertical Landing Page &amp; Cloaker &mdash; v<?php echo esc_html(ROCKETSLIDE_VERSION); ?></p>
                     </div>
                 </div>
                 <div class="rocketslide-header-meta">
@@ -199,31 +191,31 @@ class RocketSlide_Admin {
                 </div>
             </div>
 
-            <!-- Stats Bar -->
+            <!-- Stats Bar (Using Clean Dashicons) -->
             <div class="rocketslide-stats-row">
                 <div class="rocketslide-stat-card">
-                    <span class="stat-icon">ðŸŽ¬</span>
+                    <span class="stat-icon dashicons dashicons-format-video" style="color: #2563eb;"></span>
                     <span class="stat-value" id="rocketslide-stat-images-count" style="color: #2563eb;"><?php echo count($images); ?></span>
                     <span class="stat-label">Active Reels</span>
                 </div>
                 <div class="rocketslide-stat-card">
-                    <span class="stat-icon"><?php echo ($test_mode === '1') ? 'âš¡' : 'ðŸ›¡ï¸'; ?></span>
+                    <span class="stat-icon dashicons dashicons-shield" style="color: <?php echo ($test_mode === '1') ? '#d97706' : '#16a34a'; ?>;"></span>
                     <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#d97706' : '#16a34a'; ?>;">
                         <?php echo ($test_mode === '1') ? 'Testing' : 'Live'; ?>
                     </span>
                     <span class="stat-label"><?php echo ($test_mode === '1') ? 'Test Mode On' : 'Cloaking Active'; ?></span>
                 </div>
                 <div class="rocketslide-stat-card">
-                    <span class="stat-icon">ðŸ“¡</span>
+                    <span class="stat-icon dashicons dashicons-chart-bar" style="color: <?php echo !empty($tracking_script) ? '#7c3aed' : '#64748b'; ?>;"></span>
                     <span class="stat-value" style="color: <?php echo !empty($tracking_script) ? '#7c3aed' : '#64748b'; ?>;">
                         <?php echo !empty($tracking_script) ? 'Active' : 'Off'; ?>
                     </span>
                     <span class="stat-label">Analytics Pixel</span>
                 </div>
                 <div class="rocketslide-stat-card">
-                    <span class="stat-icon">âš¡</span>
+                    <span class="stat-icon dashicons dashicons-performance" style="color: #2563eb;"></span>
                     <span class="stat-value" style="color: #2563eb;">WebP HD</span>
-                    <span class="stat-label">Auto 1080Ã—1920</span>
+                    <span class="stat-label">Auto 1080 &times; 1920</span>
                 </div>
             </div>
 
@@ -248,8 +240,8 @@ class RocketSlide_Admin {
                 <!-- Add New Reel Form Card -->
                 <div class="rocketslide-card" style="margin-bottom: 24px;">
                     <div class="rocketslide-card-header">
-                        <h3 class="rocketslide-card-title">âœ¨ Add New 9:16 Reel Image</h3>
-                        <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be auto-cropped to 9:16 vertical ratio (540Ã—960 HD WebP) automatically.</p>
+                        <h3 class="rocketslide-card-title"><span class="dashicons dashicons-plus-alt2" style="color:#2563eb;"></span> Add New 9:16 Reel Image</h3>
+                        <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be auto-cropped to 9:16 vertical ratio (540 &times; 960 HD WebP) automatically.</p>
                     </div>
 
                     <form id="rocketslide-add-image-form" enctype="multipart/form-data">
@@ -259,7 +251,7 @@ class RocketSlide_Admin {
                             <div class="rocketslide-upload-box">
                                 <div class="rocketslide-upload-box-header">
                                     <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:0;">
-                                        ðŸ“¸ Select Reel Image (9:16 WebP) <span class="req">*</span>
+                                        Select Reel Image (9:16 WebP) <span class="req">*</span>
                                     </label>
                                 </div>
                                 <div class="rocketslide-upload-row">
@@ -282,7 +274,7 @@ class RocketSlide_Admin {
                                 <div id="rocketslide-image-preview-wrapper" class="rocketslide-preview-panel" style="display:none;">
                                     <img id="rocketslide-image-preview-thumb" src="" alt="Selected Preview" class="rocketslide-preview-thumb">
                                     <div class="rocketslide-preview-info">
-                                        <span class="preview-status">âœ“ Image Selected</span>
+                                        <span class="preview-status">&#10003; Image Selected</span>
                                         <span class="preview-desc">Ready to auto-crop &amp; convert to 9:16 HD WebP on save</span>
                                     </div>
                                 </div>
@@ -292,7 +284,7 @@ class RocketSlide_Admin {
                             <div class="rocketslide-form-grid-2" style="margin-top: 18px;">
                                 <div class="rocketslide-field">
                                     <div class="rocketslide-label-wrapper">
-                                        <label class="rocketslide-label" for="rocketslide-new-target-url">ðŸŽ¯ Target Redirect URL</label>
+                                        <label class="rocketslide-label" for="rocketslide-new-target-url"><span class="dashicons dashicons-admin-links"></span> Target Redirect URL</label>
                                         <span class="rocketslide-sublabel-pill">Optional</span>
                                     </div>
                                     <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" class="rocketslide-input">
@@ -301,7 +293,7 @@ class RocketSlide_Admin {
 
                                 <div class="rocketslide-field">
                                     <div class="rocketslide-label-wrapper">
-                                        <label class="rocketslide-label" for="rocketslide-new-timer">â±ï¸ Auto-Redirect Timer</label>
+                                        <label class="rocketslide-label" for="rocketslide-new-timer"><span class="dashicons dashicons-clock"></span> Auto-Redirect Timer</label>
                                         <span class="rocketslide-sublabel-pill">Seconds</span>
                                     </div>
                                     <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
@@ -312,7 +304,7 @@ class RocketSlide_Admin {
                             <!-- 3. Submit Action -->
                             <div class="rocketslide-field-submit" style="margin-top: 20px;">
                                 <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary rocketslide-btn-submit">
-                                    <span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop New Reel (540Ã—960 HD WebP)
+                                    <span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop Reel
                                 </button>
                             </div>
                         </div>
@@ -322,14 +314,14 @@ class RocketSlide_Admin {
                 <!-- Grid List of Uploaded Images -->
                 <div class="rocketslide-card">
                     <div class="rocketslide-card-header">
-                        <h3 class="rocketslide-card-title">ðŸ—‚ï¸ Managed Reel Cards (<span id="rocketslide-images-count"><?php echo count($images); ?></span>)</h3>
+                        <h3 class="rocketslide-card-title"><span class="dashicons dashicons-format-gallery" style="color:#2563eb;"></span> Managed Reel Cards (<span id="rocketslide-images-count"><?php echo count($images); ?></span>)</h3>
                         <p class="rocketslide-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
                     </div>
 
                     <div class="rocketslide-img-grid" id="rocketslide-images-container">
                         <?php if (empty($images)) : ?>
                             <div class="rocketslide-empty-state" id="rocketslide-empty-state">
-                                <div class="empty-icon">ðŸ–¼ï¸</div>
+                                <div class="empty-icon"><span class="dashicons dashicons-format-image" style="font-size:36px; width:36px; height:36px;"></span></div>
                                 <p>No 9:16 reel images added yet. Upload your first image above to launch your landing page!</p>
                             </div>
                         <?php else : ?>
@@ -345,11 +337,11 @@ class RocketSlide_Admin {
                                             <label class="rocketslide-label">Target URL:</label>
                                             <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>" placeholder="https://your-offer.com">
                                         </div>
-                                        <div style="margin-top:8px;">
+                                        <div style="margin-top:6px;">
                                             <label class="rocketslide-label">Timer (s):</label>
                                             <input type="number" min="0" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr(!empty($img['timer']) ? $img['timer'] : '0'); ?>" placeholder="0">
                                         </div>
-                                        <div class="rocketslide-img-card-actions" style="margin-top:12px;">
+                                        <div class="rocketslide-img-card-actions" style="margin-top:10px;">
                                             <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved"></span> Save</button>
                                             <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash"></span> Delete</button>
                                         </div>
@@ -359,11 +351,11 @@ class RocketSlide_Admin {
                         <?php endif; ?>
                     </div>
 
-                    <div id="rocketslide-loadmore-wrapper" style="display:none; text-align:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
-                        <button type="button" id="rocketslide-loadmore-btn" class="rocketslide-btn rocketslide-btn-secondary" style="min-width:240px; padding:10px 24px; font-size:13px; font-weight:700;">
-                            ðŸ“¥ Load More Reels
+                    <div id="rocketslide-loadmore-wrapper" style="display:none; text-align:center; margin-top:24px; padding-top:18px; border-top:1px solid var(--border);">
+                        <button type="button" id="rocketslide-loadmore-btn" class="rocketslide-btn rocketslide-btn-primary">
+                            <span class="dashicons dashicons-arrow-down-alt2"></span> Load More Reels
                         </button>
-                        <div id="rocketslide-loadmore-info" style="font-size:11.5px; color:var(--text-muted); margin-top:8px; font-weight:600;"></div>
+                        <div id="rocketslide-loadmore-info" style="font-size:12px; color:var(--text-muted); margin-top:8px; font-weight:600;"></div>
                     </div>
                 </div>
             </div>
@@ -371,7 +363,7 @@ class RocketSlide_Admin {
             <!-- Tab 2: Analytics & Publytics Script -->
             <div class="rocketslide-tab-panel" id="tab-tracking">
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">ðŸ“¡ Publytics &amp; Custom Pixel Tracking</h3>
+                    <h3 class="rocketslide-card-title"><span class="dashicons dashicons-chart-bar" style="color:#2563eb;"></span> Publytics &amp; Custom Pixel Tracking</h3>
                     <p class="rocketslide-card-subtitle">Inject your lightweight Publytics tracker or Meta/Google Ads Pixel. Injected directly on the isolated 9:16 template.</p>
                     
                     <div class="rocketslide-field">
@@ -383,19 +375,19 @@ class RocketSlide_Admin {
                     <div class="rocketslide-tracking-status-row">
                         <span class="status-label">Script Verification:</span>
                         <span class="rocketslide-status-badge <?php echo !empty($tracking_script) ? 'verified' : 'inactive'; ?>" id="rocketslide-publytics-status">
-                            <?php echo !empty($tracking_script) ? 'âš¡ Snippet Configured' : 'âšª Inactive'; ?>
+                            <?php echo !empty($tracking_script) ? '&#9889; Snippet Configured' : '&#9675; Inactive'; ?>
                         </span>
                     </div>
 
                     <div class="rocketslide-actions" style="gap:10px;">
                         <button type="button" id="rocketslide-save-tracking-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            ðŸ’¾ Save Script Tag
+                            <span class="dashicons dashicons-saved"></span> Save Script Tag
                         </button>
                         <button type="button" id="rocketslide-verify-tracking-btn" class="rocketslide-btn rocketslide-btn-secondary">
-                            ðŸ” Test &amp; Verify Connection
+                            <span class="dashicons dashicons-search"></span> Test &amp; Verify Connection
                         </button>
                         <button type="button" id="rocketslide-test-traffic-btn" class="rocketslide-btn rocketslide-btn-accent">
-                            ðŸš€ Fire Live Test Event
+                            <span class="dashicons dashicons-external"></span> Fire Live Test Event
                         </button>
                     </div>
 
@@ -406,18 +398,18 @@ class RocketSlide_Admin {
             <!-- Tab 3: Cloaking & Fallback -->
             <div class="rocketslide-tab-panel" id="tab-fallback">
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">ðŸ›¡ï¸ Advanced Dual-Layer Traffic Cloaking Engine</h3>
+                    <h3 class="rocketslide-card-title"><span class="dashicons dashicons-shield" style="color:#2563eb;"></span> Advanced Dual-Layer Traffic Cloaking Engine</h3>
                     <p class="rocketslide-card-subtitle">Genuine Facebook &amp; Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
 
                     <div class="rocketslide-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
-                        <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text);">âš¡ Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
+                        <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text);"><span class="dashicons dashicons-admin-settings"></span> Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
                         <select id="rocketslide-test-mode" class="rocketslide-select" style="max-width:550px;">
-                            <option value="0" <?php selected($test_mode, '0'); ?>>ðŸ”’ Disabled (Live Production Mode &mdash; Only Facebook/Instagram Traffic Sees Landing Page)</option>
-                            <option value="1" <?php selected($test_mode, '1'); ?>>âš¡ Enabled (Testing Mode &mdash; Open Landing Page Directly Without FB Post)</option>
+                            <option value="0" <?php selected($test_mode, '0'); ?>>Disabled (Live Production Mode &mdash; Only Facebook/Instagram Traffic Sees Landing Page)</option>
+                            <option value="1" <?php selected($test_mode, '1'); ?>>Enabled (Testing Mode &mdash; Open Landing Page Directly Without FB Post)</option>
                         </select>
                         <span class="rocketslide-input-hint" style="margin-top:8px;">
-                            â€¢ <strong>Enabled (Testing):</strong> Anyone can open <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code> directly in browser to test the landing page without posting on Facebook.<br>
-                            â€¢ <strong>Disabled (Live):</strong> Live protection mode. Direct visits are redirected to your Fallback URL, and only FB/IG clicks see the landing page.
+                            &bull; <strong>Enabled (Testing):</strong> Anyone can open <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code> directly in browser to test the landing page without posting on Facebook.<br>
+                            &bull; <strong>Disabled (Live):</strong> Live protection mode. Direct visits are redirected to your Fallback URL, and only FB/IG clicks see the landing page.
                         </span>
                     </div>
 
@@ -430,16 +422,16 @@ class RocketSlide_Admin {
                     <div class="rocketslide-cloaking-box">
                         <h4>Active Filter Signals:</h4>
                         <ul>
-                            <li><span class="check">âœ“</span> Referrer Verification: <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
-                            <li><span class="check">âœ“</span> URL Tracking Signals: <code>fbclid</code>, <code>fb_ref</code>, <code>fb_source</code></li>
-                            <li><span class="check">âœ“</span> In-App Browser User-Agents: <code>FBAN</code>, <code>FBAV</code>, <code>FB_IAB</code>, <code>FBIOS</code>, <code>FB4A</code>, <code>Instagram</code></li>
-                            <li><span class="check">âœ“</span> Crawler OpenGraph Bypass: <code>facebookexternalhit</code>, <code>facebot</code>, <code>whatsapp</code>, <code>telegrambot</code>, <code>twitterbot</code>, <code>googlebot</code></li>
+                            <li><span class="check">&#10003;</span> Referrer Verification: <code>facebook.com</code>, <code>fb.me</code>, <code>instagram.com</code>, <code>fb.gg</code></li>
+                            <li><span class="check">&#10003;</span> URL Tracking Signals: <code>fbclid</code>, <code>fb_ref</code>, <code>fb_source</code></li>
+                            <li><span class="check">&#10003;</span> In-App Browser User-Agents: <code>FBAN</code>, <code>FBAV</code>, <code>FB_IAB</code>, <code>FBIOS</code>, <code>FB4A</code>, <code>Instagram</code></li>
+                            <li><span class="check">&#10003;</span> Crawler OpenGraph Bypass: <code>facebookexternalhit</code>, <code>facebot</code>, <code>whatsapp</code>, <code>telegrambot</code>, <code>twitterbot</code>, <code>googlebot</code></li>
                         </ul>
                     </div>
 
                     <div class="rocketslide-actions">
                         <button type="button" id="rocketslide-save-fallback-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            ðŸ’¾ Save Cloaking &amp; Test Settings
+                            <span class="dashicons dashicons-saved"></span> Save Cloaking &amp; Test Settings
                         </button>
                     </div>
                 </div>
@@ -448,7 +440,7 @@ class RocketSlide_Admin {
             <!-- Tab 4: Site Settings -->
             <div class="rocketslide-tab-panel" id="tab-settings">
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">âš™ï¸ General Landing Page Configuration</h3>
+                    <h3 class="rocketslide-card-title"><span class="dashicons dashicons-admin-generic" style="color:#2563eb;"></span> General Landing Page Configuration</h3>
                     <p class="rocketslide-card-subtitle">Customize the landing page permalink route and browser title.</p>
                     
                     <div class="rocketslide-field">
@@ -469,7 +461,7 @@ class RocketSlide_Admin {
 
                     <div class="rocketslide-actions">
                         <button type="button" id="rocketslide-save-settings-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            ðŸ’¾ Save All Settings
+                            <span class="dashicons dashicons-saved"></span> Save All Settings
                         </button>
                     </div>
                 </div>
@@ -490,7 +482,7 @@ class RocketSlide_Admin {
                     <span>Cloaking</span>
                 </button>
                 <button class="rocketslide-mobile-nav-item" data-tab="tab-settings">
-                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+                    <span class="nav-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
                     <span>Settings</span>
                 </button>
             </nav>
@@ -572,7 +564,7 @@ class RocketSlide_Admin {
                 'status_code' => $status_code,
                 'script_url'  => $script_url,
                 'domain'      => $data_domain,
-                'message'     => 'âœ“ Publytics tracking script reachability confirmed (HTTP 200 OK).'
+                'message'     => 'Publytics tracking script reachability confirmed (HTTP 200 OK).'
             ));
         } else {
             wp_send_json_error('Script URL returned HTTP Status Code: ' . $status_code);
@@ -628,7 +620,7 @@ class RocketSlide_Admin {
         update_option('rocketslide_images', $images);
 
         wp_send_json_success(array(
-            'message' => 'Image processed (540Ã—960 WebP) and added successfully!',
+            'message' => 'Image processed (540x960 WebP) and added successfully!',
             'image'   => $new_item,
             'total'   => count($images)
         ));
@@ -708,4 +700,3 @@ class RocketSlide_Admin {
         ));
     }
 }
-
