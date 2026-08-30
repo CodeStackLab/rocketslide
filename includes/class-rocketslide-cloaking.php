@@ -5,12 +5,12 @@
  * ADVANCED DUAL-LAYER TRAFFIC FILTERING & BOT CLOAKING ENGINE
  * ============================================================
  *
- * Layer 1 – PHP Server-Side (this file):
- *   • Identifies known social-media bots/crawlers → let them see clean OG tags
- *   • Detects genuine Facebook/Instagram human traffic → show 9:16 landing page
- *   • Everything else (direct, Google, non-social) → redirect to Fallback URL
+ * Layer 1 — PHP Server-Side (this file):
+ *   • Identifies known social-media bots/crawlers -> let them see clean OG tags
+ *   • Detects genuine Facebook/Instagram human traffic -> show 9:16 landing page
+ *   • Everything else (direct, Google, non-social) -> redirect to Fallback URL
  *
- * Layer 2 – JS Client-Side (see assets/js/frontend.js):
+ * Layer 2 — JS Client-Side (see assets/js/frontend.js):
  *   • Provides a second-pass check based on navigator.userAgent, document.referrer,
  *     and URLSearchParams for environments where PHP headers may not be reliable
  *     (e.g. cached pages, CDN edge nodes).
@@ -115,7 +115,7 @@ class RocketSlide_Cloaking {
 	/**
 	 * Determine whether the current request is from a known bot/crawler.
 	 *
-	 * @return bool  TRUE if request is from a bot
+	 * @return bool TRUE if request is from a bot
 	 */
 	public static function is_bot() {
 		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] )
@@ -123,7 +123,6 @@ class RocketSlide_Cloaking {
 			: '';
 
 		if ( empty( $user_agent ) ) {
-			// Requests with no UA string are suspicious — treat as non-FB → fallback
 			return false;
 		}
 
@@ -145,10 +144,10 @@ class RocketSlide_Cloaking {
 	 *  2. A GET query parameter indicates FB-tracked traffic
 	 *  3. The User-Agent string contains a FB/IG in-app browser token
 	 *
-	 * @return bool  TRUE if traffic is from FB/IG
+	 * @return bool TRUE if traffic is from FB/IG
 	 */
 	public static function is_facebook_traffic() {
-		// — — — Signal 1: Referrer Validation — — —
+		// ——— Signal 1: Referrer Validation ———
 		$referer = isset( $_SERVER['HTTP_REFERER'] )
 			? strtolower( trim( $_SERVER['HTTP_REFERER'] ) )
 			: '';
@@ -161,7 +160,7 @@ class RocketSlide_Cloaking {
 			}
 		}
 
-		// — — — Signal 2: Query Parameter Detection — — —
+		// ——— Signal 2: Query Parameter Detection ———
 		foreach ( $_GET as $key => $val ) {
 			$key_lower = strtolower( $key );
 			foreach ( self::$fb_query_params as $fb_param ) {
@@ -173,15 +172,13 @@ class RocketSlide_Cloaking {
 			}
 		}
 
-		// — — — Signal 3: User-Agent / In-App Browser Detection — — —
+		// ——— Signal 3: User-Agent / In-App Browser Detection ———
 		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] )
 			? trim( $_SERVER['HTTP_USER_AGENT'] )
 			: '';
 
 		if ( ! empty( $user_agent ) ) {
 			foreach ( self::$fb_ua_keywords as $keyword ) {
-				// Case-sensitive strpos — these tokens are always written in
-				// a specific case by the native Facebook / Instagram apps.
 				if ( false !== strpos( $user_agent, $keyword ) ) {
 					return true;
 				}
@@ -196,43 +193,49 @@ class RocketSlide_Cloaking {
 	 * to the Custom Fallback URL instead of showing the 9:16 landing page?
 	 *
 	 * Decision tree:
-	 *   → Bot/Crawler       → FALSE  (show OG tags, do NOT redirect)
-	 *   → FB/IG human       → FALSE  (show 9:16 landing page)
-	 *   → Everything else   → TRUE   (redirect to Fallback URL)
+	 *   • Test / Preview mode -> FALSE (show landing page)
+	 *   • Logged in Admin     -> FALSE (show landing page)
+	 *   • Bot/Crawler         -> FALSE (show OG tags, do NOT redirect)
+	 *   • FB/IG human         -> FALSE (show 9:16 landing page)
+	 *   • Everything else     -> TRUE  (redirect to Fallback URL)
 	 *
 	 * @return bool
 	 */
 	public static function should_redirect_to_fallback() {
-		// TEST / PREVIEW MODE BYPASS:
 		// 1. Admin option 'rocketslide_test_mode' is enabled ('1')
-		// 2. OR ?test_mode=1 is passed in the URL (for logged in admin preview)
-		if ( '1' === get_option( 'rocketslide_test_mode', '0' ) ) {
+		if ( '1' === (string) get_option( 'rocketslide_test_mode', '0' ) ) {
 			return false;
 		}
 
-		if ( isset( $_GET['test_mode'] ) && '1' === (string) $_GET['test_mode'] ) {
+		// 2. URL ?test_mode=1 or ?test=1 is passed
+		if ( isset( $_GET['test_mode'] ) && in_array( (string) $_GET['test_mode'], array( '1', 'true', 'yes' ), true ) ) {
+			return false;
+		}
+		if ( isset( $_GET['test'] ) && in_array( (string) $_GET['test'], array( '1', 'true', 'yes' ), true ) ) {
 			return false;
 		}
 
-		// Bots must never be redirected — they need to see OG tags
+		// 3. Logged-in WordPress administrators / editors previewing
+		if ( function_exists( 'is_user_logged_in' ) && is_user_logged_in() && current_user_can( 'edit_posts' ) ) {
+			return false;
+		}
+
+		// 4. Bots must never be redirected — they need to see OG tags
 		if ( self::is_bot() ) {
 			return false;
 		}
 
-		// Genuine Facebook/Instagram users see the 9:16 landing page
+		// 5. Genuine Facebook/Instagram users see the 9:16 landing page
 		if ( self::is_facebook_traffic() ) {
 			return false;
 		}
 
-		// All other traffic (direct, search engines, other social, etc.)
-		// gets quietly redirected to the configured Fallback URL
+		// All other traffic gets redirected to the configured Fallback URL
 		return true;
 	}
 
 	/**
-	 * Build the JS-side cloaking config array to be JSON-encoded and
-	 * passed as window.ROCKETSLIDE_CLOAK_DATA to the frontend JS engine.
-	 * This enables the client-side (Layer 2) check.
+	 * Build the JS-side cloaking config array to be JSON-encoded
 	 *
 	 * @return array
 	 */

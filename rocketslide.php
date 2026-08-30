@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name:  RocketSlide - 9:16 Mobile Landing Page
- * Plugin URI:   https://rocketslide.com/plugin
- * Description:  All-in-one isolated 9:16 vertical reels landing page with advanced Facebook/Instagram
+ * Plugin Name:  RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
+ * Plugin URI:   https://rocketslide.com
+ * Description:  Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with
  *               dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics
- *               integration, automatic 540x960 WebP conversion, and a modern dark-mode admin dashboard.
+ *               integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard.
  *               100% self-contained — no custom theme or external pages required.
- * Version:      3.5.0
+ * Version:      3.6.0
  * Author:       RocketSlide Engine
  * Author URI:   https://rocketslide.com
  * Text Domain:  rocketslide-lp
@@ -26,17 +26,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ============================================================
 // PLUGIN CONSTANTS
 // ============================================================
-define( 'ROCKETSLIDE_VERSION',     '3.5.0' );
+define( 'ROCKETSLIDE_VERSION',     '3.6.0' );
 define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
 define( 'ROCKETSLIDE_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'ROCKETSLIDE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
 
 /**
  * Returns the absolute filesystem path to the plugin's dedicated upload folder.
- * We use a function (not a constant) because wp_upload_dir() may not be
- * available this early in some WordPress environments.
  *
- * @return string  e.g. /var/www/html/wp-content/uploads/rocketslide/
+ * @return string e.g. /var/www/html/wp-content/uploads/rocketslide/
  */
 function rocketslide_uploads_dir() {
 	return wp_upload_dir()['basedir'] . '/rocketslide/';
@@ -45,7 +43,7 @@ function rocketslide_uploads_dir() {
 /**
  * Returns the public URL to the plugin's dedicated upload folder.
  *
- * @return string  e.g. https://example.com/wp-content/uploads/rocketslide/
+ * @return string e.g. https://example.com/wp-content/uploads/rocketslide/
  */
 function rocketslide_uploads_url() {
 	return wp_upload_dir()['baseurl'] . '/rocketslide/';
@@ -66,7 +64,7 @@ function rocketslide_get_default_images() {
 			'timer'          => 0,
 			'username'       => '@viral_reels_official',
 			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-1.webp',
-			'caption'        => 'Wait till the end! 😱🔥 #viral #trending #reels',
+			'caption'        => 'Wait till the end! #viral #trending #reels',
 			'likes_count'    => '142.8K',
 			'comments_count' => '3.4K',
 			'shares_count'   => '18.9K',
@@ -80,7 +78,7 @@ function rocketslide_get_default_images() {
 			'timer'          => 0,
 			'username'       => '@top_trends_daily',
 			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-2.webp',
-			'caption'        => 'You won\'t believe this happened... 💥 #foryou #fyp',
+			'caption'        => 'You won\'t believe this happened... #foryou #fyp',
 			'likes_count'    => '98.5K',
 			'comments_count' => '2.1K',
 			'shares_count'   => '11.4K',
@@ -94,7 +92,7 @@ function rocketslide_get_default_images() {
 			'timer'          => 0,
 			'username'       => '@reels_hub_vids',
 			'user_avatar'    => ROCKETSLIDE_PLUGIN_URL . 'assets/images/sample-3.webp',
-			'caption'        => 'Tap anywhere to watch full video! 🎬✨',
+			'caption'        => 'Tap anywhere to watch full video!',
 			'likes_count'    => '215.3K',
 			'comments_count' => '5.9K',
 			'shares_count'   => '29.7K',
@@ -122,7 +120,7 @@ require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-admin.php';
  */
 final class RocketSlide_Landing_Page {
 
-	/** @var RocketSlide_Landing_Page|null  Singleton instance */
+	/** @var RocketSlide_Landing_Page|null Singleton instance */
 	private static $instance = null;
 
 	/**
@@ -140,12 +138,12 @@ final class RocketSlide_Landing_Page {
 	/** Private constructor — use get_instance() */
 	private function __construct() {
 		$this->register_lifecycle_hooks();
+		$this->self_heal_defaults();
 		$this->boot_components();
 	}
 
 	/**
 	 * Register activation / deactivation hooks.
-	 * These must be called with the MAIN plugin file path.
 	 */
 	private function register_lifecycle_hooks() {
 		register_activation_hook( ROCKETSLIDE_PLUGIN_FILE, array( $this, 'on_activate' ) );
@@ -153,14 +151,41 @@ final class RocketSlide_Landing_Page {
 	}
 
 	/**
+	 * Ensure upload directory and default options exist on any site automatically.
+	 */
+	private function self_heal_defaults() {
+		$installed_ver = get_option( 'rocketslide_version' );
+		if ( $installed_ver !== ROCKETSLIDE_VERSION ) {
+			update_option( 'rocketslide_version', ROCKETSLIDE_VERSION );
+
+			$upload_dir = rocketslide_uploads_dir();
+			if ( ! file_exists( $upload_dir ) ) {
+				wp_mkdir_p( $upload_dir );
+			}
+
+			$defaults = array(
+				'rocketslide_slug'             => 'v',
+				'rocketslide_tab_title'        => 'Exclusive Video Content',
+				'rocketslide_fallback_url'     => 'https://google.com',
+				'rocketslide_tracking_script'  => '',
+				'rocketslide_test_mode'        => '0',
+				'rocketslide_images'           => rocketslide_get_default_images(),
+			);
+
+			foreach ( $defaults as $key => $value ) {
+				if ( false === get_option( $key ) ) {
+					add_option( $key, $value );
+				}
+			}
+		}
+	}
+
+	/**
 	 * Instantiate every component class.
-	 * Each class registers its own WordPress hooks internally.
 	 */
 	private function boot_components() {
 		new RocketSlide_Frontend();
 		new RocketSlide_Admin();
-		// RocketSlide_Cloaking & RocketSlide_Image_Processor are static-utility classes
-		// — they don't need instantiation; they're called by Frontend & Admin.
 	}
 
 	// -----------------------------------------------------------
@@ -169,24 +194,18 @@ final class RocketSlide_Landing_Page {
 
 	/**
 	 * Runs once when the plugin is activated.
-	 *  - Creates the /uploads/rocketslide/ directory
-	 *  - Seeds default option values (only if they don't exist yet)
-	 *  - Registers rewrite rules & flushes so /v/ works immediately
 	 */
 	public function on_activate() {
-		// Create dedicated upload folder
 		$upload_dir = rocketslide_uploads_dir();
 		if ( ! file_exists( $upload_dir ) ) {
 			wp_mkdir_p( $upload_dir );
 
-			// Drop an .htaccess that allows webp serving (Apache)
 			$htaccess = $upload_dir . '.htaccess';
 			if ( ! file_exists( $htaccess ) ) {
 				file_put_contents( $htaccess, "Options -Indexes\n" );
 			}
 		}
 
-		// Seed default options (won't overwrite existing values)
 		$defaults = array(
 			'rocketslide_slug'             => 'v',
 			'rocketslide_tab_title'        => 'Exclusive Video Content',
@@ -201,7 +220,6 @@ final class RocketSlide_Landing_Page {
 			}
 		}
 
-		// Register rewrite rules THEN flush so the slug works immediately
 		RocketSlide_Frontend::register_rewrite_rules();
 		flush_rewrite_rules();
 	}
@@ -210,12 +228,6 @@ final class RocketSlide_Landing_Page {
 	// DEACTIVATION
 	// -----------------------------------------------------------
 
-	/**
-	 * Runs once when the plugin is deactivated.
-	 * Flushes rewrite rules so WordPress removes the custom slug.
-	 * Note: We intentionally do NOT delete uploaded images or options
-	 * on deactivation — only on uninstall (which would use uninstall.php).
-	 */
 	public function on_deactivate() {
 		flush_rewrite_rules();
 	}
