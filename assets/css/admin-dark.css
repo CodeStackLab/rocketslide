@@ -25,6 +25,7 @@
     color: var(--text-main);
     margin: 20px 20px 40px 0;
     max-width: 1200px;
+    box-sizing: border-box;
 }
 
 /* Header */
@@ -225,6 +226,7 @@
     padding: 24px;
     box-shadow: var(--card-shadow);
     box-sizing: border-box;
+    margin-bottom: 20px;
 }
 
 .rocketslide-card-header {
@@ -511,7 +513,7 @@
     transform: translateY(-2px);
 }
 
-/* Cloaking Box & Active Filter Signals - 100% Mobile Clean & Fluid */
+/* Cloaking Box & Active Filter Signals */
 .rocketslide-cloaking-box {
     background: var(--surface-2);
     border: 1px solid var(--border);
@@ -583,6 +585,7 @@
     align-items: center;
     gap: 10px;
     margin-top: 18px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
 }
 
@@ -647,22 +650,37 @@
     user-select: none;
 }
 
-/* Toast */
+/* Toast Notifications - Always High Z-Index & Clear of Bottom Nav */
 .rocketslide-toast {
     position: fixed;
-    bottom: 24px;
-    right: 20px;
-    padding: 10px 18px;
-    border-radius: 8px;
-    font-weight: 600;
-    font-size: 13px;
+    bottom: 30px;
+    right: 24px;
+    padding: 12px 22px;
+    border-radius: 10px;
+    font-weight: 700;
+    font-size: 14px;
     color: #ffffff;
-    z-index: 200000;
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 10000000 !important;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    animation: toastSlideIn 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.rocketslide-toast.success { background: var(--green); }
-.rocketslide-toast.error   { background: var(--red); }
+.rocketslide-toast.success { background: #16a34a !important; }
+.rocketslide-toast.error   { background: #dc2626 !important; }
+
+@keyframes toastSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
 
 /* Mobile Bottom Nav */
 .rocketslide-mobile-nav {
@@ -684,9 +702,29 @@
         overflow-x: hidden !important;
     }
 
+    /* Generous Bottom Padding so content is never blocked by bottom nav */
     .rocketslide-wrap {
-        padding: 10px 10px calc(90px + env(safe-area-inset-bottom, 0px)) 10px !important;
+        padding: 10px 10px calc(110px + env(safe-area-inset-bottom, 0px)) 10px !important;
         margin-right: 0 !important;
+        margin-bottom: 20px !important;
+    }
+
+    .rocketslide-tab-panel {
+        padding-bottom: 30px !important;
+    }
+
+    /* Floating Toast on Mobile - Floats Safely Above Fixed Nav Bar */
+    .rocketslide-toast {
+        bottom: 84px !important;
+        left: 16px !important;
+        right: 16px !important;
+        width: calc(100% - 32px) !important;
+        max-width: 420px !important;
+        margin: 0 auto !important;
+        text-align: center !important;
+        justify-content: center !important;
+        z-index: 10000000 !important;
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25) !important;
     }
 
     .rocketslide-header {
@@ -778,6 +816,7 @@
 
     .rocketslide-card {
         padding: 18px 14px !important;
+        margin-bottom: 16px !important;
     }
 
     .rocketslide-upload-row {
@@ -878,10 +917,12 @@
     .rocketslide-actions {
         flex-direction: column !important;
         align-items: stretch !important;
+        margin-top: 14px !important;
+        margin-bottom: 14px !important;
     }
 
     .rocketslide-actions .rocketslide-btn {
         width: 100% !important;
-        height: 42px !important;
+        height: 44px !important;
     }
 }
