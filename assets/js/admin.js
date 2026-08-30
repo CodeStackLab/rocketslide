@@ -3,7 +3,7 @@
 
     $(document).ready(function () {
 
-        // 1. Tab Navigation (Desktop Tabs + Mobile Bottom Nav Bar)
+        // 1. Navigation Tab Switching
         $('.rocketslide-tab-btn, .rocketslide-mobile-nav-item').on('click', function (e) {
             var targetTab = $(this).data('tab');
             if (!targetTab) return;
@@ -33,7 +33,7 @@
             var originalHtml = $btn.html();
 
             function onCopySuccess() {
-                $btn.html('✅ Copied!').addClass('copied');
+                $btn.html('✓ Copied!').addClass('copied');
                 showNotice('🔗 Live Landing Page URL copied to clipboard!', false);
                 setTimeout(function () {
                     $btn.html(originalHtml).removeClass('copied');
@@ -71,7 +71,7 @@
             }
 
             mediaUploader = wp.media({
-                title: '📁 Select or Upload 9:16 Reel Image (Local File or Media Gallery)',
+                title: '🖼️ Select or Upload 9:16 Reel Image (Local File or Media Gallery)',
                 button: { text: 'Select & Auto-Crop to 9:16 WebP' },
                 multiple: false
             });
@@ -80,7 +80,7 @@
                 var attachment = mediaUploader.state().get('selection').first().toJSON();
                 $('#rocketslide-media-id').val(attachment.id);
                 $('#rocketslide-file-input').val('');
-                $('#rocketslide-file-name').html('✅ Gallery: <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
+                $('#rocketslide-file-name').html('✓ Gallery: <strong style="color:var(--blue);">' + (attachment.filename || attachment.title || 'Selected Image') + '</strong>');
 
                 // Render Live Thumbnail Preview
                 if (attachment.url) {
@@ -102,7 +102,7 @@
             var file = this.files[0];
             if (file) {
                 $('#rocketslide-media-id').val('');
-                $('#rocketslide-file-name').html('✅ PC File: <strong style="color:var(--blue);">' + file.name + '</strong>');
+                $('#rocketslide-file-name').html('✓ PC File: <strong style="color:var(--blue);">' + file.name + '</strong>');
 
                 // Render Local Computer Image Preview
                 var reader = new FileReader();
@@ -155,7 +155,7 @@
         // 4. Verify Publytics / Tracking Script Engine
         function checkTrackingVerification() {
             var $badge = $('#rocketslide-publytics-status');
-            $badge.removeClass('verified inactive').addClass('checking').html('🟡 Checking...');
+            $badge.removeClass('verified inactive').addClass('checking').html('🔄 Checking...');
 
             var data = {
                 action: 'rocketslide_verify_publytics',
@@ -164,10 +164,10 @@
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
                 if (res.success) {
-                    $badge.removeClass('checking inactive').addClass('verified').html('🟢 Status: Verified (HTTP 200 OK)');
+                    $badge.removeClass('checking inactive').addClass('verified').html('⚡ Status: Verified (HTTP 200 OK)');
                     $('#rocketslide-verification-output').show().text(res.data.message + '\nDomain: ' + (res.data.domain || 'All') + '\nScript: ' + res.data.script_url);
                 } else {
-                    $badge.removeClass('checking verified').addClass('inactive').html('🔴 Status: Inactive / Unverified');
+                    $badge.removeClass('checking verified').addClass('inactive').html('⚪ Status: Inactive / Unverified');
                     $('#rocketslide-verification-output').show().text('Error: ' + res.data);
                 }
             });
@@ -217,184 +217,14 @@
             }
         });
 
-        // Avatar WP Media Picker for New Reel Form
-        var avatarUploader;
-        $('#rocketslide-select-avatar-btn').on('click', function (e) {
-            e.preventDefault();
-            if (avatarUploader) {
-                avatarUploader.open();
-                return;
-            }
-            avatarUploader = wp.media({
-                title: '👤 Choose User Profile Avatar',
-                button: { text: 'Use Avatar Image' },
-                multiple: false
-            });
-            avatarUploader.on('select', function () {
-                var attachment = avatarUploader.state().get('selection').first().toJSON();
-                $('#rocketslide-new-user-avatar').val(attachment.url);
-            });
-            avatarUploader.open();
-        });
-
-        // Local Computer Avatar Upload for New Reel Form
-        $('#rocketslide-upload-avatar-computer-btn').on('click', function (e) {
-            e.preventDefault();
-            $('#rocketslide-new-avatar-file-input').trigger('click');
-        });
-
-        $('#rocketslide-new-avatar-file-input').on('change', function () {
-            var files = this.files;
-            if (!files || files.length === 0) return;
-
-            var formData = new FormData();
-            formData.append('action', 'rocketslide_upload_avatar');
-            formData.append('nonce', rocketslide_admin_vars.nonce);
-            formData.append('avatar_file', files[0]);
-
-            showNotice('Uploading avatar image...', false);
-
-            $.ajax({
-                url: rocketslide_admin_vars.ajax_url,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    if (res.success) {
-                        $('#rocketslide-new-user-avatar').val(res.data.url);
-                        showNotice('👤 Avatar image uploaded successfully!', false);
-                    } else {
-                        showNotice(res.data || 'Avatar upload failed.', true);
-                    }
-                },
-                error: function () {
-                    showNotice('Server error uploading avatar.', true);
-                }
-            });
-        });
-
-        // Avatar WP Media Picker for Individual Cards
-        $(document).on('click', '.rocketslide-pick-card-avatar-btn', function (e) {
-            e.preventDefault();
-            var $input = $(this).siblings('.rocketslide-card-avatar');
-            var cardAvatarPicker = wp.media({
-                title: '👤 Choose User Profile Avatar',
-                button: { text: 'Use Avatar Image' },
-                multiple: false
-            });
-            cardAvatarPicker.on('select', function () {
-                var attachment = cardAvatarPicker.state().get('selection').first().toJSON();
-                $input.val(attachment.url);
-            });
-            cardAvatarPicker.open();
-        });
-
-        // Local Computer Avatar Upload for Individual Cards
-        $(document).on('click', '.rocketslide-pick-card-avatar-computer-btn', function (e) {
-            e.preventDefault();
-            var $fileInput = $(this).siblings('.rocketslide-card-avatar-file-input');
-            $fileInput.trigger('click');
-        });
-
-        $(document).on('change', '.rocketslide-card-avatar-file-input', function () {
-            var files = this.files;
-            if (!files || files.length === 0) return;
-
-            var $urlInput = $(this).siblings('.rocketslide-card-avatar');
-            var formData = new FormData();
-            formData.append('action', 'rocketslide_upload_avatar');
-            formData.append('nonce', rocketslide_admin_vars.nonce);
-            formData.append('avatar_file', files[0]);
-
-            showNotice('Uploading avatar image...', false);
-
-            $.ajax({
-                url: rocketslide_admin_vars.ajax_url,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    if (res.success) {
-                        $urlInput.val(res.data.url);
-                        showNotice('👤 Card avatar uploaded successfully!', false);
-                    } else {
-                        showNotice(res.data || 'Avatar upload failed.', true);
-                    }
-                },
-                error: function () {
-                    showNotice('Server error uploading avatar.', true);
-                }
-            });
-        });
-
-        // WP Media Gallery Avatar Picker for Top Form
-        $('#rocketslide-select-avatar-btn').on('click', function (e) {
-            e.preventDefault();
-            var topAvatarPicker = wp.media({
-                title: 'Select Profile Avatar Image',
-                button: { text: 'Use Avatar Image' },
-                multiple: false
-            });
-            topAvatarPicker.on('select', function () {
-                var attachment = topAvatarPicker.state().get('selection').first().toJSON();
-                $('#rocketslide-new-user-avatar').val(attachment.url);
-                showNotice('👤 Top form avatar selected!', false);
-            });
-            topAvatarPicker.open();
-        });
-
-        // Local Computer Avatar Upload for Top Form
-        $('#rocketslide-upload-avatar-computer-btn').on('click', function (e) {
-            e.preventDefault();
-            $('#rocketslide-new-avatar-file-input').trigger('click');
-        });
-
-        $('#rocketslide-new-avatar-file-input').on('change', function () {
-            var files = this.files;
-            if (!files || files.length === 0) return;
-
-            var formData = new FormData();
-            formData.append('action', 'rocketslide_upload_avatar');
-            formData.append('nonce', rocketslide_admin_vars.nonce);
-            formData.append('avatar_file', files[0]);
-
-            showNotice('Uploading avatar image...', false);
-
-            $.ajax({
-                url: rocketslide_admin_vars.ajax_url,
-                type: 'POST',
-                data: formData,
-                contentType: false,
-                processData: false,
-                success: function (res) {
-                    if (res.success) {
-                        $('#rocketslide-new-user-avatar').val(res.data.url);
-                        showNotice('👤 Avatar uploaded successfully!', false);
-                    } else {
-                        showNotice(res.data || 'Avatar upload failed.', true);
-                    }
-                },
-                error: function () {
-                    showNotice('Server error uploading avatar.', true);
-                }
-            });
-        });
-
         // 6. Upload & Process Image Form
         $('#rocketslide-add-image-form').on('submit', function (e) {
             e.preventDefault();
 
-            var fileInput      = $('#rocketslide-file-input')[0];
-            var mediaId        = $('#rocketslide-media-id').val();
-            var targetUrl      = $('#rocketslide-new-target-url').val();
-            var username       = $('#rocketslide-new-username').val() || '@viral_reels';
-            var userAvatar     = $('#rocketslide-new-user-avatar').val() || '';
-            var likesCount     = $('#rocketslide-new-likes').val() || '142.8K';
-            var commentsCount  = $('#rocketslide-new-comments').val() || '3.4K';
-            var sharesCount    = $('#rocketslide-new-shares').val() || '18.9K';
-            var timer          = $('#rocketslide-new-timer').val() || 0;
+            var fileInput = $('#rocketslide-file-input')[0];
+            var mediaId   = $('#rocketslide-media-id').val();
+            var targetUrl = $('#rocketslide-new-target-url').val();
+            var timer     = $('#rocketslide-new-timer').val() || 0;
 
             if (!mediaId && (!fileInput.files || fileInput.files.length === 0)) {
                 showNotice('Please select an image file first via "Upload from Computer" or "Choose from WP Gallery".', true);
@@ -406,11 +236,6 @@
             formData.append('nonce', rocketslide_admin_vars.nonce);
             formData.append('target_url', targetUrl);
             formData.append('timer', timer);
-            formData.append('username', username);
-            formData.append('user_avatar', userAvatar);
-            formData.append('likes_count', likesCount);
-            formData.append('comments_count', commentsCount);
-            formData.append('shares_count', sharesCount);
 
             if (mediaId) {
                 formData.append('media_id', mediaId);
@@ -438,22 +263,21 @@
                         
                         $('#rocketslide-empty-state').remove();
                         var img = res.data.image;
-                        var avatarHtml = img.user_avatar ? `<img src="${img.user_avatar}" class="thumb-avatar" alt="Avatar">` : `<span class="thumb-avatar-placeholder">👤</span>`;
                         var cardHtml = `
                             <div class="rocketslide-img-card" data-id="${img.id}">
                                 <div class="rocketslide-img-thumb">
                                     <img src="${img.url}" alt="Reel Card">
                                     <span class="rocketslide-img-index">NEW</span>
                                     <span class="rocketslide-img-format-badge">WebP</span>
-                                    <div class="rocketslide-thumb-user-badge">
-                                        ${avatarHtml}
-                                        <span>${img.username || '@viral_reels'}</span>
-                                    </div>
                                 </div>
                                 <div class="rocketslide-img-body">
                                     <div>
                                         <label class="rocketslide-label">Target URL:</label>
                                         <input type="url" class="rocketslide-input rocketslide-card-target" value="${img.target_url}">
+                                    </div>
+                                    <div style="margin-top:8px;">
+                                        <label class="rocketslide-label">Timer (s):</label>
+                                        <input type="number" min="0" class="rocketslide-input rocketslide-card-timer" value="${img.timer || 0}">
                                     </div>
                                     <div class="rocketslide-img-card-actions" style="margin-top:12px;">
                                         <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
@@ -479,29 +303,17 @@
         // 7. Save Individual Image Card Details
         $(document).on('click', '.rocketslide-save-card-btn', function (e) {
             e.preventDefault();
-            var $card          = $(this).closest('.rocketslide-img-card');
-            var cardId         = $card.data('id');
-            var targetUrl      = $card.find('.rocketslide-card-target').val();
-            var timer          = $card.find('.rocketslide-card-timer').val();
-            var username       = $card.find('.rocketslide-card-username').val();
-            var userAvatar     = $card.find('.rocketslide-card-avatar').val();
-            var caption        = $card.find('.rocketslide-card-caption').val();
-            var likesCount     = $card.find('.rocketslide-card-likes').val();
-            var commentsCount  = $card.find('.rocketslide-card-comments').val();
-            var sharesCount    = $card.find('.rocketslide-card-shares').val();
+            var $card     = $(this).closest('.rocketslide-img-card');
+            var cardId    = $card.data('id');
+            var targetUrl = $card.find('.rocketslide-card-target').val();
+            var timer     = $card.find('.rocketslide-card-timer').val() || 0;
 
             var data = {
                 action: 'rocketslide_update_image',
                 nonce: rocketslide_admin_vars.nonce,
                 id: cardId,
                 target_url: targetUrl,
-                timer: timer,
-                username: username,
-                user_avatar: userAvatar,
-                caption: caption,
-                likes_count: likesCount,
-                comments_count: commentsCount,
-                shares_count: sharesCount
+                timer: timer
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
@@ -536,7 +348,7 @@
                         if (res.data.total === 0) {
                             $('#rocketslide-images-container').html('<div class="rocketslide-empty-state" id="rocketslide-empty-state"><div class="empty-icon">🖼️</div><p>No 9:16 reel images added yet.</p></div>');
                         }
-                        updatePagination();
+                        updateLoadMore();
                     });
                 } else {
                     showNotice(res.data || 'Failed to delete image', true);
@@ -574,7 +386,7 @@
 
             if (remainingCount > 0) {
                 $('#rocketslide-loadmore-btn').show().html(
-                    '⬇️ Load More Reels (' + remainingCount + ' Remaining)'
+                    '📥 Load More Reels (' + remainingCount + ' Remaining)'
                 );
                 $('#rocketslide-loadmore-wrapper').show();
             } else if (totalCards > stepCount) {

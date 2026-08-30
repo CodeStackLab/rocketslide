@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -69,7 +69,7 @@ $is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_
 
     <?php if ($is_test_mode) : ?>
         <div class="rocketslide-test-mode-pill">
-            🧪 TEST MODE ACTIVE (Direct Preview)
+            ⚡ TEST MODE ACTIVE (Direct Preview)
         </div>
     <?php endif; ?>
 
@@ -78,10 +78,10 @@ $is_bot       = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_
         <div id="redirect-progress-bar"></div>
     </div>
 
-    <!-- 9:16 Vertical TikTok/Reels Centered Container -->
+    <!-- 9:16 Vertical Centered Container -->
     <main class="reels-main-wrapper">
         <div id="rocketslide-reels-container" class="reels-container">
-            <!-- Dynamic Reel Cards rendered by frontend.js -->
+            <!-- Dynamic Cards rendered by frontend.js -->
         </div>
     </main>
 

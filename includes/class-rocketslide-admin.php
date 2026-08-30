@@ -2,7 +2,7 @@
 /**
  * class-rocketslide-admin.php
  *
- * MODERN DARK-MODE ADMIN DASHBOARD & PLUGIN SETTINGS MANAGER
+ * MODERN LIGHT-MODE ADMIN DASHBOARD & PLUGIN SETTINGS MANAGER
  * ==========================================================
  *
  * Provides a responsive, simple, and clean Settings Manager UI for:
@@ -37,7 +37,6 @@ class RocketSlide_Admin {
         add_action('wp_ajax_rocketslide_save_settings', array($this, 'ajax_save_settings'));
         add_action('wp_ajax_rocketslide_verify_publytics', array($this, 'ajax_verify_publytics'));
         add_action('wp_ajax_rocketslide_upload_image', array($this, 'ajax_upload_image'));
-        add_action('wp_ajax_rocketslide_upload_avatar', array($this, 'ajax_upload_avatar'));
         add_action('wp_ajax_rocketslide_update_image', array($this, 'ajax_update_image'));
         add_action('wp_ajax_rocketslide_delete_image', array($this, 'ajax_delete_image'));
     }
@@ -198,125 +197,116 @@ class RocketSlide_Admin {
             <div class="rocketslide-stats-row">
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">🎬</span>
-                    <span class="stat-value" id="rocketslide-stat-images-count" style="color: #58a6ff;"><?php echo count($images); ?></span>
+                    <span class="stat-value" id="rocketslide-stat-images-count" style="color: #2563eb;"><?php echo count($images); ?></span>
                     <span class="stat-label">Active Reels</span>
                 </div>
                 <div class="rocketslide-stat-card">
-                    <span class="stat-icon"><?php echo ($test_mode === '1') ? '🧪' : '🛡️'; ?></span>
-                    <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#f0883e' : '#3fb950'; ?>;">
+                    <span class="stat-icon"><?php echo ($test_mode === '1') ? '⚡' : '🛡️'; ?></span>
+                    <span class="stat-value" style="color: <?php echo ($test_mode === '1') ? '#d97706' : '#16a34a'; ?>;">
                         <?php echo ($test_mode === '1') ? 'Testing' : 'Live'; ?>
                     </span>
                     <span class="stat-label"><?php echo ($test_mode === '1') ? 'Test Mode On' : 'Cloaking Active'; ?></span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">📡</span>
-                    <span class="stat-value" style="color: <?php echo !empty($tracking_script) ? '#bc8cff' : '#484f58'; ?>;">
+                    <span class="stat-value" style="color: <?php echo !empty($tracking_script) ? '#7c3aed' : '#64748b'; ?>;">
                         <?php echo !empty($tracking_script) ? 'Active' : 'Off'; ?>
                     </span>
                     <span class="stat-label">Analytics Pixel</span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon">⚡</span>
-                    <span class="stat-value" style="color: #58a6ff;">WebP HD</span>
+                    <span class="stat-value" style="color: #2563eb;">WebP HD</span>
                     <span class="stat-label">Auto 1080×1920</span>
                 </div>
             </div>
 
-            <!-- Desktop Navigation Tabs -->
-            <nav class="rocketslide-tabs-nav">
-                <button class="rocketslide-tab-btn active" data-tab="tab-images">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-                    Reels Manager
+            <!-- Navigation Tabs -->
+            <div class="rocketslide-tabs-nav">
+                <button type="button" class="rocketslide-tab-btn active" data-tab="tab-images">
+                    <span class="dashicons dashicons-format-gallery"></span> Reels Manager
                 </button>
-                <button class="rocketslide-tab-btn" data-tab="tab-tracking">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-                    Analytics
+                <button type="button" class="rocketslide-tab-btn" data-tab="tab-tracking">
+                    <span class="dashicons dashicons-chart-bar"></span> Analytics
                 </button>
-                <button class="rocketslide-tab-btn" data-tab="tab-fallback">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    Cloaking
+                <button type="button" class="rocketslide-tab-btn" data-tab="tab-fallback">
+                    <span class="dashicons dashicons-shield"></span> Cloaking
                 </button>
-                <button class="rocketslide-tab-btn" data-tab="tab-settings">
-                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
-                    Settings
+                <button type="button" class="rocketslide-tab-btn" data-tab="tab-settings">
+                    <span class="dashicons dashicons-admin-generic"></span> Settings
                 </button>
-            </nav>
+            </div>
 
-            <!-- Tab 1: Image & Target Link Manager -->
+            <!-- Tab 1: Image & Reels Management -->
             <div class="rocketslide-tab-panel active" id="tab-images">
-                <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">✨ Add New 9:16 TikTok Reel Image</h3>
-                    <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be auto-cropped to TikTok 9:16 vertical ratio (1080×1920 HD WebP) automatically.</p>
-                    
-                    <form id="rocketslide-add-image-form">
-                        <div class="rocketslide-add-form-container">
-                            <!-- Row 1: Select Reel Image & Target Redirect URL -->
-                            <div class="rocketslide-form-grid-2">
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Select Reel Image (TikTok 9:16 / 1080×1920 WebP) <span class="req">*</span></label>
-                                    <div class="rocketslide-file-picker">
-                                        <input type="file" id="rocketslide-file-input" accept="image/*" class="rocketslide-file-hidden">
-                                        <input type="hidden" id="rocketslide-media-id" value="">
-                                        <button type="button" id="rocketslide-upload-computer-btn" class="rocketslide-btn rocketslide-btn-primary"><span class="dashicons dashicons-desktop" style="font-size:16px; width:16px; height:16px; margin-right:4px; vertical-align:middle;"></span> Upload from Computer</button>
-                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary"><span class="dashicons dashicons-admin-media" style="font-size:16px; width:16px; height:16px; margin-right:4px; vertical-align:middle;"></span> Choose from WP Gallery</button>
+                <!-- Add New Reel Form Card -->
+                <div class="rocketslide-card" style="margin-bottom: 24px;">
+                    <div class="rocketslide-card-header">
+                        <h3 class="rocketslide-card-title">✨ Add New 9:16 Reel Image</h3>
+                        <p class="rocketslide-card-subtitle">Upload any image file or choose from WordPress Media Library. It will be auto-cropped to 9:16 vertical ratio (540×960 HD WebP) automatically.</p>
+                    </div>
+
+                    <form id="rocketslide-add-image-form" enctype="multipart/form-data">
+                        <div class="rocketslide-form-container">
+                            
+                            <!-- 1. Upload Source Container -->
+                            <div class="rocketslide-upload-box">
+                                <div class="rocketslide-upload-box-header">
+                                    <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:0;">
+                                        📸 Select Reel Image (9:16 WebP) <span class="req">*</span>
+                                    </label>
+                                </div>
+                                <div class="rocketslide-upload-row">
+                                    <div class="rocketslide-picker-btn-group">
+                                        <button type="button" id="rocketslide-upload-computer-btn" class="rocketslide-btn rocketslide-btn-primary">
+                                            <span class="dashicons dashicons-desktop"></span> Upload from Computer
+                                        </button>
+                                        <button type="button" id="rocketslide-select-media-btn" class="rocketslide-btn rocketslide-btn-secondary">
+                                            <span class="dashicons dashicons-admin-media"></span> Choose from WP Gallery
+                                        </button>
+                                    </div>
+                                    <input type="file" id="rocketslide-file-input" name="image_file" accept="image/*" class="rocketslide-file-hidden" style="display:none;">
+                                    <input type="hidden" id="rocketslide-media-id" name="media_id" value="">
+                                    
+                                    <div class="rocketslide-file-indicator">
                                         <span id="rocketslide-file-name" class="rocketslide-file-name">No file chosen</span>
                                     </div>
-                                    <div id="rocketslide-image-preview-wrapper" style="display:none; margin-top: 10px; align-items: center; gap: 10px;">
-                                        <img id="rocketslide-image-preview-thumb" src="" alt="Selected Preview" style="width: 50px; height: 88px; object-fit: cover; border-radius: 6px; border: 2px solid var(--blue); box-shadow: 0 2px 8px rgba(0,0,0,0.15);">
-                                        <span style="font-size: 11.5px; color: var(--green); font-weight: 600;">✨ Ready to convert to 9:16 HD WebP!</span>
-                                    </div>
                                 </div>
 
+                                <div id="rocketslide-image-preview-wrapper" class="rocketslide-preview-panel" style="display:none;">
+                                    <img id="rocketslide-image-preview-thumb" src="" alt="Selected Preview" class="rocketslide-preview-thumb">
+                                    <div class="rocketslide-preview-info">
+                                        <span class="preview-status">✓ Image Selected</span>
+                                        <span class="preview-desc">Ready to auto-crop &amp; convert to 9:16 HD WebP on save</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 2. Target URL & Timer Grid (2 Balanced Columns) -->
+                            <div class="rocketslide-form-grid-2" style="margin-top: 18px;">
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Target Redirect URL <span style="font-weight:400; color:var(--text-muted);">(Optional — auto-uses Fallback URL if empty)</span></label>
+                                    <div class="rocketslide-label-wrapper">
+                                        <label class="rocketslide-label" for="rocketslide-new-target-url">🎯 Target Redirect URL</label>
+                                        <span class="rocketslide-sublabel-pill">Optional</span>
+                                    </div>
                                     <input type="url" id="rocketslide-new-target-url" placeholder="https://your-affiliate-offer.com" class="rocketslide-input">
-                                </div>
-                            </div>
-
-                            <!-- Row 2: Username & Profile Avatar Image -->
-                            <div class="rocketslide-form-grid-2" style="margin-top: 16px;">
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">Username Handle (e.g. @viral_reels)</label>
-                                    <input type="text" id="rocketslide-new-username" placeholder="@viral_reels_official" class="rocketslide-input" value="@viral_reels">
+                                    <span class="rocketslide-input-hint">Visitor redirects here upon tapping the image. Auto-uses Fallback URL if empty.</span>
                                 </div>
 
                                 <div class="rocketslide-field">
-                                    <label class="rocketslide-label">User Profile Avatar <span style="font-weight:400; color:var(--text-muted);">(Upload local file or pick WP gallery)</span></label>
-                                    <div class="rocketslide-avatar-picker-wrap">
-                                        <input type="url" id="rocketslide-new-user-avatar" placeholder="https://example.com/avatar.jpg (Optional)" class="rocketslide-input">
-                                        <input type="file" id="rocketslide-new-avatar-file-input" accept="image/*" class="rocketslide-file-hidden" style="display:none;">
-                                        <div class="rocketslide-avatar-btn-group">
-                                            <button type="button" id="rocketslide-upload-avatar-computer-btn" class="rocketslide-btn rocketslide-btn-primary rocketslide-avatar-btn" title="Upload Local Computer Avatar"><span class="dashicons dashicons-desktop"></span> Local</button>
-                                            <button type="button" id="rocketslide-select-avatar-btn" class="rocketslide-btn rocketslide-btn-secondary rocketslide-avatar-btn" title="Choose Avatar from WP Gallery"><span class="dashicons dashicons-format-gallery"></span> Gallery</button>
-                                        </div>
+                                    <div class="rocketslide-label-wrapper">
+                                        <label class="rocketslide-label" for="rocketslide-new-timer">⏱️ Auto-Redirect Timer</label>
+                                        <span class="rocketslide-sublabel-pill">Seconds</span>
                                     </div>
-                                </div>
-                            </div>
-
-                            <!-- Row 4: Engagement Counters (Likes, Comments, Shares, Timer) -->
-                            <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap:12px; margin-top:16px;">
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">❤️ Likes Count</label>
-                                    <input type="text" id="rocketslide-new-likes" placeholder="142.8K" value="142.8K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">💬 Comments</label>
-                                    <input type="text" id="rocketslide-new-comments" placeholder="3.4K" value="3.4K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">↗️ Shares Count</label>
-                                    <input type="text" id="rocketslide-new-shares" placeholder="18.9K" value="18.9K" class="rocketslide-input">
-                                </div>
-                                <div class="rocketslide-field">
-                                    <label class="rocketslide-label">⏱️ Timer (s)</label>
                                     <input type="number" id="rocketslide-new-timer" value="0" min="0" placeholder="0" class="rocketslide-input">
+                                    <span class="rocketslide-input-hint">Countdown in seconds. Set <code>0</code> for manual tap redirect only.</span>
                                 </div>
                             </div>
 
-                            <!-- Row 5: Submit Action -->
-                            <div class="rocketslide-field rocketslide-field-submit" style="margin-top: 16px;">
-                                <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary" style="width:100%;">
-                                    <span class="dashicons dashicons-cloud-upload" style="font-size:18px; width:18px; height:18px; margin-right:6px; vertical-align:middle;"></span> Save & Crop New Reel (540×960 WebP)
+                            <!-- 3. Submit Action -->
+                            <div class="rocketslide-field-submit" style="margin-top: 20px;">
+                                <button type="submit" id="rocketslide-add-image-btn" class="rocketslide-btn rocketslide-btn-primary rocketslide-btn-submit">
+                                    <span class="dashicons dashicons-cloud-upload"></span> Save &amp; Crop New Reel (540×960 HD WebP)
                                 </button>
                             </div>
                         </div>
@@ -325,8 +315,10 @@ class RocketSlide_Admin {
 
                 <!-- Grid List of Uploaded Images -->
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title">🎬 Managed Reel Cards (<span id="rocketslide-images-count"><?php echo count($images); ?></span>)</h3>
-                    <p class="rocketslide-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
+                    <div class="rocketslide-card-header">
+                        <h3 class="rocketslide-card-title">🗂️ Managed Reel Cards (<span id="rocketslide-images-count"><?php echo count($images); ?></span>)</h3>
+                        <p class="rocketslide-card-subtitle">Every visit randomly shuffles the card order. First 2 load eagerly, remaining lazy load on scroll.</p>
+                    </div>
 
                     <div class="rocketslide-img-grid" id="rocketslide-images-container">
                         <?php if (empty($images)) : ?>
@@ -335,32 +327,25 @@ class RocketSlide_Admin {
                                 <p>No 9:16 reel images added yet. Upload your first image above to launch your landing page!</p>
                             </div>
                         <?php else : ?>
-                            <?php foreach ($images as $index => $img) : 
-                                $username       = !empty($img['username']) ? $img['username'] : '@viral_reels';
-                                $user_avatar    = !empty($img['user_avatar']) ? $img['user_avatar'] : '';
-                            ?>
+                            <?php foreach ($images as $index => $img) : ?>
                                 <div class="rocketslide-img-card" data-id="<?php echo esc_attr($img['id']); ?>">
                                     <div class="rocketslide-img-thumb">
                                         <img src="<?php echo esc_url($img['url']); ?>" alt="Reel Card">
                                         <span class="rocketslide-img-index">#<?php echo $index + 1; ?></span>
                                         <span class="rocketslide-img-format-badge">WebP</span>
-                                        <div class="rocketslide-thumb-user-badge">
-                                            <?php if (!empty($user_avatar)) : ?>
-                                                <img src="<?php echo esc_url($user_avatar); ?>" class="thumb-avatar" alt="Avatar">
-                                            <?php else : ?>
-                                                <span class="thumb-avatar-placeholder">👤</span>
-                                            <?php endif; ?>
-                                            <span><?php echo esc_html($username); ?></span>
-                                        </div>
                                     </div>
                                     <div class="rocketslide-img-body">
                                         <div>
                                             <label class="rocketslide-label">Target URL:</label>
-                                            <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>">
+                                            <input type="url" class="rocketslide-input rocketslide-card-target" value="<?php echo esc_url($img['target_url']); ?>" placeholder="https://your-offer.com">
+                                        </div>
+                                        <div style="margin-top:8px;">
+                                            <label class="rocketslide-label">Timer (s):</label>
+                                            <input type="number" min="0" class="rocketslide-input rocketslide-card-timer" value="<?php echo esc_attr(!empty($img['timer']) ? $img['timer'] : '0'); ?>" placeholder="0">
                                         </div>
                                         <div class="rocketslide-img-card-actions" style="margin-top:12px;">
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Save</button>
-                                            <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash" style="font-size:15px; width:15px; height:15px; vertical-align:middle;"></span> Delete</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-success rocketslide-save-card-btn"><span class="dashicons dashicons-saved"></span> Save</button>
+                                            <button type="button" class="rocketslide-btn rocketslide-btn-danger rocketslide-delete-card-btn"><span class="dashicons dashicons-trash"></span> Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -368,39 +353,40 @@ class RocketSlide_Admin {
                         <?php endif; ?>
                     </div>
 
-                    <!-- Load More Reels Button Wrapper -->
-                    <div class="rocketslide-loadmore-wrapper" id="rocketslide-loadmore-wrapper" style="display: none;">
-                        <button type="button" id="rocketslide-loadmore-btn" class="rocketslide-btn rocketslide-btn-primary rocketslide-loadmore-btn">
-                            ⬇️ Load More Reels
+                    <div id="rocketslide-loadmore-wrapper" style="display:none; text-align:center; margin-top:24px; padding-top:20px; border-top:1px solid var(--border);">
+                        <button type="button" id="rocketslide-loadmore-btn" class="rocketslide-btn rocketslide-btn-secondary" style="min-width:240px; padding:10px 24px; font-size:13px; font-weight:700;">
+                            📥 Load More Reels
                         </button>
-                        <p class="rocketslide-loadmore-info" id="rocketslide-loadmore-info">Showing Reels</p>
+                        <div id="rocketslide-loadmore-info" style="font-size:11.5px; color:var(--text-muted); margin-top:8px; font-weight:600;"></div>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab 2: Publytics & Tracking -->
+            <!-- Tab 2: Analytics & Publytics Script -->
             <div class="rocketslide-tab-panel" id="tab-tracking">
                 <div class="rocketslide-card">
-                    <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px; margin-bottom:12px;">
-                        <h3 class="rocketslide-card-title" style="margin:0;">📊 Publytics & Analytics Integration</h3>
-                        <div id="rocketslide-publytics-status" class="rocketslide-badge checking">
-                            🟡 Checking Status...
-                        </div>
-                    </div>
-                    <p class="rocketslide-card-subtitle">Paste custom tracking snippet (Publytics, GA4, TikTok Pixel, Facebook Pixel). It injects directly into the <code>&lt;head&gt;</code> of the 9:16 template.</p>
-
+                    <h3 class="rocketslide-card-title">📡 Publytics &amp; Custom Pixel Tracking</h3>
+                    <p class="rocketslide-card-subtitle">Inject your lightweight Publytics tracker or Meta/Google Ads Pixel. Injected directly on the isolated 9:16 template.</p>
+                    
                     <div class="rocketslide-field">
-                        <label class="rocketslide-label">Tracking Code Snippet Tag:</label>
-                        <textarea id="rocketslide-tracking-script" class="rocketslide-textarea" rows="6" placeholder="<script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.js&quot;></script>"><?php echo esc_textarea($tracking_script); ?></textarea>
-                        <span class="rocketslide-input-hint">Make sure to include full <code>&lt;script&gt;...&lt;/script&gt;</code> tags.</span>
+                        <label class="rocketslide-label">Analytics Script Tag &lt;script&gt; ... &lt;/script&gt;</label>
+                        <textarea id="rocketslide-tracking-script" rows="5" class="rocketslide-textarea" placeholder="&lt;script defer data-domain=&quot;yourdomain.com&quot; src=&quot;https://api.publytics.net/js/script.manual.min.js&quot;&gt;&lt;/script&gt;"><?php echo esc_textarea($tracking_script); ?></textarea>
+                        <span class="rocketslide-input-hint">Paste full <code>&lt;script&gt;</code> HTML code here.</span>
                     </div>
 
-                    <div class="rocketslide-actions">
+                    <div class="rocketslide-tracking-status-row">
+                        <span class="status-label">Script Verification:</span>
+                        <span class="rocketslide-status-badge <?php echo !empty($tracking_script) ? 'verified' : 'inactive'; ?>" id="rocketslide-publytics-status">
+                            <?php echo !empty($tracking_script) ? '⚡ Snippet Configured' : '⚪ Inactive'; ?>
+                        </span>
+                    </div>
+
+                    <div class="rocketslide-actions" style="gap:10px;">
                         <button type="button" id="rocketslide-save-tracking-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            💾 Save Tracking Code
+                            💾 Save Script Tag
                         </button>
                         <button type="button" id="rocketslide-verify-tracking-btn" class="rocketslide-btn rocketslide-btn-secondary">
-                            🔍 Test & Verify Connection
+                            🔍 Test &amp; Verify Connection
                         </button>
                         <button type="button" id="rocketslide-test-traffic-btn" class="rocketslide-btn rocketslide-btn-accent">
                             🚀 Fire Live Test Event
@@ -415,13 +401,13 @@ class RocketSlide_Admin {
             <div class="rocketslide-tab-panel" id="tab-fallback">
                 <div class="rocketslide-card">
                     <h3 class="rocketslide-card-title">🛡️ Advanced Dual-Layer Traffic Cloaking Engine</h3>
-                    <p class="rocketslide-card-subtitle">Genuine Facebook & Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
+                    <p class="rocketslide-card-subtitle">Genuine Facebook &amp; Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
 
                     <div class="rocketslide-field" style="background:var(--surface-2); padding:16px; border-radius:var(--radius-sm); border:1px solid var(--border); margin-bottom:20px;">
-                        <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text);">🧪 Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
+                        <label class="rocketslide-label" style="font-size:14px; font-weight:700; color:var(--text);">⚡ Test / Preview Mode (Bypass Cloaking for Direct Testing)</label>
                         <select id="rocketslide-test-mode" class="rocketslide-select" style="max-width:550px;">
-                            <option value="0" <?php selected($test_mode, '0'); ?>>🔴 Disabled (Live Production Mode — Only Facebook/Instagram Traffic Sees Landing Page)</option>
-                            <option value="1" <?php selected($test_mode, '1'); ?>>🟢 Enabled (Testing Mode — Open Landing Page Directly Without FB Post)</option>
+                            <option value="0" <?php selected($test_mode, '0'); ?>>🔒 Disabled (Live Production Mode &mdash; Only Facebook/Instagram Traffic Sees Landing Page)</option>
+                            <option value="1" <?php selected($test_mode, '1'); ?>>⚡ Enabled (Testing Mode &mdash; Open Landing Page Directly Without FB Post)</option>
                         </select>
                         <span class="rocketslide-input-hint" style="margin-top:8px;">
                             • <strong>Enabled (Testing):</strong> Anyone can open <code>/<?php echo esc_html(trim($slug, '/')); ?>/</code> directly in browser to test the landing page without posting on Facebook.<br>
@@ -447,7 +433,7 @@ class RocketSlide_Admin {
 
                     <div class="rocketslide-actions">
                         <button type="button" id="rocketslide-save-fallback-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            💾 Save Cloaking & Test Settings
+                            💾 Save Cloaking &amp; Test Settings
                         </button>
                     </div>
                 </div>
@@ -584,7 +570,7 @@ class RocketSlide_Admin {
                 'status_code' => $status_code,
                 'script_url'  => $script_url,
                 'domain'      => $data_domain,
-                'message'     => '🟢 Publytics tracking script reachability confirmed (HTTP 200 OK).'
+                'message'     => '✓ Publytics tracking script reachability confirmed (HTTP 200 OK).'
             ));
         } else {
             wp_send_json_error('Script URL returned HTTP Status Code: ' . $status_code);
@@ -601,18 +587,12 @@ class RocketSlide_Admin {
             wp_send_json_error('Unauthorized');
         }
 
-        $target_url     = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
+        $target_url = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
         if (empty($target_url)) {
             $target_url = get_option('rocketslide_fallback_url', 'https://google.com');
         }
-        $timer          = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
-        $media_id       = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
-        $username       = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '@viral_reels';
-        $user_avatar    = isset($_POST['user_avatar']) ? esc_url_raw($_POST['user_avatar']) : '';
-        $caption        = isset($_POST['caption']) ? sanitize_text_field($_POST['caption']) : 'Wait till the end! 😱🔥';
-        $likes_count    = isset($_POST['likes_count']) ? sanitize_text_field($_POST['likes_count']) : '142.8K';
-        $comments_count = isset($_POST['comments_count']) ? sanitize_text_field($_POST['comments_count']) : '3.4K';
-        $shares_count   = isset($_POST['shares_count']) ? sanitize_text_field($_POST['shares_count']) : '18.9K';
+        $timer    = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
+        $media_id = isset($_POST['media_id']) ? intval($_POST['media_id']) : 0;
 
         $processed_result = null;
 
@@ -634,25 +614,19 @@ class RocketSlide_Admin {
         }
 
         $new_item = array(
-            'id'             => uniqid('img_'),
-            'url'            => $processed_result['url'],
-            'path'           => $processed_result['path'],
-            'target_url'     => $target_url,
-            'timer'          => $timer,
-            'username'       => $username,
-            'user_avatar'    => $user_avatar,
-            'caption'        => $caption,
-            'likes_count'    => $likes_count,
-            'comments_count' => $comments_count,
-            'shares_count'   => $shares_count,
-            'created_at'     => time()
+            'id'         => uniqid('img_'),
+            'url'        => $processed_result['url'],
+            'path'       => $processed_result['path'],
+            'target_url' => $target_url,
+            'timer'      => $timer,
+            'created_at' => time()
         );
 
         array_unshift($images, $new_item);
         update_option('rocketslide_images', $images);
 
         wp_send_json_success(array(
-            'message' => 'Image processed (540x960 WebP) and added successfully!',
+            'message' => 'Image processed (540×960 WebP) and added successfully!',
             'image'   => $new_item,
             'total'   => count($images)
         ));
@@ -668,15 +642,9 @@ class RocketSlide_Admin {
             wp_send_json_error('Unauthorized');
         }
 
-        $id             = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
-        $target_url     = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
-        $timer          = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
-        $username       = isset($_POST['username']) ? sanitize_text_field($_POST['username']) : '@viral_reels';
-        $user_avatar    = isset($_POST['user_avatar']) ? esc_url_raw($_POST['user_avatar']) : '';
-        $caption        = isset($_POST['caption']) ? sanitize_text_field($_POST['caption']) : '';
-        $likes_count    = isset($_POST['likes_count']) ? sanitize_text_field($_POST['likes_count']) : '';
-        $comments_count = isset($_POST['comments_count']) ? sanitize_text_field($_POST['comments_count']) : '';
-        $shares_count   = isset($_POST['shares_count']) ? sanitize_text_field($_POST['shares_count']) : '';
+        $id         = isset($_POST['id']) ? sanitize_text_field($_POST['id']) : '';
+        $target_url = isset($_POST['target_url']) ? esc_url_raw($_POST['target_url']) : '';
+        $timer      = isset($_POST['timer']) ? intval($_POST['timer']) : 0;
 
         if (empty($id)) {
             wp_send_json_error('Invalid image ID.');
@@ -687,15 +655,9 @@ class RocketSlide_Admin {
 
         foreach ($images as &$img) {
             if ($img['id'] === $id) {
-                $img['target_url']     = $target_url;
-                $img['timer']          = $timer;
-                $img['username']       = $username;
-                $img['user_avatar']    = $user_avatar;
-                $img['caption']        = $caption;
-                $img['likes_count']    = $likes_count;
-                $img['comments_count'] = $comments_count;
-                $img['shares_count']   = $shares_count;
-                $updated               = true;
+                $img['target_url'] = $target_url;
+                $img['timer']      = $timer;
+                $updated           = true;
                 break;
             }
         }
@@ -742,55 +704,5 @@ class RocketSlide_Admin {
             'message' => 'Image deleted successfully!',
             'total'   => count($filtered)
         ));
-    }
-
-    /**
-     * AJAX Upload Avatar File from Local Computer
-     */
-    public function ajax_upload_avatar() {
-        check_ajax_referer('rocketslide_admin_nonce', 'nonce');
-
-        if (!current_user_can('manage_options')) {
-            wp_send_json_error('Unauthorized');
-        }
-
-        if (!isset($_FILES['avatar_file']) || empty($_FILES['avatar_file']['name'])) {
-            wp_send_json_error('No avatar image file provided.');
-        }
-
-        $file = $_FILES['avatar_file'];
-
-        $allowed_mimes = array(
-            'jpg'  => 'image/jpeg',
-            'jpeg' => 'image/jpeg',
-            'png'  => 'image/png',
-            'webp' => 'image/webp',
-            'gif'  => 'image/gif'
-        );
-
-        $file_info = wp_check_filetype(basename($file['name']), $allowed_mimes);
-
-        if (empty($file_info['ext'])) {
-            wp_send_json_error('Invalid image type. Please upload a JPG, PNG, WebP, or GIF image.');
-        }
-
-        $upload_dir = rocketslide_uploads_dir();
-        $avatar_dir = $upload_dir . 'avatars/';
-        if (!file_exists($avatar_dir)) {
-            wp_mkdir_p($avatar_dir);
-        }
-
-        $filename    = 'avatar_' . uniqid() . '.' . $file_info['ext'];
-        $target_path = $avatar_dir . $filename;
-
-        if (move_uploaded_file($file['tmp_name'], $target_path)) {
-            $avatar_url = rocketslide_uploads_url() . 'avatars/' . $filename;
-            wp_send_json_success(array(
-                'message' => 'Avatar uploaded successfully!',
-                'url'     => $avatar_url
-            ));
-        } else {
-            wp_send_json_error('Failed to save uploaded avatar file.');
-        }
     }
 }
