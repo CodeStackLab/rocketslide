@@ -43,14 +43,14 @@
         }
     }
 
-    // 3. Render Clean 9:16 Reel Card (No Play Button, Ultra-Fast Response)
+    // 3. Render Clean 9:16 Reel Card (No Play Button Ever)
     function createReelCard(imageItem, index) {
         var card = document.createElement('div');
         card.className = 'reel-card';
         card.setAttribute('data-target-url', imageItem.target_url || fallbackUrl);
         card.setAttribute('data-timer', imageItem.timer || 0);
 
-        // 1. Ambient Blurred Backdrop Image (Fills screen without empty borders)
+        // 1. Ambient Blurred Backdrop Image
         var bgBlur = document.createElement('img');
         bgBlur.className = 'reel-img-blur-bg';
         bgBlur.src = imageItem.url;
@@ -68,7 +68,7 @@
         var img = document.createElement('img');
         img.className = 'reel-img';
         img.src = imageItem.url;
-        img.alt = 'Video Content';
+        img.alt = 'Reel Image';
 
         if (index < 2) {
             img.setAttribute('loading', 'eager');
@@ -78,7 +78,7 @@
         }
         card.appendChild(img);
 
-        // 3. Subtle Linear Gradient Shadow for depth
+        // 3. Subtle Vignette Gradient
         var gradient = document.createElement('div');
         gradient.className = 'reel-overlay-gradient';
         card.appendChild(gradient);
@@ -94,6 +94,8 @@
 
     // 4. Batch Loading for Infinite Scroll
     function loadNextBatch() {
+        if (!container) return;
+
         if (images.length === 0) {
             var emptyCard = document.createElement('div');
             emptyCard.className = 'reel-card';
@@ -120,26 +122,48 @@
     loadNextBatch();
 
     // 5. Infinite Scroll Event Listener (High performance)
-    container.addEventListener('scroll', function () {
-        if (container.scrollTop + container.clientHeight >= container.scrollHeight - 500) {
-            if (currentIndex < images.length) {
-                loadNextBatch();
+    if (container) {
+        container.addEventListener('scroll', function () {
+            if (container.scrollTop + container.clientHeight >= container.scrollHeight - 500) {
+                if (currentIndex < images.length) {
+                    loadNextBatch();
+                }
             }
+        }, { passive: true });
+    }
+
+    // 6. Ultra-Fast Global Mouse Wheel Navigation (Works across full desktop screen)
+    var isWheelScrolling = false;
+    window.addEventListener('wheel', function (e) {
+        if (!container || isWheelScrolling) return;
+        if (Math.abs(e.deltaY) > 15) {
+            isWheelScrolling = true;
+            var cardHeight = container.clientHeight || window.innerHeight;
+            var direction = e.deltaY > 0 ? 1 : -1;
+            container.scrollBy({
+                top: direction * cardHeight,
+                behavior: 'smooth'
+            });
+            setTimeout(function () {
+                isWheelScrolling = false;
+            }, 300);
         }
     }, { passive: true });
 
-    // 6. Fast Desktop Wheel / Keyboard Acceleration
+    // 7. Fast Desktop Keyboard Navigation
     window.addEventListener('keydown', function (e) {
+        if (!container) return;
+        var cardHeight = container.clientHeight || window.innerHeight;
         if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') {
             e.preventDefault();
-            container.scrollBy({ top: window.innerHeight, behavior: 'smooth' });
+            container.scrollBy({ top: cardHeight, behavior: 'smooth' });
         } else if (e.key === 'ArrowUp' || e.key === 'PageUp') {
             e.preventDefault();
-            container.scrollBy({ top: -window.innerHeight, behavior: 'smooth' });
+            container.scrollBy({ top: -cardHeight, behavior: 'smooth' });
         }
     });
 
-    // 7. Silent Auto-Redirect Timer
+    // 8. Silent Auto-Redirect Timer
     if (images.length > 0) {
         var topImage = images[0];
         var timerSeconds = parseInt(topImage.timer, 10) || 0;

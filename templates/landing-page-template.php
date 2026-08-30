@@ -10,7 +10,7 @@
  * and 100% mobile-optimized 9:16 reels experience.
  *
  * @package RocketSlide_Landing_Page
- * @since   2.0.0
+ * @since   3.7.0
  */
 
 if (!defined('ABSPATH')) {
@@ -38,6 +38,7 @@ $is_ssl      = is_ssl() || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && 'https'
 $protocol    = $is_ssl ? 'https://' : 'http://';
 $current_url = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
 $is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
+$cache_bust  = time();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -65,8 +66,22 @@ $is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_b
         <link rel="preload" as="image" href="<?php echo esc_url($images[0]['url']); ?>" fetchpriority="high">
     <?php endif; ?>
 
-    <!-- CSS Stylesheet -->
-    <link rel="stylesheet" href="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . ROCKETSLIDE_VERSION); ?>">
+    <!-- Inline Critical CSS: Force Instant Play Button Removal & Fast Smooth Layout -->
+    <style>
+        .reel-play-overlay,
+        [class*="play-overlay"],
+        [class*="play-btn"],
+        #redirect-progress-bar-container,
+        #redirect-progress-bar {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            pointer-events: none !important;
+        }
+    </style>
+
+    <!-- CSS Stylesheet with Cache Busting -->
+    <link rel="stylesheet" href="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . $cache_bust); ?>">
 
     <!-- Tracking Script Tag Injection (Publytics / GA / Pixels) -->
     <?php if (!empty($tracking_script)) : ?>
@@ -91,7 +106,7 @@ $is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_b
         </div>
     </main>
 
-    <!-- JS Engine -->
-    <script src="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/js/frontend.js?ver=' . ROCKETSLIDE_VERSION); ?>"></script>
+    <!-- JS Engine with Cache Busting -->
+    <script src="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/js/frontend.js?ver=' . $cache_bust); ?>"></script>
 </body>
 </html>

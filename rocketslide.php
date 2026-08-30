@@ -6,7 +6,7 @@
  *               dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics
  *               integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard.
  *               100% self-contained — no custom theme or external pages required.
- * Version:      3.6.0
+ * Version:      3.7.0
  * Author:       RocketSlide Engine
  * Author URI:   https://rocketslide.com
  * Text Domain:  rocketslide-lp
@@ -26,7 +26,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ============================================================
 // PLUGIN CONSTANTS
 // ============================================================
-define( 'ROCKETSLIDE_VERSION',     '3.6.0' );
+define( 'ROCKETSLIDE_VERSION',     '3.7.0' );
 define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
 define( 'ROCKETSLIDE_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
 define( 'ROCKETSLIDE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
@@ -122,7 +122,7 @@ final class RocketSlide_Landing_Page {
 
 			$defaults = array(
 				'rocketslide_slug'             => 'v',
-				'rocketslide_tab_title'        => 'Exclusive Video Content',
+				'rocketslide_tab_title'        => '',
 				'rocketslide_fallback_url'     => 'https://google.com',
 				'rocketslide_tracking_script'  => '',
 				'rocketslide_images'           => array(),
@@ -164,7 +164,7 @@ final class RocketSlide_Landing_Page {
 
 		$defaults = array(
 			'rocketslide_slug'             => 'v',
-			'rocketslide_tab_title'        => 'Exclusive Video Content',
+			'rocketslide_tab_title'        => '',
 			'rocketslide_fallback_url'     => 'https://google.com',
 			'rocketslide_tracking_script'  => '',
 			'rocketslide_images'           => array(),
