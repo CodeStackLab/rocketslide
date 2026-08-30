@@ -533,7 +533,7 @@
 }
 
 /* ============================================================
-   MANAGED REELS CARD GRID (ENHANCED PROPORTIONAL HEIGHT)
+   MANAGED REELS CARD GRID (TALL 9:16 PROPORTIONAL HEIGHT)
    ============================================================ */
 .rocketslide-img-grid {
     display: grid;
@@ -558,12 +558,12 @@
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Proportional Desktop Image Thumbnail Height */
+/* Tall Desktop Image Thumbnail Height */
 .rocketslide-img-thumb {
     position: relative;
     width: 100%;
-    height: 280px;
-    max-height: 280px;
+    height: 380px;
+    max-height: 380px;
     background: #0f172a;
     overflow: hidden;
 }
@@ -916,41 +916,41 @@
     /* 1-Column Full Width Clean Cards on Mobile (One By One) */
     .rocketslide-img-grid {
         grid-template-columns: 1fr !important;
-        gap: 16px !important;
+        gap: 20px !important;
     }
 
-    /* Proportional Mobile Image Thumbnail Height */
+    /* Tall Mobile Image Thumbnail Height */
     .rocketslide-img-thumb {
-        height: 320px !important;
-        max-height: 320px !important;
+        height: 460px !important;
+        max-height: 460px !important;
     }
 
     .rocketslide-img-body {
-        padding: 14px !important;
-        gap: 8px !important;
+        padding: 16px !important;
+        gap: 10px !important;
     }
 
     .rocketslide-img-body .rocketslide-label {
-        font-size: 12.5px !important;
+        font-size: 13px !important;
     }
 
     .rocketslide-img-body .rocketslide-input {
-        font-size: 13.5px !important;
-        padding: 8px 12px !important;
-        height: 40px !important;
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+        height: 42px !important;
     }
 
     .rocketslide-img-card-actions .rocketslide-btn {
-        height: 38px !important;
-        font-size: 12.5px !important;
-        padding: 0 12px !important;
+        height: 40px !important;
+        font-size: 13px !important;
+        padding: 0 14px !important;
     }
 }
 
 @media (max-width: 540px) {
     .rocketslide-img-thumb {
-        height: 300px !important;
-        max-height: 300px !important;
+        height: 440px !important;
+        max-height: 440px !important;
     }
 
     .rocketslide-card-title {
