@@ -9,7 +9,8 @@ A high-speed, isolated vertical landing page plugin for mobile traffic and ads c
 - **Dark Mode Admin Interface**: Modern settings dashboard for managing affiliate links and pixel tracking.
 
 ## Installation via WP Pusher
-1. Install and activate **WP Pusher** on your WordPress live site.
+1. Install and activate **WP Pusher** on your WordPress site.
 2. In WP Pusher, select **Install Plugin**.
-3. Enter repository: `<your-github-username>/rocketslide`
-4. Enable **Push-to-Deploy** if automatic updates from GitHub are desired.
+3. Plugin repository: `CodeStackLab/rocketslide`
+4. Repository branch: `main` (or leave blank / `master`)
+5. Enable **Push-to-Deploy** for automatic GitHub updates.

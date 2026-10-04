@@ -1,20 +1,18 @@
 <?php
-/**
- * Plugin Name:  RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
- * Plugin URI:   https://rocketslide.com
- * Description:  Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with
- *               dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics
- *               integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard.
- *               100% self-contained — no custom theme or external pages required.
- * Version:      3.7.0
- * Author:       RocketSlide Engine
- * Author URI:   https://rocketslide.com
- * Text Domain:  rocketslide-lp
- * License:      GPL-2.0+
- * License URI:  https://www.gnu.org/licenses/gpl-2.0.html
- * Requires at least: 5.5
- * Requires PHP: 7.4
- */
+/*
+Plugin Name: RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
+Plugin URI: https://rocketslide.com
+Description: Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard. 100% self-contained — no custom theme or external pages required.
+Version: 3.7.0
+Author: RocketSlide Engine
+Author URI: https://rocketslide.com
+Text Domain: rocketslide-lp
+Domain Path: /languages
+License: GPL-2.0+
+License URI: https://www.gnu.org/licenses/gpl-2.0.html
+Requires at least: 5.5
+Requires PHP: 7.4
+*/
 
 // ============================================================
 // SECURITY: Block direct file access
