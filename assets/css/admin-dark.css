@@ -796,6 +796,111 @@
     border-color: #94a3b8;
 }
 
+/* ============================================================
+   Single Country Toggles & Tags Chips Styling
+   ============================================================ */
+.rs-quick-countries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(135px, 1fr));
+    gap: 7px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.rs-quick-country-btn {
+    background: var(--surface-2);
+    border: 1.5px solid var(--border);
+    color: var(--text-main);
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 11.5px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+    user-select: none;
+}
+
+.rs-quick-country-btn:hover {
+    border-color: #94a3b8;
+    background: #e2e8f0;
+}
+
+.rs-quick-country-btn.active {
+    background: #fef2f2 !important;
+    border-color: #dc2626 !important;
+    color: #991b1b !important;
+    box-shadow: 0 0 0 1px #dc2626;
+}
+
+.rs-blocked-tags-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+    min-height: 44px;
+    padding: 8px 12px;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.rs-country-chip {
+    background: #fef2f2;
+    border: 1.5px solid #fecaca;
+    color: #991b1b;
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 800;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    animation: toastSlideIn 0.15s ease;
+}
+
+.rs-country-chip .rs-remove-country-btn {
+    background: transparent;
+    border: none;
+    color: #dc2626;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 900;
+    padding: 0 0 0 2px;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.rs-country-chip .rs-remove-country-btn:hover {
+    color: #7f1d1d;
+}
+
+.rs-no-countries-placeholder {
+    font-size: 12.5px;
+    color: var(--text-muted);
+    font-style: italic;
+}
+
+.rs-single-country-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+    width: 100%;
+}
+
+.rs-single-country-input-wrap {
+    flex: 1;
+    min-width: 200px;
+}
+
 .rocketslide-actions {
     display: flex;
     align-items: center;

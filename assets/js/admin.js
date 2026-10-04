@@ -126,22 +126,169 @@
             });
         });
 
-        // Geo-Firewall Country Preset Quick Buttons
+        // -------------------------------------------------------------
+        // Geo-Firewall & Single-Country Blocking Manager
+        // -------------------------------------------------------------
+        var COUNTRY_FLAGS = {
+            'PK': '🇵🇰', 'IN': '🇮🇳', 'BD': '🇧🇩', 'NG': '🇳🇬',
+            'EG': '🇪🇬', 'PH': '🇵🇭', 'TW': '🇹🇼', 'ID': '🇮🇩',
+            'VN': '🇻🇳', 'BR': '🇧🇷', 'RU': '🇷🇺', 'CN': '🇨🇳',
+            'TR': '🇹🇷', 'US': '🇺🇸', 'GB': '🇬🇧', 'CA': '🇨🇦',
+            'DE': '🇩🇪', 'FR': '🇫🇷', 'IT': '🇮🇹', 'ES': '🇪🇸',
+            'AU': '🇦🇺', 'SA': '🇸🇦', 'AE': '🇦🇪', 'ZA': '🇿🇦',
+            'MX': '🇲🇽', 'MY': '🇲🇾', 'TH': '🇹🇭', 'CO': '🇨🇴'
+        };
+
+        function getCountryFlag(code) {
+            if (!code || code.length !== 2) return '🌐';
+            code = code.toUpperCase();
+            if (COUNTRY_FLAGS[code]) return COUNTRY_FLAGS[code];
+            try {
+                return String.fromCodePoint(code.charCodeAt(0) - 65 + 0x1F1E6) +
+                       String.fromCodePoint(code.charCodeAt(1) - 65 + 0x1F1E6);
+            } catch (e) {
+                return '🌐';
+            }
+        }
+
+        var blockedCountries = new Set();
+
+        // Initialize from existing input
+        var initialCountries = ($('#rocketslide-blocked-countries').val() || '')
+            .split(',')
+            .map(function (c) { return c.trim().toUpperCase(); })
+            .filter(function (c) { return c.length === 2; });
+
+        initialCountries.forEach(function (c) {
+            blockedCountries.add(c);
+        });
+
+        function renderBlockedCountriesTags() {
+            var $container = $('#rs-blocked-countries-tags');
+            if (!$container.length) return;
+
+            $container.empty();
+
+            var list = Array.from(blockedCountries).sort();
+            $('#rs-blocked-count').text(list.length);
+            $('#rocketslide-blocked-countries').val(list.join(', '));
+
+            if (list.length === 0) {
+                $container.append('<span class="rs-no-countries-placeholder">No countries blocked. All global traffic allowed.</span>');
+            } else {
+                list.forEach(function (code) {
+                    var flag = getCountryFlag(code);
+                    var chip = $('<span class="rs-country-chip" data-code="' + code + '">' +
+                        flag + ' ' + code + ' ' +
+                        '<button type="button" class="rs-remove-country-btn" data-code="' + code + '" title="Remove ' + code + '">&times;</button>' +
+                        '</span>');
+                    $container.append(chip);
+                });
+            }
+
+            // Sync quick toggle buttons state
+            $('.rs-quick-country-btn').each(function () {
+                var code = $(this).data('code');
+                if (blockedCountries.has(code)) {
+                    $(this).addClass('active');
+                } else {
+                    $(this).removeClass('active');
+                }
+            });
+        }
+
+        renderBlockedCountriesTags();
+
+        // Quick Country Buttons (1-Click Toggle)
+        $(document).on('click', '.rs-quick-country-btn', function (e) {
+            e.preventDefault();
+            var code = $(this).data('code');
+            if (!code) return;
+
+            if (blockedCountries.has(code)) {
+                blockedCountries.delete(code);
+                showNotice('Country ' + code + ' removed from blocklist.', false);
+            } else {
+                blockedCountries.add(code);
+                $('#rocketslide-country-block-enabled').prop('checked', true);
+                showNotice('Country ' + code + ' added to blocklist!', false);
+            }
+            renderBlockedCountriesTags();
+        });
+
+        // Remove Single Country Chip Click
+        $(document).on('click', '.rs-remove-country-btn', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            var code = $(this).data('code');
+            if (code && blockedCountries.has(code)) {
+                blockedCountries.delete(code);
+                renderBlockedCountriesTags();
+                showNotice('Country ' + code + ' unblocked.', false);
+            }
+        });
+
+        // Single Country Input: Add Country Button
+        function addSingleCountry(saveImmediately) {
+            var $input = $('#rs-single-country-input');
+            var raw = ($input.val() || '').trim().toUpperCase();
+
+            if (!raw || !/^[A-Z]{2}$/.test(raw)) {
+                showNotice('Please enter a valid 2-letter ISO country code (e.g. PK, US, SA, DE).', true);
+                $input.focus();
+                return false;
+            }
+
+            blockedCountries.add(raw);
+            $('#rocketslide-country-block-enabled').prop('checked', true);
+            $input.val('');
+            renderBlockedCountriesTags();
+
+            if (saveImmediately) {
+                showNotice('Country ' + raw + ' added! Saving now...', false);
+                $('#rocketslide-save-fallback-btn').trigger('click');
+            } else {
+                showNotice('Country ' + raw + ' added to blocklist. Click Save to persist.', false);
+            }
+            return true;
+        }
+
+        $('#rs-add-single-country-btn').on('click', function (e) {
+            e.preventDefault();
+            addSingleCountry(false);
+        });
+
+        $('#rs-add-save-single-country-btn').on('click', function (e) {
+            e.preventDefault();
+            addSingleCountry(true);
+        });
+
+        $('#rs-single-country-input').on('keydown', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                addSingleCountry(false);
+            }
+        });
+
+        // Presets Buttons
         $(document).on('click', '.rs-preset-btn', function (e) {
             e.preventDefault();
             var preset = $(this).data('preset');
-            var $input = $('#rocketslide-blocked-countries');
             var $enableCheckbox = $('#rocketslide-country-block-enabled');
 
             if (preset === 'clear') {
-                $input.val('');
+                blockedCountries.clear();
+                showNotice('All blocked countries cleared.', false);
             } else if (preset === 'clickfarms') {
-                $input.val('PK, IN, BD, NG');
+                ['PK', 'IN', 'BD', 'NG'].forEach(function (c) { blockedCountries.add(c); });
                 $enableCheckbox.prop('checked', true);
+                showNotice('Click Farms preset (PK, IN, BD, NG) applied!', false);
             } else if (preset === 'tier3') {
-                $input.val('PK, IN, BD, NG, PH, ID, VN');
+                ['PK', 'IN', 'BD', 'NG', 'PH', 'ID', 'VN'].forEach(function (c) { blockedCountries.add(c); });
                 $enableCheckbox.prop('checked', true);
+                showNotice('Tier 3 preset applied!', false);
             }
+            renderBlockedCountriesTags();
         });
 
         $('#rocketslide-save-tracking-btn').on('click', function (e) {

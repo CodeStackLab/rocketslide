@@ -575,17 +575,17 @@ class RocketSlide_Admin {
                     <!-- SECTION 3: Geo Firewall / Country Block -->
                     <div style="margin-top:24px;">
                         <div class="rs-section-title-wrap">
-                            <h4 class="rs-section-title"><span class="dashicons dashicons-admin-site-alt3" style="color:#d97706;"></span> Geo Firewall &amp; Low-CPM Country Filter</h4>
-                            <p class="rs-section-subtitle">Prevent invalid traffic (IVT) and account deductions by redirecting low-CPM click farm countries before any ad tags load.</p>
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-admin-site-alt3" style="color:#d97706;"></span> Geo Firewall &amp; Country Block (Google AdX Protection)</h4>
+                            <p class="rs-section-subtitle">Prevent invalid traffic (IVT) and account deductions by blocking low-CPM countries or click farm regions before any ad tags load.</p>
                         </div>
 
-                        <div class="rs-toggle-card" style="margin-bottom:12px;">
+                        <div class="rs-toggle-card" style="margin-bottom:14px;">
                             <div class="rs-toggle-info">
                                 <div class="rs-toggle-title">
                                     Enable Country Geo-Firewall
                                     <span class="rs-toggle-badge warning">AdX Protection</span>
                                 </div>
-                                <p class="rs-toggle-desc">When enabled, visitors originating from the blocked countries listed below are immediately redirected to the Fallback URL.</p>
+                                <p class="rs-toggle-desc">When enabled, visitors originating from the blocked countries below are immediately redirected to the Fallback URL.</p>
                             </div>
                             <label class="rs-switch">
                                 <input type="checkbox" id="rocketslide-country-block-enabled" value="1" <?php checked($country_block_enabled, '1'); ?>>
@@ -593,21 +593,66 @@ class RocketSlide_Admin {
                             </label>
                         </div>
 
-                        <div class="rocketslide-field" id="rs-country-block-field-wrap">
+                        <!-- 1-Click Single Country Quick Toggles -->
+                        <div style="margin-bottom:14px;">
+                            <label class="rocketslide-label" style="font-size:12px; margin-bottom:6px; display:block;">
+                                <span class="dashicons dashicons-grid-view"></span> Quick Single-Country Toggles (1-Click Block / Unblock):
+                            </label>
+                            <div class="rs-quick-countries-grid">
+                                <button type="button" class="rs-quick-country-btn" data-code="PK">🇵🇰 PK (Pakistan)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="IN">🇮🇳 IN (India)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="BD">🇧🇩 BD (Bangladesh)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="NG">🇳🇬 NG (Nigeria)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="EG">🇪🇬 EG (Egypt)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="PH">🇵🇭 PH (Philippines)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="ID">🇮🇩 ID (Indonesia)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="VN">🇻🇳 VN (Vietnam)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="BR">🇧🇷 BR (Brazil)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="RU">🇷🇺 RU (Russia)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="TR">🇹🇷 TR (Turkey)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="US">🇺🇸 US (USA)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="GB">🇬🇧 GB (UK)</button>
+                                <button type="button" class="rs-quick-country-btn" data-code="CA">🇨🇦 CA (Canada)</button>
+                            </div>
+                        </div>
+
+                        <!-- Active Blocked Country Tags Chips -->
+                        <div style="margin-bottom:14px;">
                             <div class="rocketslide-label-wrapper">
-                                <label class="rocketslide-label"><span class="dashicons dashicons-flag"></span> Blocked Country Codes (ISO-2)</label>
-                                <span class="rocketslide-sublabel-pill">Comma-Separated</span>
+                                <label class="rocketslide-label"><span class="dashicons dashicons-flag"></span> Active Blocked Countries (<span id="rs-blocked-count">0</span>)</label>
+                                <span class="rocketslide-sublabel-pill">Active Blocklist</span>
                             </div>
-                            <input type="text" id="rocketslide-blocked-countries" class="rocketslide-input" value="<?php echo esc_attr($blocked_countries); ?>" placeholder="PK, IN, BD, NG">
-                            
-                            <!-- Quick Presets -->
-                            <div class="rs-geo-presets-row" style="margin-top:8px;">
-                                <span style="font-size:12px; font-weight:700; color:var(--text-muted); align-self:center;">Quick Presets:</span>
-                                <button type="button" class="rs-preset-btn" data-preset="clickfarms">+ Block Click Farms (PK, IN, BD, NG)</button>
-                                <button type="button" class="rs-preset-btn" data-preset="tier3">+ Block Tier 3 (PK, IN, BD, NG, PH, ID, VN)</button>
-                                <button type="button" class="rs-preset-btn" data-preset="clear">Clear All</button>
+                            <div id="rs-blocked-countries-tags" class="rs-blocked-tags-box">
+                                <!-- Tags rendered dynamically by JS -->
                             </div>
-                            <span class="rocketslide-input-hint" style="margin-top:6px;">Supported via Cloudflare IP headers, GeoIP server headers, and cached IP-API lookups.</span>
+                            <!-- Hidden synced storage input -->
+                            <input type="hidden" id="rocketslide-blocked-countries" value="<?php echo esc_attr($blocked_countries); ?>">
+                        </div>
+
+                        <!-- Single Country Custom Add Bar -->
+                        <div style="margin-bottom:14px;">
+                            <label class="rocketslide-label" style="font-size:12px; margin-bottom:6px; display:block;">
+                                <span class="dashicons dashicons-plus-alt2"></span> Add Any Single Country Code (e.g. SA, AE, FR, DE, ZA):
+                            </label>
+                            <div class="rs-single-country-bar">
+                                <div class="rs-single-country-input-wrap">
+                                    <input type="text" id="rs-single-country-input" class="rocketslide-input" placeholder="Type 2-letter ISO code (e.g. SA, AE, FR, DE)" maxlength="2" style="text-transform:uppercase; font-weight:700; font-family:monospace; height:38px;">
+                                </div>
+                                <button type="button" id="rs-add-single-country-btn" class="rocketslide-btn rocketslide-btn-secondary">
+                                    <span class="dashicons dashicons-plus"></span> Add Country
+                                </button>
+                                <button type="button" id="rs-add-save-single-country-btn" class="rocketslide-btn rocketslide-btn-primary">
+                                    <span class="dashicons dashicons-saved"></span> Add &amp; Save Now
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Presets Row -->
+                        <div class="rs-geo-presets-row" style="margin-top:8px;">
+                            <span style="font-size:12px; font-weight:700; color:var(--text-muted); align-self:center;">Presets:</span>
+                            <button type="button" class="rs-preset-btn" data-preset="clickfarms">+ Block Click Farms (PK, IN, BD, NG)</button>
+                            <button type="button" class="rs-preset-btn" data-preset="tier3">+ Block Tier 3 (PK, IN, BD, NG, PH, ID, VN)</button>
+                            <button type="button" class="rs-preset-btn" data-preset="clear">Clear All</button>
                         </div>
                     </div>
 
