@@ -28,6 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'RocketSlide_Frontend' ) ) {
 class RocketSlide_Frontend {
 
 	/** @var string Name of the custom WP query variable */
@@ -305,4 +306,5 @@ class RocketSlide_Frontend {
 		$slug = sanitize_title( trim( $slug, '/' ) );
 		return empty( $slug ) ? 'v' : $slug;
 	}
+}
 }

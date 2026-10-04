@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'RocketSlide_Cloaking' ) ) {
 class RocketSlide_Cloaking {
 
 	// -----------------------------------------------------------
@@ -236,4 +237,5 @@ class RocketSlide_Cloaking {
 			'bot_signatures'  => self::$bot_signatures,
 		);
 	}
+}
 }

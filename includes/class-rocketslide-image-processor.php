@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+if ( ! class_exists( 'RocketSlide_Image_Processor' ) ) {
 class RocketSlide_Image_Processor {
 
 	/** Target width for 9:16 vertical resolution */
@@ -306,4 +307,5 @@ class RocketSlide_Image_Processor {
 
 		return true;
 	}
+}
 }

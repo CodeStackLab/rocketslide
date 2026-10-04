@@ -21,6 +21,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+if ( ! class_exists( 'RocketSlide_Admin' ) ) {
 class RocketSlide_Admin {
 
     public function __construct() {
@@ -708,4 +709,5 @@ class RocketSlide_Admin {
             'total'   => count($filtered)
         ));
     }
+}
 }

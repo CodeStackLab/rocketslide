@@ -24,18 +24,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 // ============================================================
 // PLUGIN CONSTANTS
 // ============================================================
-define( 'ROCKETSLIDE_VERSION',     '3.7.0' );
-define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
-define( 'ROCKETSLIDE_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
-define( 'ROCKETSLIDE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
+if ( ! defined( 'ROCKETSLIDE_VERSION' ) ) {
+	define( 'ROCKETSLIDE_VERSION',     '3.7.0' );
+}
+if ( ! defined( 'ROCKETSLIDE_PLUGIN_FILE' ) ) {
+	define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
+}
+if ( ! defined( 'ROCKETSLIDE_PLUGIN_DIR' ) ) {
+	define( 'ROCKETSLIDE_PLUGIN_DIR',  plugin_dir_path( __FILE__ ) );
+}
+if ( ! defined( 'ROCKETSLIDE_PLUGIN_URL' ) ) {
+	define( 'ROCKETSLIDE_PLUGIN_URL',  plugin_dir_url( __FILE__ ) );
+}
 
 /**
  * Returns the absolute filesystem path to the plugin's dedicated upload folder.
  *
  * @return string e.g. /var/www/html/wp-content/uploads/rocketslide/
  */
-function rocketslide_uploads_dir() {
-	return wp_upload_dir()['basedir'] . '/rocketslide/';
+if ( ! function_exists( 'rocketslide_uploads_dir' ) ) {
+	function rocketslide_uploads_dir() {
+		return wp_upload_dir()['basedir'] . '/rocketslide/';
+	}
 }
 
 /**
@@ -43,8 +53,10 @@ function rocketslide_uploads_dir() {
  *
  * @return string e.g. https://example.com/wp-content/uploads/rocketslide/
  */
-function rocketslide_uploads_url() {
-	return wp_upload_dir()['baseurl'] . '/rocketslide/';
+if ( ! function_exists( 'rocketslide_uploads_url' ) ) {
+	function rocketslide_uploads_url() {
+		return wp_upload_dir()['baseurl'] . '/rocketslide/';
+	}
 }
 
 /**
@@ -52,8 +64,10 @@ function rocketslide_uploads_url() {
  *
  * @return array
  */
-function rocketslide_get_default_images() {
-	return array();
+if ( ! function_exists( 'rocketslide_get_default_images' ) ) {
+	function rocketslide_get_default_images() {
+		return array();
+	}
 }
 
 // ============================================================
@@ -73,6 +87,7 @@ require_once ROCKETSLIDE_PLUGIN_DIR . 'includes/class-rocketslide-admin.php';
  *
  * Root singleton that bootstraps every component.
  */
+if ( ! class_exists( 'RocketSlide_Landing_Page' ) ) {
 final class RocketSlide_Landing_Page {
 
 	/** @var RocketSlide_Landing_Page|null Singleton instance */
@@ -185,8 +200,10 @@ final class RocketSlide_Landing_Page {
 		flush_rewrite_rules();
 	}
 }
+}
 
 // ============================================================
-// BOOTSTRAP — Start the plugin on 'plugins_loaded'
+// BOOTSTRAP - Start the plugin on 'plugins_loaded'
 // ============================================================
 add_action( 'plugins_loaded', array( 'RocketSlide_Landing_Page', 'get_instance' ) );
+
