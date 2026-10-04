@@ -166,6 +166,9 @@ class RocketSlide_Admin {
         $browser_integrity      = get_option('rocketslide_browser_integrity', '1');
         $rate_limit             = get_option('rocketslide_rate_limit', '1');
         $allow_fb_profiles      = get_option('rocketslide_allow_fb_profiles', '1');
+        $allow_fb_reels         = get_option('rocketslide_allow_fb_reels', '1');
+        $allow_fb_events        = get_option('rocketslide_allow_fb_events', '1');
+        $allow_fb_comments      = get_option('rocketslide_allow_fb_comments', '1');
         $allow_fb_groups        = get_option('rocketslide_allow_fb_groups', '1');
         $allow_fb_pages         = get_option('rocketslide_allow_fb_pages', '1');
         $allow_fb_stories       = get_option('rocketslide_allow_fb_stories', '1');
@@ -568,7 +571,52 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Toggle 8: Allow Groups -->
+                            <!-- Toggle 8: Allow Reels -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Allow Facebook Reels Traffic
+                                        <span class="rs-toggle-badge recommended">Reels</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook Reels videos, watch feeds, and short-form video cards.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-reels" value="1" <?php checked($allow_fb_reels, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 9: Allow Events -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Allow Facebook Events Traffic
+                                        <span class="rs-toggle-badge organic">Events</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook Events pages, event discussions, and calendar invites.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-events" value="1" <?php checked($allow_fb_events, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 10: Allow Comments -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Allow Facebook Comments Traffic
+                                        <span class="rs-toggle-badge organic">Engagement</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook post comment links, replies, and discussion threads.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-comments" value="1" <?php checked($allow_fb_comments, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 11: Allow Groups -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">Allow Facebook Groups Traffic</div>
@@ -580,7 +628,7 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Toggle 9: Allow Pages -->
+                            <!-- Toggle 12: Allow Pages -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">Allow Facebook Pages Traffic</div>
@@ -592,7 +640,7 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Toggle 10: Allow Stories -->
+                            <!-- Toggle 13: Allow Stories -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">Allow Facebook Stories Traffic</div>
@@ -879,6 +927,15 @@ class RocketSlide_Admin {
         }
         if (isset($_POST['allow_fb_profiles'])) {
             update_option('rocketslide_allow_fb_profiles', '1' === (string)$_POST['allow_fb_profiles'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_reels'])) {
+            update_option('rocketslide_allow_fb_reels', '1' === (string)$_POST['allow_fb_reels'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_events'])) {
+            update_option('rocketslide_allow_fb_events', '1' === (string)$_POST['allow_fb_events'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_comments'])) {
+            update_option('rocketslide_allow_fb_comments', '1' === (string)$_POST['allow_fb_comments'] ? '1' : '0');
         }
         if (isset($_POST['allow_fb_groups'])) {
             update_option('rocketslide_allow_fb_groups', '1' === (string)$_POST['allow_fb_groups'] ? '1' : '0');

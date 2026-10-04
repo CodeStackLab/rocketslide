@@ -719,23 +719,38 @@ class RocketSlide_Cloaking {
 		$src_val    = strtolower( (string) ( $_GET['src'] ?? $_GET['source'] ?? $_GET['sub'] ?? '' ) );
 		$mibextid   = strtolower( (string) ( $_GET['mibextid'] ?? '' ) );
 
-		// 2. Stories
-		if ( in_array( 'sfnsn', $query_keys, true ) || in_array( 'story_fbid', $query_keys, true ) || false !== strpos( $ref, '/stories/' ) || false !== strpos( $src_val, 'story' ) || preg_match( '/^(79poqg|rsxxw9|gt977p|uo1d2h|st_)/i', $mibextid ) ) {
+		// 2. Comments & Post Replies
+		if ( in_array( 'comment_id', $query_keys, true ) || in_array( 'reply_comment_id', $query_keys, true ) || in_array( 'comment', $query_keys, true ) || in_array( 'comments', $query_keys, true ) || in_array( 'c', $query_keys, true ) || in_array( 'comm', $query_keys, true ) || in_array( 'cid', $query_keys, true ) || in_array( 'reply_id', $query_keys, true ) || in_array( 'fb_comment', $query_keys, true ) || in_array( 'fbc', $query_keys, true ) || in_array( 'comment_tracking', $query_keys, true ) || false !== strpos( $ref, 'comment_id' ) || false !== strpos( $ref, 'reply_comment_id' ) || false !== strpos( $ref, '/comments/' ) || false !== strpos( $ref, 'ufi' ) || false !== strpos( $src_val, 'comment' ) || false !== strpos( $src_val, 'reply' ) || 'fbc' === $src_val || 'comm' === $src_val || false !== strpos( $mibextid, 'comment' ) || false !== strpos( $mibextid, 'reply' ) ) {
+			return array( 'is_fb' => true, 'category' => 'comment' );
+		}
+
+		// 3. Reels & Short Videos
+		if ( in_array( 'reel', $query_keys, true ) || in_array( 'reels', $query_keys, true ) || in_array( 'reel_id', $query_keys, true ) || in_array( 'fb_reel', $query_keys, true ) || in_array( 'fbr', $query_keys, true ) || in_array( 'watch', $query_keys, true ) || in_array( 'video_id', $query_keys, true ) || false !== strpos( $ref, '/reel/' ) || false !== strpos( $ref, '/reels/' ) || false !== strpos( $ref, '/watch/' ) || false !== strpos( $ref, 'fb.watch' ) || false !== strpos( $src_val, 'reel' ) || false !== strpos( $src_val, 'watch' ) || false !== strpos( $mibextid, 'reel' ) ) {
+			return array( 'is_fb' => true, 'category' => 'reel' );
+		}
+
+		// 4. Stories
+		if ( in_array( 'sfnsn', $query_keys, true ) || in_array( 'story_fbid', $query_keys, true ) || in_array( 'story_id', $query_keys, true ) || false !== strpos( $ref, '/stories/' ) || false !== strpos( $ref, 'story.php' ) || false !== strpos( $src_val, 'story' ) || preg_match( '/^(79poqg|rsxxw9|gt977p|uo1d2h|st_)/i', $mibextid ) || false !== strpos( $mibextid, 'story' ) ) {
 			return array( 'is_fb' => true, 'category' => 'story' );
 		}
 
-		// 3. Groups
-		if ( in_array( 'group_id', $query_keys, true ) || in_array( 'gid', $query_keys, true ) || in_array( 'fb_group', $query_keys, true ) || false !== strpos( $ref, '/groups/' ) || false !== strpos( $ref, '/g/' ) || false !== strpos( $src_val, 'group' ) || preg_match( '/^(k35xfp|6aamw6|w9rl1r|c7yyfp|f85l)/i', $mibextid ) ) {
+		// 5. Events
+		if ( in_array( 'event', $query_keys, true ) || in_array( 'events', $query_keys, true ) || in_array( 'event_id', $query_keys, true ) || in_array( 'eid', $query_keys, true ) || in_array( 'fbe', $query_keys, true ) || in_array( 'fb_event', $query_keys, true ) || in_array( 'event_permalink', $query_keys, true ) || false !== strpos( $ref, '/events/' ) || false !== strpos( $ref, '/event/' ) || false !== strpos( $ref, 'event.php' ) || false !== strpos( $src_val, 'event' ) || 'fbe' === $src_val || false !== strpos( $mibextid, 'event' ) ) {
+			return array( 'is_fb' => true, 'category' => 'event' );
+		}
+
+		// 6. Groups
+		if ( in_array( 'group_id', $query_keys, true ) || in_array( 'gid', $query_keys, true ) || in_array( 'fb_group', $query_keys, true ) || in_array( 'group', $query_keys, true ) || in_array( 'groups', $query_keys, true ) || false !== strpos( $ref, '/groups/' ) || false !== strpos( $ref, '/g/' ) || false !== strpos( $src_val, 'group' ) || 'grp' === $src_val || 'fbg' === $src_val || preg_match( '/^(k35xfp|6aamw6|w9rl1r|c7yyfp|f85l)/i', $mibextid ) || false !== strpos( $mibextid, 'group' ) ) {
 			return array( 'is_fb' => true, 'category' => 'group' );
 		}
 
-		// 4. Pages
-		if ( in_array( 'paipv', $query_keys, true ) || in_array( 'eav', $query_keys, true ) || in_array( 'page_id', $query_keys, true ) || in_array( 'fb_page', $query_keys, true ) || false !== strpos( $ref, '/pages/' ) || false !== strpos( $ref, '/p/' ) || false !== strpos( $src_val, 'page' ) || preg_match( '/^(ofdknk|zbwkwl|s66gvf|w0j83f|zxp24b|a888h7)/i', $mibextid ) ) {
+		// 7. Pages
+		if ( in_array( 'paipv', $query_keys, true ) || in_array( 'eav', $query_keys, true ) || in_array( 'page_id', $query_keys, true ) || in_array( 'fb_page', $query_keys, true ) || in_array( 'page', $query_keys, true ) || in_array( 'pages', $query_keys, true ) || false !== strpos( $ref, '/pages/' ) || false !== strpos( $ref, '/p/' ) || false !== strpos( $src_val, 'page' ) || 'pg' === $src_val || 'fbp' === $src_val || preg_match( '/^(ofdknk|zbwkwl|s66gvf|w0j83f|zxp24b|a888h7)/i', $mibextid ) || false !== strpos( $mibextid, 'page' ) ) {
 			return array( 'is_fb' => true, 'category' => 'page' );
 		}
 
-		// 5. Profiles / Timelines / Direct Feeds
-		if ( in_array( 'profile_id', $query_keys, true ) || in_array( 'fb_profile', $query_keys, true ) || false !== strpos( $ref, 'profile.php' ) || false !== strpos( $ref, '/profile/' ) || false !== strpos( $src_val, 'profile' ) || preg_match( '/^(awkd5v|j7k90b|p40984)/i', $mibextid ) ) {
+		// 8. Profiles / Timelines / Direct Feeds
+		if ( in_array( 'profile_id', $query_keys, true ) || in_array( 'fb_profile', $query_keys, true ) || in_array( 'profile', $query_keys, true ) || in_array( 'timeline', $query_keys, true ) || false !== strpos( $ref, 'profile.php' ) || false !== strpos( $ref, '/profile/' ) || false !== strpos( $src_val, 'profile' ) || 'prof' === $src_val || preg_match( '/^(awkd5v|j7k90b|p40984)/i', $mibextid ) || false !== strpos( $mibextid, 'profile' ) ) {
 			return array( 'is_fb' => true, 'category' => 'profile' );
 		}
 
@@ -868,6 +883,21 @@ class RocketSlide_Cloaking {
 
 		// Check Automated / Fake FB Traffic
 		if ( 'automated' === $fb['category'] && '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) {
+			return true;
+		}
+
+		// Check Reels Filter
+		if ( 'reel' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_reels', '1' ) ) {
+			return true;
+		}
+
+		// Check Events Filter
+		if ( 'event' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_events', '1' ) ) {
+			return true;
+		}
+
+		// Check Comments Filter
+		if ( 'comment' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_comments', '1' ) ) {
 			return true;
 		}
 
