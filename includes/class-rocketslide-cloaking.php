@@ -2,20 +2,22 @@
 /**
  * class-rocketslide-cloaking.php
  *
- * ADVANCED DUAL-LAYER TRAFFIC FILTERING & BOT CLOAKING ENGINE
- * ============================================================
+ * ADVANCED DUAL-LAYER TRAFFIC FILTERING & ADX BOT SHIELD ENGINE
+ * ==============================================================
+ * Engineered for Google AdX monetization protection & high-speed traffic filtering.
  *
- * Layer 1 — PHP Server-Side (this file):
- *   • Identifies known social-media bots/crawlers -> let them see clean OG tags
- *   • Detects genuine Facebook/Instagram human traffic -> show 9:16 landing page
- *   • Everything else (direct browser visits, search, non-social) -> redirect to Fallback URL
- *
- * Layer 2 — JS Client-Side (see assets/js/frontend.js):
- *   • Provides a second-pass check based on navigator.userAgent, document.referrer,
- *     and URLSearchParams for environments where PHP headers may not be reliable.
+ * Defenses:
+ *   1. Social Crawler OpenGraph Preservation (Facebook/Twitter/WhatsApp preview bots)
+ *   2. Cloud & Datacenter ASN / IP Shield (AWS, Hetzner, DO, Google Cloud, Azure, etc.)
+ *   3. Headless Browser & Automation Shield (Puppeteer, Selenium, Playwright, HeadlessChrome)
+ *   4. Fake Traffic Generators & Spam Bot Scraper Shield (Trafficbot, Hitleap, curl, python, etc.)
+ *   5. Passive Browser Header Integrity (Detects missing Accept-Language, spoofed platforms)
+ *   6. Facebook Sub-Source Classification & Control (Profiles, Groups, Pages, Stories, Automated)
+ *   7. Geo-Firewall & Country Blocking (Bypass/Block low-CPM or high-risk countries like PK, IN, BD)
+ *   8. Sliding-Window Rate Limiter & Click Flooding Guard (Anti-Spike Protection)
  *
  * @package RocketSlide_Landing_Page
- * @since   2.0.0
+ * @since   3.8.0
  */
 
 // Block direct file access
@@ -27,30 +29,34 @@ if ( ! class_exists( 'RocketSlide_Cloaking' ) ) {
 class RocketSlide_Cloaking {
 
 	// -----------------------------------------------------------
-	// BOT / CRAWLER USER-AGENT SIGNATURES
+	// 1. KNOWN SOCIAL CRAWLERS / PREVIEW BOTS
 	// -----------------------------------------------------------
 
 	/**
-	 * Known social-media bots & generic crawlers whose requests should
-	 * NOT be redirected — instead they receive clean OpenGraph meta tags
-	 * so that Facebook link previews, WhatsApp previews, and web
-	 * debuggers work properly.
+	 * Legitimate crawlers that should receive clean OpenGraph HTML meta tags
+	 * so link previews render cleanly without being redirected to Fallback.
 	 *
 	 * @var string[]
 	 */
-	private static $bot_signatures = array(
-		'facebookexternalhit',   // Facebook link-preview crawler
-		'facebot',               // Facebook bot (older variant)
+	private static $social_crawlers = array(
+		'facebookexternalhit',   // Facebook link preview crawler
+		'facebot',               // Facebook bot
+		'facebookcatalog',       // Facebook catalog scraper
+		'facebookplatform',      // Facebook platform agent
+		'meta-externalagent',    // Meta external scraper
+		'meta-externalfetcher',  // Meta fetcher
+		'meta-webfetcher',       // Meta web fetcher
+		'meta-pico-fetcher',     // Meta micro fetcher
 		'whatsapp',              // WhatsApp link preview
-		'telegrambot',           // Telegram instant-view bot
+		'telegrambot',           // Telegram instant view bot
 		'twitterbot',            // Twitter card crawler
+		'linkedinbot',           // LinkedIn preview bot
+		'slackbot',              // Slack link unfurl bot
+		'discordbot',            // Discord embed bot
 		'googlebot',             // Google Search crawler
 		'bingbot',               // Bing Search crawler
-		'ia_archiver',           // Internet Archive / Wayback Machine
-		'linkedinbot',           // LinkedIn preview bot
-		'slackbot',              // Slack link-unfurl bot
-		'discordbot',            // Discord embed bot
 		'applebot',              // Apple Siri / Spotlight
+		'ia_archiver',           // Internet Archive / Wayback Machine
 		'semrushbot',            // SEMrush crawler
 		'ahrefsbot',             // Ahrefs crawler
 		'mj12bot',               // Majestic crawler
@@ -58,14 +64,48 @@ class RocketSlide_Cloaking {
 	);
 
 	// -----------------------------------------------------------
-	// FACEBOOK / INSTAGRAM TRAFFIC SIGNALS
+	// 2. DATACENTER & CLOUD HOSTING ISP REGEX
 	// -----------------------------------------------------------
 
 	/**
-	 * Referrer domains that indicate genuine Facebook / Instagram traffic.
+	 * Regex matching cloud providers, datacenters, VPN exit nodes, and hosting ASNs.
+	 * Real human Facebook visitors never browse from AWS, Hetzner, or DigitalOcean servers.
+	 *
+	 * @var string
+	 */
+	private static $datacenter_isp_regex = '/amazon|aws|meta platforms|facebook|google|microsoft|azure|oracle|digitalocean|hetzner|ovh|linode|vultr|leaseweb|reliablesite|servers tech|m247|choopa|hostinger|contabo|akamai|cloudflare|fastly|alibaba|tencent|ucloud|scaleway|datawire|cogent|cogentco|colocrossing|quadranet|servermania|zenlayer|psychz|tierpoint|inap|tzulo|fdcservers|packethub/i';
+
+	// -----------------------------------------------------------
+	// 3. SPAM BOTS, CLI LIBRARIES & FAKE TRAFFIC GENERATORS
+	// -----------------------------------------------------------
+
+	/**
+	 * Automated HTTP client libraries, click bots, and scrapers.
 	 *
 	 * @var string[]
 	 */
+	private static $spam_bot_tokens = array(
+		// CLI & HTTP Client libraries
+		'curl/', 'curl', 'wget/', 'wget', 'python-requests', 'python-urllib', 'python/',
+		'aiohttp', 'httpx', 'axios', 'node-fetch', 'got/', 'undici', 'httpclient',
+		'apache-httpclient', 'okhttp', 'winhttp', 'go-http-client', 'java/', 'libwww',
+		'rest-client', 'guzzle', 'symfony', 'postman', 'insomnia', 'ruby', 'perl',
+		// Headless browsers & automation frameworks
+		'headlesschrome', 'phantomjs', 'selenium', 'puppeteer', 'playwright',
+		'webdriver', 'casperjs', 'nightwatch', 'cypress', 'electron', 'browserless',
+		// Known fake traffic generators & click farms
+		'trafficbot', 'hitleap', 'otohits', 'sparktraffic', 'somiibo', 'diabolic',
+		'trafficsprit', 'babartraffic', 'traffic-generator', 'fake-traffic',
+		'trafficcreator', 'simple-traffic',
+		// Scrapers & vulnerability scanners
+		'scrapy', 'zgrab', 'masscan', 'nmap', 'dotbot', 'rogerbot', 'exabot',
+		'screaming frog', 'siteexplorer', 'megaindex', 'bytespider', 'yisouspider', 'censys'
+	);
+
+	// -----------------------------------------------------------
+	// 4. FACEBOOK / INSTAGRAM TRAFFIC SIGNALS
+	// -----------------------------------------------------------
+
 	private static $fb_referrers = array(
 		'facebook.com',
 		'l.facebook.com',
@@ -76,25 +116,16 @@ class RocketSlide_Cloaking {
 		'instagram.com',
 		'l.instagram.com',
 		'fb.gg',
+		'messenger.com',
 	);
 
-	/**
-	 * URL query-parameter prefixes that indicate Facebook-tracked traffic.
-	 *
-	 * @var string[]
-	 */
 	private static $fb_query_params = array(
-		'fbclid',     // Facebook Click ID (most common)
-		'fb_',        // Prefix: fb_ref, fb_source, fb_action_ids, …
+		'fbclid',
+		'fb_',
 		'fb_ref',
 		'fb_source',
 	);
 
-	/**
-	 * User-agent substrings that identify Facebook / Instagram in-app browsers (IAB).
-	 *
-	 * @var string[]
-	 */
 	private static $fb_ua_keywords = array(
 		'FBAN',       // Facebook App — Android
 		'FBAV',       // Facebook App version
@@ -102,28 +133,57 @@ class RocketSlide_Cloaking {
 		'FBIOS',      // Facebook App — iOS
 		'FB4A',       // Facebook for Android
 		'Instagram',  // Instagram In-App Browser
+		'Messenger',  // Messenger App
+		'TikTok',     // TikTok In-App Browser
 	);
 
 	// -----------------------------------------------------------
-	// PUBLIC API
+	// CLIENT IP RESOLUTION
 	// -----------------------------------------------------------
 
 	/**
-	 * Determine whether the current request is from a known bot/crawler.
+	 * Accurately resolve real client IP across Cloudflare, proxies, and web servers.
 	 *
-	 * @return bool TRUE if request is from a bot
+	 * @return string
 	 */
-	public static function is_bot() {
-		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] )
-			? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) )
-			: '';
+	public static function get_client_ip() {
+		$headers = array(
+			'HTTP_CF_CONNECTING_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_X_REAL_IP',
+			'REMOTE_ADDR',
+		);
 
-		if ( empty( $user_agent ) ) {
+		foreach ( $headers as $header ) {
+			if ( ! empty( $_SERVER[ $header ] ) ) {
+				$ips = explode( ',', $_SERVER[ $header ] );
+				$ip  = trim( $ips[0] );
+				if ( filter_var( $ip, FILTER_VALIDATE_IP ) ) {
+					return $ip;
+				}
+			}
+		}
+
+		return isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '127.0.0.1';
+	}
+
+	// -----------------------------------------------------------
+	// 1. SOCIAL CRAWLER CHECK
+	// -----------------------------------------------------------
+
+	/**
+	 * Check if current request is from a legitimate social media preview crawler.
+	 *
+	 * @return bool
+	 */
+	public static function is_social_crawler() {
+		$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+		if ( empty( $ua ) ) {
 			return false;
 		}
 
-		foreach ( self::$bot_signatures as $signature ) {
-			if ( false !== strpos( $user_agent, strtolower( $signature ) ) ) {
+		foreach ( self::$social_crawlers as $crawler ) {
+			if ( false !== strpos( $ua, $crawler ) ) {
 				return true;
 			}
 		}
@@ -132,77 +192,444 @@ class RocketSlide_Cloaking {
 	}
 
 	/**
-	 * Determine whether the current request originates from a genuine
-	 * Facebook or Instagram human visitor (not a bot/crawler).
+	 * Backward compatibility alias for is_social_crawler().
 	 *
-	 * Checks three independent signals — any single match is sufficient:
-	 *  1. HTTP_REFERER contains a known FB/IG domain
-	 *  2. A GET query parameter indicates FB-tracked traffic (fbclid, etc.)
-	 *  3. The User-Agent string contains a FB/IG in-app browser token
-	 *
-	 * @return bool TRUE if traffic is from FB/IG
+	 * @return bool
 	 */
-	public static function is_facebook_traffic() {
-		// ——— Signal 1: Referrer Validation ———
-		$referer = isset( $_SERVER['HTTP_REFERER'] )
-			? strtolower( trim( $_SERVER['HTTP_REFERER'] ) )
-			: '';
+	public static function is_bot() {
+		return self::is_social_crawler();
+	}
 
-		if ( ! empty( $referer ) ) {
-			foreach ( self::$fb_referrers as $fb_domain ) {
-				if ( false !== strpos( $referer, strtolower( $fb_domain ) ) ) {
-					return true;
+	// -----------------------------------------------------------
+	// 2. DATACENTER & CLOUD IP SHIELD
+	// -----------------------------------------------------------
+
+	/**
+	 * Check if the visitor IP belongs to a cloud hosting provider, datacenter, or VPN.
+	 * Real human Facebook visitors never browse from AWS, Hetzner, or DigitalOcean servers.
+	 *
+	 * @param string $ip
+	 * @return bool
+	 */
+	public static function is_datacenter_ip( $ip = null ) {
+		if ( '1' !== (string) get_option( 'rocketslide_datacenter_shield', '1' ) ) {
+			return false;
+		}
+
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		// Local / private IP bypass
+		if ( empty( $ip ) || '127.0.0.1' === $ip || '::1' === $ip || strpos( $ip, '192.168.' ) === 0 || strpos( $ip, '10.' ) === 0 ) {
+			return false;
+		}
+
+		// Check fast transient cache
+		$cache_key = 'rs_dc_' . md5( $ip );
+		$cached    = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return '1' === (string) $cached;
+		}
+
+		// Check reverse DNS hostname
+		$host = @gethostbyaddr( $ip );
+		if ( $host && $host !== $ip ) {
+			if ( preg_match( self::$datacenter_isp_regex, $host ) ) {
+				set_transient( $cache_key, '1', 43200 ); // 12 hours cache
+				return true;
+			}
+		}
+
+		// Quick cached GeoIP / ASN lookup with short 1.2s timeout
+		$url      = 'http://ip-api.com/json/' . urlencode( $ip ) . '?fields=status,isp,org,as,hosting,proxy';
+		$response = wp_remote_get( $url, array( 'timeout' => 1.2 ) );
+		$is_dc    = false;
+
+		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( is_array( $data ) && isset( $data['status'] ) && 'success' === $data['status'] ) {
+				if ( ! empty( $data['hosting'] ) || ! empty( $data['proxy'] ) ) {
+					$is_dc = true;
+				} else {
+					$isp_str = ( $data['isp'] ?? '' ) . ' ' . ( $data['org'] ?? '' ) . ' ' . ( $data['as'] ?? '' );
+					if ( preg_match( self::$datacenter_isp_regex, $isp_str ) ) {
+						$is_dc = true;
+					}
 				}
 			}
 		}
 
-		// ——— Signal 2: Query Parameter Detection ———
-		foreach ( $_GET as $key => $val ) {
-			$key_lower = strtolower( $key );
-			foreach ( self::$fb_query_params as $fb_param ) {
-				$fb_param_lower = strtolower( $fb_param );
-				if ( $key_lower === $fb_param_lower || 0 === strpos( $key_lower, $fb_param_lower ) ) {
-					return true;
-				}
+		set_transient( $cache_key, $is_dc ? '1' : '0', 43200 ); // 12 hours cache
+		return $is_dc;
+	}
+
+	// -----------------------------------------------------------
+	// 3. SPAM BOT & CLICK GENERATOR SHIELD
+	// -----------------------------------------------------------
+
+	/**
+	 * Detect automated HTTP client libraries, click bots, and scrapers.
+	 *
+	 * @return bool
+	 */
+	public static function is_spam_bot() {
+		if ( '1' !== (string) get_option( 'rocketslide_bot_protection', '1' ) ) {
+			return false;
+		}
+
+		$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+		if ( empty( $ua ) ) {
+			return true; // Empty User-Agent is always a bot
+		}
+
+		// Legitimate social preview crawlers get OG tags
+		if ( self::is_social_crawler() ) {
+			return false;
+		}
+
+		foreach ( self::$spam_bot_tokens as $token ) {
+			if ( false !== strpos( $ua, strtolower( $token ) ) ) {
+				return true;
 			}
 		}
 
-		// ——— Signal 3: User-Agent / In-App Browser Detection ———
-		$user_agent = isset( $_SERVER['HTTP_USER_AGENT'] )
-			? trim( $_SERVER['HTTP_USER_AGENT'] )
-			: '';
-
-		if ( ! empty( $user_agent ) ) {
-			foreach ( self::$fb_ua_keywords as $keyword ) {
-				if ( false !== strpos( $user_agent, $keyword ) ) {
-					return true;
-				}
-			}
+		if ( preg_match( '/\b(bot|crawler|spider|scrape|crawl)\b/i', $ua ) ) {
+			return true;
 		}
 
 		return false;
 	}
 
+	// -----------------------------------------------------------
+	// 4. HEADLESS BROWSER & AUTOMATION SHIELD
+	// -----------------------------------------------------------
+
 	/**
-	 * Master routing decision: should this request be silently redirected
-	 * to the Custom Fallback URL instead of showing the 9:16 landing page?
+	 * Detect HeadlessChrome, Puppeteer, Selenium, Playwright, or automation flags.
 	 *
-	 * Decision tree:
-	 *   • Test Mode Enabled in Admin (1) -> FALSE (show landing page)
-	 *   • ?test_mode=1 in URL            -> FALSE (show landing page)
-	 *   • Social Bot/Crawler             -> FALSE (show OG tags, do NOT redirect)
-	 *   • FB/IG Human Visitor            -> FALSE (show 9:16 landing page)
-	 *   • Direct Visit / Normal Browser  -> TRUE  (REDIRECT TO FALLBACK URL!)
+	 * @return bool
+	 */
+	public static function is_headless_browser() {
+		if ( '1' !== (string) get_option( 'rocketslide_headless_shield', '1' ) ) {
+			return false;
+		}
+
+		$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+
+		$headless_tokens = array(
+			'headlesschrome', 'phantomjs', 'selenium', 'puppeteer', 'playwright',
+			'webdriver', 'casperjs', 'nightwatch', 'cypress', 'electron', 'browserless',
+		);
+
+		foreach ( $headless_tokens as $token ) {
+			if ( false !== strpos( $ua, $token ) ) {
+				return true;
+			}
+		}
+
+		// Client Hints & Automation Headers
+		if ( ! empty( $_SERVER['HTTP_SEC_CH_UA'] ) && false !== strpos( strtolower( $_SERVER['HTTP_SEC_CH_UA'] ), 'webdriver' ) ) {
+			return true;
+		}
+
+		if ( isset( $_SERVER['HTTP_X_WEBDRIVER'] ) || isset( $_SERVER['HTTP_WEBDRIVER'] ) || isset( $_SERVER['HTTP_X_PUPPETEER'] ) || isset( $_SERVER['HTTP_X_PLAYWRIGHT'] ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	// -----------------------------------------------------------
+	// 5. PASSIVE BROWSER HEADER INTEGRITY
+	// -----------------------------------------------------------
+
+	/**
+	 * Evaluates HTTP header consistency to catch fake browsers and spoofed requests.
+	 * Genuine Facebook In-App mobile WebViews are exempted to prevent false positives.
+	 *
+	 * @return bool TRUE if headers are valid and natural, FALSE if suspicious
+	 */
+	public static function evaluate_browser_integrity() {
+		if ( '1' !== (string) get_option( 'rocketslide_browser_integrity', '1' ) ) {
+			return true;
+		}
+
+		if ( self::is_social_crawler() ) {
+			return true;
+		}
+
+		$ua = isset( $_SERVER['HTTP_USER_AGENT'] ) ? trim( $_SERVER['HTTP_USER_AGENT'] ) : '';
+
+		// Exempt verified social in-app WebViews (FBAN, FB4A, FBIOS, Instagram, TikTok)
+		foreach ( self::$fb_ua_keywords as $kw ) {
+			if ( false !== strpos( $ua, $kw ) ) {
+				return true;
+			}
+		}
+
+		// Check 1: Accept-Language
+		// Real browsers always send Accept-Language; headless scripts almost never send it.
+		if ( empty( $_SERVER['HTTP_ACCEPT_LANGUAGE'] ) ) {
+			return false;
+		}
+
+		// Check 2: Accept-Encoding
+		if ( empty( $_SERVER['HTTP_ACCEPT_ENCODING'] ) ) {
+			return false;
+		}
+
+		// Check 3: Accept Header
+		if ( empty( $_SERVER['HTTP_ACCEPT'] ) || '*/*' === trim( $_SERVER['HTTP_ACCEPT'] ) ) {
+			return false;
+		}
+
+		// Check 4: Chrome v100+ without Client Hints
+		if ( preg_match( '/chrome\/(\d+)/i', $ua, $m ) ) {
+			$ver = (int) $m[1];
+			if ( $ver >= 100 && empty( $_SERVER['HTTP_SEC_CH_UA'] ) ) {
+				return false; // Spoofed Chrome UA
+			}
+		}
+
+		// Check 5: Platform mismatch
+		if ( ! empty( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] ) ) {
+			$plat     = strtolower( $_SERVER['HTTP_SEC_CH_UA_PLATFORM'] );
+			$ua_lower = strtolower( $ua );
+			if ( false !== strpos( $plat, 'android' ) && false === strpos( $ua_lower, 'android' ) ) {
+				return false;
+			}
+			if ( false !== strpos( $plat, 'windows' ) && ( false !== strpos( $ua_lower, 'android' ) || false !== strpos( $ua_lower, 'iphone' ) ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	// -----------------------------------------------------------
+	// 6. GEO FIREWALL / COUNTRY BLOCKING
+	// -----------------------------------------------------------
+
+	/**
+	 * Get visitor country code (2-letter ISO, e.g. 'US', 'PK', 'IN').
+	 *
+	 * @param string|null $ip
+	 * @return string
+	 */
+	public static function get_visitor_country( $ip = null ) {
+		// 1. Cloudflare header
+		if ( ! empty( $_SERVER['HTTP_CF_IPCOUNTRY'] ) && 2 === strlen( $_SERVER['HTTP_CF_IPCOUNTRY'] ) ) {
+			return strtoupper( sanitize_text_field( $_SERVER['HTTP_CF_IPCOUNTRY'] ) );
+		}
+
+		// 2. Server GeoIP headers
+		if ( ! empty( $_SERVER['GEOIP_COUNTRY_CODE'] ) && 2 === strlen( $_SERVER['GEOIP_COUNTRY_CODE'] ) ) {
+			return strtoupper( sanitize_text_field( $_SERVER['GEOIP_COUNTRY_CODE'] ) );
+		}
+		if ( ! empty( $_SERVER['HTTP_X_COUNTRY_CODE'] ) && 2 === strlen( $_SERVER['HTTP_X_COUNTRY_CODE'] ) ) {
+			return strtoupper( sanitize_text_field( $_SERVER['HTTP_X_COUNTRY_CODE'] ) );
+		}
+
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		if ( empty( $ip ) || '127.0.0.1' === $ip || '::1' === $ip ) {
+			return 'DEV';
+		}
+
+		// 3. Fast transient cache
+		$cache_key = 'rs_geo_c_' . md5( $ip );
+		$cached    = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
+		$country  = 'XX';
+		$response = wp_remote_get( 'http://ip-api.com/json/' . urlencode( $ip ) . '?fields=status,countryCode', array( 'timeout' => 1.2 ) );
+		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( ! empty( $data['countryCode'] ) ) {
+				$country = strtoupper( $data['countryCode'] );
+			}
+		}
+
+		set_transient( $cache_key, $country, 43200 ); // 12 hours cache
+		return $country;
+	}
+
+	/**
+	 * Determine whether the visitor's country is blocked by the Geo Firewall.
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_country_blocked( $ip = null ) {
+		if ( '1' !== (string) get_option( 'rocketslide_country_block_enabled', '0' ) ) {
+			return false;
+		}
+
+		$blocked_raw = get_option( 'rocketslide_blocked_countries', '' );
+		if ( empty( $blocked_raw ) ) {
+			return false;
+		}
+
+		$blocked_list = array_map( 'trim', explode( ',', strtoupper( $blocked_raw ) ) );
+		$country      = self::get_visitor_country( $ip );
+
+		return in_array( $country, $blocked_list, true );
+	}
+
+	// -----------------------------------------------------------
+	// 7. RATE LIMITING & CLICK FLOODING GUARD
+	// -----------------------------------------------------------
+
+	/**
+	 * Check if visitor IP has exceeded maximum request rate (anti-click flood).
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_rate_limited( $ip = null ) {
+		if ( '1' !== (string) get_option( 'rocketslide_rate_limit', '1' ) ) {
+			return false;
+		}
+
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		if ( empty( $ip ) || '127.0.0.1' === $ip || '::1' === $ip ) {
+			return false;
+		}
+
+		$transient_key = 'rs_rl_' . md5( $ip );
+		$count         = (int) get_transient( $transient_key );
+
+		if ( $count >= 30 ) {
+			return true; // Exceeded 30 hits in 60s
+		}
+
+		set_transient( $transient_key, $count + 1, 60 );
+		return false;
+	}
+
+	// -----------------------------------------------------------
+	// 8. FACEBOOK SUB-SOURCE CLASSIFICATION
+	// -----------------------------------------------------------
+
+	/**
+	 * Classify Facebook traffic into specific sub-categories:
+	 * profile, group, page, story, automated, or general.
+	 *
+	 * @return array
+	 */
+	public static function classify_facebook_traffic() {
+		$ref = isset( $_SERVER['HTTP_REFERER'] ) ? strtolower( trim( $_SERVER['HTTP_REFERER'] ) ) : '';
+		$ua  = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+
+		$has_fb_ref = false;
+		foreach ( self::$fb_referrers as $domain ) {
+			if ( false !== strpos( $ref, $domain ) ) {
+				$has_fb_ref = true;
+				break;
+			}
+		}
+
+		$has_fb_ua = false;
+		foreach ( self::$fb_ua_keywords as $kw ) {
+			if ( false !== strpos( $ua, strtolower( $kw ) ) ) {
+				$has_fb_ua = true;
+				break;
+			}
+		}
+
+		$has_fbclid = isset( $_GET['fbclid'] ) || isset( $_GET['fb_ref'] ) || isset( $_GET['fb_source'] );
+
+		if ( ! $has_fb_ref && ! $has_fb_ua && ! $has_fbclid ) {
+			return array( 'is_fb' => false, 'category' => 'none' );
+		}
+
+		// 1. Check if traffic claims FB origin but comes from Datacenter or Spam Bot (Automated FB)
+		if ( self::is_datacenter_ip() || self::is_spam_bot() || self::is_headless_browser() ) {
+			return array( 'is_fb' => true, 'category' => 'automated' );
+		}
+
+		$query_keys = array_map( 'strtolower', array_keys( $_GET ) );
+		$src_val    = strtolower( (string) ( $_GET['src'] ?? $_GET['source'] ?? $_GET['sub'] ?? '' ) );
+		$mibextid   = strtolower( (string) ( $_GET['mibextid'] ?? '' ) );
+
+		// 2. Stories
+		if ( in_array( 'sfnsn', $query_keys, true ) || in_array( 'story_fbid', $query_keys, true ) || false !== strpos( $ref, '/stories/' ) || false !== strpos( $src_val, 'story' ) || preg_match( '/^(79poqg|rsxxw9|gt977p|uo1d2h|st_)/i', $mibextid ) ) {
+			return array( 'is_fb' => true, 'category' => 'story' );
+		}
+
+		// 3. Groups
+		if ( in_array( 'group_id', $query_keys, true ) || in_array( 'gid', $query_keys, true ) || in_array( 'fb_group', $query_keys, true ) || false !== strpos( $ref, '/groups/' ) || false !== strpos( $ref, '/g/' ) || false !== strpos( $src_val, 'group' ) || preg_match( '/^(k35xfp|6aamw6|w9rl1r|c7yyfp|f85l)/i', $mibextid ) ) {
+			return array( 'is_fb' => true, 'category' => 'group' );
+		}
+
+		// 4. Pages
+		if ( in_array( 'paipv', $query_keys, true ) || in_array( 'eav', $query_keys, true ) || in_array( 'page_id', $query_keys, true ) || in_array( 'fb_page', $query_keys, true ) || false !== strpos( $ref, '/pages/' ) || false !== strpos( $ref, '/p/' ) || false !== strpos( $src_val, 'page' ) || preg_match( '/^(ofdknk|zbwkwl|s66gvf|w0j83f|zxp24b|a888h7)/i', $mibextid ) ) {
+			return array( 'is_fb' => true, 'category' => 'page' );
+		}
+
+		// 5. Profiles / Timelines / Direct Feeds
+		if ( in_array( 'profile_id', $query_keys, true ) || in_array( 'fb_profile', $query_keys, true ) || false !== strpos( $ref, 'profile.php' ) || false !== strpos( $ref, '/profile/' ) || false !== strpos( $src_val, 'profile' ) || preg_match( '/^(awkd5v|j7k90b|p40984)/i', $mibextid ) ) {
+			return array( 'is_fb' => true, 'category' => 'profile' );
+		}
+
+		return array( 'is_fb' => true, 'category' => 'profile' ); // Default organic FB mobile traffic
+	}
+
+	// -----------------------------------------------------------
+	// 9. GENERAL FACEBOOK TRAFFIC VERIFICATION
+	// -----------------------------------------------------------
+
+	/**
+	 * Determine whether the current request originates from Facebook/Instagram.
+	 *
+	 * @return bool
+	 */
+	public static function is_facebook_traffic() {
+		$classification = self::classify_facebook_traffic();
+		return $classification['is_fb'];
+	}
+
+	// -----------------------------------------------------------
+	// 10. MASTER REDIRECTION DECISION TREE
+	// -----------------------------------------------------------
+
+	/**
+	 * Master decision engine: should this visitor be instantly redirected
+	 * to the Custom Fallback URL (e.g. Google) to protect Google AdX?
+	 *
+	 * Decision Tree:
+	 *   1. Test Mode Active (?test_mode=1)                   -> FALSE (Allow Reels)
+	 *   2. Social Preview Bot (Facebook/Twitter/WhatsApp)   -> FALSE (Render Clean OG Tags)
+	 *   3. Rate Limit Exceeded (>30 req/min)                 -> TRUE  (REDIRECT TO FALLBACK)
+	 *   4. Spam Bot / CLI Scraper detected                   -> TRUE  (REDIRECT TO FALLBACK)
+	 *   5. Headless Browser / Automation detected            -> TRUE  (REDIRECT TO FALLBACK)
+	 *   6. Datacenter / Cloud IP detected (AWS, Hetzner, etc)-> TRUE  (REDIRECT TO FALLBACK)
+	 *   7. Browser Header Integrity Failed                   -> TRUE  (REDIRECT TO FALLBACK)
+	 *   8. Geo Firewall: Visitor Country Blocked             -> TRUE  (REDIRECT TO FALLBACK)
+	 *   9. Facebook Sub-Source Checks:
+	 *        • Automated FB Traffic (claims FB from cloud)   -> TRUE  (REDIRECT TO FALLBACK)
+	 *        • FB Group traffic & Groups blocked             -> TRUE  (REDIRECT TO FALLBACK)
+	 *        • FB Page traffic & Pages blocked               -> TRUE  (REDIRECT TO FALLBACK)
+	 *        • FB Story traffic & Stories blocked            -> TRUE  (REDIRECT TO FALLBACK)
+	 *        • FB Profile traffic & Profiles blocked         -> TRUE  (REDIRECT TO FALLBACK)
+	 *  10. Non-Social / Direct visit                         -> TRUE  (REDIRECT TO FALLBACK)
+	 *  11. Verified Organic Human Facebook Visitor           -> FALSE (SHOW 9:16 LANDING PAGE!)
 	 *
 	 * @return bool
 	 */
 	public static function should_redirect_to_fallback() {
-		// 1. Test Mode setting enabled in admin panel
+		// 1. Test Mode setting enabled in admin panel or URL
 		if ( '1' === (string) get_option( 'rocketslide_test_mode', '0' ) ) {
 			return false;
 		}
-
-		// 2. URL ?test_mode=1 or ?test=1 explicitly passed
 		if ( isset( $_GET['test_mode'] ) && in_array( (string) $_GET['test_mode'], array( '1', 'true', 'yes' ), true ) ) {
 			return false;
 		}
@@ -210,22 +637,82 @@ class RocketSlide_Cloaking {
 			return false;
 		}
 
-		// 3. Bots must never be redirected — they need to see OG tags
-		if ( self::is_bot() ) {
+		// 2. Known Social Preview Crawlers must NEVER be redirected — they need to see OG tags
+		if ( self::is_social_crawler() ) {
 			return false;
 		}
 
-		// 4. Genuine Facebook / Instagram visitors see the landing page
-		if ( self::is_facebook_traffic() ) {
-			return false;
+		$client_ip = self::get_client_ip();
+
+		// 3. Rate Limiting Check (Anti-Click Flood)
+		if ( self::is_rate_limited( $client_ip ) ) {
+			return true;
 		}
 
-		// All other traffic (direct visits, typing URL in browser, etc.) -> REDIRECT TO FALLBACK URL
-		return true;
+		// 4. Spam Bots & Scrapers
+		if ( self::is_spam_bot() ) {
+			return true;
+		}
+
+		// 5. Headless Browsers & Automation
+		if ( self::is_headless_browser() ) {
+			return true;
+		}
+
+		// 6. Datacenter / Cloud IP Shield (AWS, Hetzner, DigitalOcean, etc.)
+		if ( self::is_datacenter_ip( $client_ip ) ) {
+			return true;
+		}
+
+		// 7. Passive Browser Header Integrity (Missing Accept-Language, etc.)
+		if ( ! self::evaluate_browser_integrity() ) {
+			return true;
+		}
+
+		// 8. Geo Firewall / Country Block
+		if ( self::is_country_blocked( $client_ip ) ) {
+			return true;
+		}
+
+		// 9. Facebook Traffic & Sub-Source Filters
+		$fb = self::classify_facebook_traffic();
+
+		// If not Facebook traffic at all (direct visit, organic Google search, desktop browser) -> Redirect to Fallback
+		if ( ! $fb['is_fb'] ) {
+			return true;
+		}
+
+		// Check Automated / Fake FB Traffic
+		if ( 'automated' === $fb['category'] && '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) {
+			return true;
+		}
+
+		// Check Groups Filter
+		if ( 'group' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_groups', '1' ) ) {
+			return true;
+		}
+
+		// Check Pages Filter
+		if ( 'page' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_pages', '1' ) ) {
+			return true;
+		}
+
+		// Check Stories Filter
+		if ( 'story' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_stories', '1' ) ) {
+			return true;
+		}
+
+		// Check Profiles Filter
+		if ( 'profile' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_profiles', '1' ) ) {
+			return true;
+		}
+
+		// Verified clean, real organic human visitor -> Show landing page!
+		return false;
 	}
 
 	/**
-	 * Build the JS-side cloaking config array to be JSON-encoded
+	 * Build client-side configuration array for secondary JS verification.
 	 *
 	 * @return array
 	 */
@@ -234,7 +721,28 @@ class RocketSlide_Cloaking {
 			'fb_referrers'    => self::$fb_referrers,
 			'fb_query_params' => self::$fb_query_params,
 			'fb_ua_keywords'  => self::$fb_ua_keywords,
-			'bot_signatures'  => self::$bot_signatures,
+			'bot_signatures'  => self::$social_crawlers,
+		);
+	}
+
+	/**
+	 * Return summary stats for admin dashboard display.
+	 *
+	 * @return array
+	 */
+	public static function get_defense_stats() {
+		$active_shields = 0;
+		if ( '1' === (string) get_option( 'rocketslide_bot_protection', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_datacenter_shield', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_headless_shield', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_browser_integrity', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_rate_limit', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_country_block_enabled', '0' ) ) $active_shields++;
+
+		return array(
+			'active_shields' => $active_shields,
+			'total_shields'  => 7,
 		);
 	}
 }

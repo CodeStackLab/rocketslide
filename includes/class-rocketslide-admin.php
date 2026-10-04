@@ -156,6 +156,23 @@ class RocketSlide_Admin {
         $tracking_script = get_option('rocketslide_tracking_script', '');
         $images          = get_option('rocketslide_images', array());
 
+        // Anti-Bot & Cloaking Engine Options
+        $test_mode              = get_option('rocketslide_test_mode', '0');
+        $bot_protection         = get_option('rocketslide_bot_protection', '1');
+        $datacenter_shield      = get_option('rocketslide_datacenter_shield', '1');
+        $headless_shield        = get_option('rocketslide_headless_shield', '1');
+        $browser_integrity      = get_option('rocketslide_browser_integrity', '1');
+        $rate_limit             = get_option('rocketslide_rate_limit', '1');
+        $allow_fb_profiles      = get_option('rocketslide_allow_fb_profiles', '1');
+        $allow_fb_groups        = get_option('rocketslide_allow_fb_groups', '1');
+        $allow_fb_pages         = get_option('rocketslide_allow_fb_pages', '1');
+        $allow_fb_stories       = get_option('rocketslide_allow_fb_stories', '1');
+        $block_fb_automated     = get_option('rocketslide_block_fb_automated', '1');
+        $country_block_enabled  = get_option('rocketslide_country_block_enabled', '0');
+        $blocked_countries      = get_option('rocketslide_blocked_countries', 'PK, IN, BD');
+
+        $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 7, 'total_shields' => 7);
+
         if (!is_array($images)) {
             $images = array();
         }
@@ -190,8 +207,8 @@ class RocketSlide_Admin {
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon dashicons dashicons-shield" style="color:#16a34a;"></span>
-                    <span class="stat-value" style="color:#16a34a;">Active</span>
-                    <span class="stat-label">Cloaking Live</span>
+                    <span class="stat-value" id="rocketslide-stat-shields" style="color:#16a34a;"><?php echo esc_html($defense_stats['active_shields'] . '/' . $defense_stats['total_shields']); ?> Active</span>
+                    <span class="stat-label">Traffic Shields Live</span>
                 </div>
                 <div class="rocketslide-stat-card">
                     <span class="stat-icon dashicons dashicons-chart-bar" style="color:#7c3aed;"></span>
@@ -360,48 +377,263 @@ class RocketSlide_Admin {
             <!-- Tab 3: Cloaking & Fallback -->
             <div class="rocketslide-tab-panel" id="tab-fallback">
                 <div class="rocketslide-card">
-                    <h3 class="rocketslide-card-title"><span class="dashicons dashicons-shield" style="color:#2563eb;"></span> Advanced Dual-Layer Traffic Cloaking Engine</h3>
-                    <p class="rocketslide-card-subtitle">Genuine Facebook &amp; Instagram traffic displays the 9:16 Reels landing page. Non-social visitors (direct visits, search engines) are instantly redirected to the Fallback URL. Social media crawlers receive clean OpenGraph meta tags.</p>
-
-                    <div class="rocketslide-field" style="margin-top:14px;">
-                        <label class="rocketslide-label">Custom Fallback Redirect URL <span class="req">*</span></label>
-                        <input type="url" id="rocketslide-fallback-url" class="rocketslide-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
-                        <span class="rocketslide-input-hint">Target URL for non-social visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
+                    <div class="rocketslide-card-header">
+                        <h3 class="rocketslide-card-title"><span class="dashicons dashicons-shield" style="color:#2563eb;"></span> Traffic Cloaking &amp; Google AdX Bot Defense</h3>
+                        <p class="rocketslide-card-subtitle">Dual-layer protection engineered to safeguard Google AdX/AdSense revenue. Real human mobile Facebook/Instagram visitors see the 9:16 reels landing page. All bots, datacenters, click farms, and non-social visitors are diverted to the Fallback URL.</p>
                     </div>
 
-                    <!-- Modern Responsive Cloaking Signals Grid -->
-                    <div style="margin-top:16px;">
-                        <h4 style="font-size:13.5px; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Active Filter Signals:</h4>
+                    <!-- Destination & Test Mode Box -->
+                    <div class="rocketslide-form-grid-2" style="margin-top:14px; gap:16px;">
+                        <div class="rocketslide-field">
+                            <div class="rocketslide-label-wrapper">
+                                <label class="rocketslide-label"><span class="dashicons dashicons-admin-links"></span> Custom Fallback Redirect URL <span class="req">*</span></label>
+                                <span class="rocketslide-sublabel-pill">Safe Destination</span>
+                            </div>
+                            <input type="url" id="rocketslide-fallback-url" class="rocketslide-input" value="<?php echo esc_url($fallback_url); ?>" placeholder="https://google.com or https://news.com" required>
+                            <span class="rocketslide-input-hint">Target URL for filtered visitors. All incoming URL parameters (<code>utm_*</code>, <code>fbclid</code>) are preserved and forwarded.</span>
+                        </div>
+
+                        <div class="rocketslide-field">
+                            <div class="rocketslide-label-wrapper">
+                                <label class="rocketslide-label"><span class="dashicons dashicons-visibility"></span> Bypass Cloaking (Testing Mode)</label>
+                                <span class="rocketslide-sublabel-pill">Dev / Preview</span>
+                            </div>
+                            <div class="rs-toggle-card" style="margin-top:2px;">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">Developer Direct Preview</div>
+                                    <p class="rs-toggle-desc">Allows any desktop or direct browser visit to view the reels without spoofing FB user-agent. (Keep OFF in production).</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-test-mode" value="1" <?php checked($test_mode, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 1: Core Anti-Bot & Datacenter Shields -->
+                    <div style="margin-top:24px;">
+                        <div class="rs-section-title-wrap">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-shield-alt" style="color:#16a34a;"></span> Core Anti-Bot &amp; Datacenter Shields (Google AdX Protection)</h4>
+                            <p class="rs-section-subtitle">Instantly diverts scrapers, datacenter ASNs, headless automations, and fake click traffic to the fallback URL.</p>
+                        </div>
+
+                        <div class="rs-toggles-grid">
+                            <!-- Shield 1: Bot Shield -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Spam Bots &amp; CLI Scraper Shield
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Blocks curl, python-requests, automated scrapers, trafficbot, hitleap, and click farm generators.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-bot-protection" value="1" <?php checked($bot_protection, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 2: Datacenter Shield -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Cloud &amp; Datacenter ASN Shield
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Instantly redirects AWS, Hetzner, DigitalOcean, OVH, Google Cloud, Azure, and VPN exit nodes to Fallback.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-datacenter-shield" value="1" <?php checked($datacenter_shield, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 3: Headless Shield -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Headless Browser &amp; Automation Guard
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Catches Puppeteer, Playwright, Selenium, HeadlessChrome, and <code>navigator.webdriver</code> instances.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-headless-shield" value="1" <?php checked($headless_shield, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 4: Header Integrity -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Passive Browser Header Integrity
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Filters fake HTTP headers and spoofed Chrome clients missing natural headers. (FB/IG in-app WebViews safely exempt).</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-browser-integrity" value="1" <?php checked($browser_integrity, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 5: Rate Limiting -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Sliding-Window Rate Limiter
+                                        <span class="rs-toggle-badge recommended">Anti-Flood</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Prevents aggressive click-flooding and spam spikes by limiting IPs to 30 requests per minute.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-rate-limit" value="1" <?php checked($rate_limit, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Facebook Sub-Source Routing -->
+                    <div style="margin-top:24px;">
+                        <div class="rs-section-title-wrap">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-networking" style="color:#2563eb;"></span> Facebook Sub-Source Traffic Routing</h4>
+                            <p class="rs-section-subtitle">Granularly control which Facebook traffic categories are allowed to view the 9:16 reels.</p>
+                        </div>
+
+                        <div class="rs-toggles-grid">
+                            <!-- Toggle 6: Block Automated FB -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Block Automated / Fake FB Traffic
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Diverts traffic claiming FB origin but arriving from cloud servers, datacenters, or automated headless tools.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-block-fb-automated" value="1" <?php checked($block_fb_automated, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 7: Allow Profiles -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Allow Facebook Profiles &amp; Feeds
+                                        <span class="rs-toggle-badge recommended">Organic</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from personal profiles, timelines, and direct feed posts.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-profiles" value="1" <?php checked($allow_fb_profiles, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 8: Allow Groups -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">Allow Facebook Groups Traffic</div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook Groups posts, threads, and comments.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-groups" value="1" <?php checked($allow_fb_groups, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 9: Allow Pages -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">Allow Facebook Pages Traffic</div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from public Facebook Pages and shared Page posts.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-pages" value="1" <?php checked($allow_fb_pages, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle 10: Allow Stories -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">Allow Facebook Stories Traffic</div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook Stories swipe-up or link stickers.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-stories" value="1" <?php checked($allow_fb_stories, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 3: Geo Firewall / Country Block -->
+                    <div style="margin-top:24px;">
+                        <div class="rs-section-title-wrap">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-admin-site-alt3" style="color:#d97706;"></span> Geo Firewall &amp; Low-CPM Country Filter</h4>
+                            <p class="rs-section-subtitle">Prevent invalid traffic (IVT) and account deductions by redirecting low-CPM click farm countries before any ad tags load.</p>
+                        </div>
+
+                        <div class="rs-toggle-card" style="margin-bottom:12px;">
+                            <div class="rs-toggle-info">
+                                <div class="rs-toggle-title">
+                                    Enable Country Geo-Firewall
+                                    <span class="rs-toggle-badge warning">AdX Protection</span>
+                                </div>
+                                <p class="rs-toggle-desc">When enabled, visitors originating from the blocked countries listed below are immediately redirected to the Fallback URL.</p>
+                            </div>
+                            <label class="rs-switch">
+                                <input type="checkbox" id="rocketslide-country-block-enabled" value="1" <?php checked($country_block_enabled, '1'); ?>>
+                                <span class="rs-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="rocketslide-field" id="rs-country-block-field-wrap">
+                            <div class="rocketslide-label-wrapper">
+                                <label class="rocketslide-label"><span class="dashicons dashicons-flag"></span> Blocked Country Codes (ISO-2)</label>
+                                <span class="rocketslide-sublabel-pill">Comma-Separated</span>
+                            </div>
+                            <input type="text" id="rocketslide-blocked-countries" class="rocketslide-input" value="<?php echo esc_attr($blocked_countries); ?>" placeholder="PK, IN, BD, NG">
+                            
+                            <!-- Quick Presets -->
+                            <div class="rs-geo-presets-row" style="margin-top:8px;">
+                                <span style="font-size:12px; font-weight:700; color:var(--text-muted); align-self:center;">Quick Presets:</span>
+                                <button type="button" class="rs-preset-btn" data-preset="clickfarms">+ Block Click Farms (PK, IN, BD, NG)</button>
+                                <button type="button" class="rs-preset-btn" data-preset="tier3">+ Block Tier 3 (PK, IN, BD, NG, PH, ID, VN)</button>
+                                <button type="button" class="rs-preset-btn" data-preset="clear">Clear All</button>
+                            </div>
+                            <span class="rocketslide-input-hint" style="margin-top:6px;">Supported via Cloudflare IP headers, GeoIP server headers, and cached IP-API lookups.</span>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 4: Social Crawler OpenGraph Safe-Bypass Info -->
+                    <div style="margin-top:24px;">
+                        <h4 style="font-size:13.5px; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Verified OpenGraph Safe-Bypass (Always Active):</h4>
                         <div class="rocketslide-cloaking-signals-grid">
                             <div class="rocketslide-signal-card">
                                 <div class="signal-header">
                                     <span class="signal-badge-icon">&#10003;</span>
-                                    <span class="signal-title">Referrer Verification</span>
+                                    <span class="signal-title">Social Preview Crawlers</span>
                                 </div>
                                 <div class="signal-tags">
-                                    <code>facebook.com</code>
-                                    <code>fb.me</code>
-                                    <code>instagram.com</code>
-                                    <code>fb.gg</code>
+                                    <code>facebookexternalhit</code>
+                                    <code>facebot</code>
+                                    <code>whatsapp</code>
+                                    <code>telegrambot</code>
+                                    <code>twitterbot</code>
                                 </div>
+                                <p style="font-size:11.5px; color:var(--text-muted); margin:6px 0 0 0;">Never redirected. Receive clean OpenGraph meta tags so Facebook link previews render perfectly.</p>
                             </div>
 
                             <div class="rocketslide-signal-card">
                                 <div class="signal-header">
                                     <span class="signal-badge-icon">&#10003;</span>
-                                    <span class="signal-title">URL Tracking Signals</span>
-                                </div>
-                                <div class="signal-tags">
-                                    <code>fbclid</code>
-                                    <code>fb_ref</code>
-                                    <code>fb_source</code>
-                                </div>
-                            </div>
-
-                            <div class="rocketslide-signal-card">
-                                <div class="signal-header">
-                                    <span class="signal-badge-icon">&#10003;</span>
-                                    <span class="signal-title">In-App Browser User-Agents</span>
+                                    <span class="signal-title">In-App Mobile WebViews</span>
                                 </div>
                                 <div class="signal-tags">
                                     <code>FBAN</code>
@@ -411,28 +643,14 @@ class RocketSlide_Admin {
                                     <code>FB4A</code>
                                     <code>Instagram</code>
                                 </div>
-                            </div>
-
-                            <div class="rocketslide-signal-card">
-                                <div class="signal-header">
-                                    <span class="signal-badge-icon">&#10003;</span>
-                                    <span class="signal-title">Crawler OpenGraph Bypass</span>
-                                </div>
-                                <div class="signal-tags">
-                                    <code>facebookexternalhit</code>
-                                    <code>facebot</code>
-                                    <code>whatsapp</code>
-                                    <code>telegrambot</code>
-                                    <code>twitterbot</code>
-                                    <code>googlebot</code>
-                                </div>
+                                <p style="font-size:11.5px; color:var(--text-muted); margin:6px 0 0 0;">Exempted from browser integrity penalties to guarantee genuine mobile users never get blocked.</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="rocketslide-actions" style="margin-top:16px;">
+                    <div class="rocketslide-actions" style="margin-top:20px;">
                         <button type="button" id="rocketslide-save-fallback-btn" class="rocketslide-btn rocketslide-btn-primary">
-                            <span class="dashicons dashicons-saved"></span> Save Cloaking Settings
+                            <span class="dashicons dashicons-saved"></span> Save Cloaking &amp; Traffic Shield Settings
                         </button>
                     </div>
                 </div>
@@ -521,6 +739,53 @@ class RocketSlide_Admin {
         if (isset($_POST['fallback_url'])) {
             update_option('rocketslide_fallback_url', esc_url_raw($_POST['fallback_url']));
         }
+        if (isset($_POST['test_mode'])) {
+            update_option('rocketslide_test_mode', '1' === (string)$_POST['test_mode'] ? '1' : '0');
+        }
+        if (isset($_POST['bot_protection'])) {
+            update_option('rocketslide_bot_protection', '1' === (string)$_POST['bot_protection'] ? '1' : '0');
+        }
+        if (isset($_POST['datacenter_shield'])) {
+            update_option('rocketslide_datacenter_shield', '1' === (string)$_POST['datacenter_shield'] ? '1' : '0');
+        }
+        if (isset($_POST['headless_shield'])) {
+            update_option('rocketslide_headless_shield', '1' === (string)$_POST['headless_shield'] ? '1' : '0');
+        }
+        if (isset($_POST['browser_integrity'])) {
+            update_option('rocketslide_browser_integrity', '1' === (string)$_POST['browser_integrity'] ? '1' : '0');
+        }
+        if (isset($_POST['rate_limit'])) {
+            update_option('rocketslide_rate_limit', '1' === (string)$_POST['rate_limit'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_profiles'])) {
+            update_option('rocketslide_allow_fb_profiles', '1' === (string)$_POST['allow_fb_profiles'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_groups'])) {
+            update_option('rocketslide_allow_fb_groups', '1' === (string)$_POST['allow_fb_groups'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_pages'])) {
+            update_option('rocketslide_allow_fb_pages', '1' === (string)$_POST['allow_fb_pages'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_stories'])) {
+            update_option('rocketslide_allow_fb_stories', '1' === (string)$_POST['allow_fb_stories'] ? '1' : '0');
+        }
+        if (isset($_POST['block_fb_automated'])) {
+            update_option('rocketslide_block_fb_automated', '1' === (string)$_POST['block_fb_automated'] ? '1' : '0');
+        }
+        if (isset($_POST['country_block_enabled'])) {
+            update_option('rocketslide_country_block_enabled', '1' === (string)$_POST['country_block_enabled'] ? '1' : '0');
+        }
+        if (isset($_POST['blocked_countries'])) {
+            $raw_countries = sanitize_text_field($_POST['blocked_countries']);
+            $parts         = array_filter(array_map('trim', explode(',', strtoupper($raw_countries))));
+            $cleaned       = array();
+            foreach ($parts as $p) {
+                if (preg_match('/^[A-Z]{2}$/', $p)) {
+                    $cleaned[] = $p;
+                }
+            }
+            update_option('rocketslide_blocked_countries', implode(', ', array_unique($cleaned)));
+        }
         if (isset($_POST['tab_title'])) {
             update_option('rocketslide_tab_title', sanitize_text_field($_POST['tab_title']));
         }
@@ -536,7 +801,12 @@ class RocketSlide_Admin {
             update_option('rocketslide_tracking_script', wp_unslash($_POST['tracking_script']));
         }
 
-        wp_send_json_success(array('message' => 'Settings saved successfully!'));
+        $defense_stats = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 7, 'total_shields' => 7);
+
+        wp_send_json_success(array(
+            'message' => 'Traffic Cloaking & Shield settings saved successfully!',
+            'stats'   => $defense_stats,
+        ));
     }
 
     /**

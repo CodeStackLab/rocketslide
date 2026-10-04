@@ -92,22 +92,56 @@
         $('#rocketslide-save-fallback-btn').on('click', function (e) {
             e.preventDefault();
             var $btn = $(this);
-            $btn.prop('disabled', true).text('Saving...');
+            $btn.prop('disabled', true).text('Saving Shields...');
 
             var data = {
                 action: 'rocketslide_save_settings',
                 nonce: rocketslide_admin_vars.nonce,
-                fallback_url: $('#rocketslide-fallback-url').val()
+                fallback_url: $('#rocketslide-fallback-url').val(),
+                test_mode: $('#rocketslide-test-mode').is(':checked') ? '1' : '0',
+                bot_protection: $('#rocketslide-bot-protection').is(':checked') ? '1' : '0',
+                datacenter_shield: $('#rocketslide-datacenter-shield').is(':checked') ? '1' : '0',
+                headless_shield: $('#rocketslide-headless-shield').is(':checked') ? '1' : '0',
+                browser_integrity: $('#rocketslide-browser-integrity').is(':checked') ? '1' : '0',
+                rate_limit: $('#rocketslide-rate-limit').is(':checked') ? '1' : '0',
+                allow_fb_profiles: $('#rocketslide-allow-fb-profiles').is(':checked') ? '1' : '0',
+                allow_fb_groups: $('#rocketslide-allow-fb-groups').is(':checked') ? '1' : '0',
+                allow_fb_pages: $('#rocketslide-allow-fb-pages').is(':checked') ? '1' : '0',
+                allow_fb_stories: $('#rocketslide-allow-fb-stories').is(':checked') ? '1' : '0',
+                block_fb_automated: $('#rocketslide-block-fb-automated').is(':checked') ? '1' : '0',
+                country_block_enabled: $('#rocketslide-country-block-enabled').is(':checked') ? '1' : '0',
+                blocked_countries: $('#rocketslide-blocked-countries').val()
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
-                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking Settings');
+                $btn.prop('disabled', false).html('<span class="dashicons dashicons-saved"></span> Save Cloaking &amp; Traffic Shield Settings');
                 if (res.success) {
                     showNotice(res.data.message, false);
+                    if (res.data.stats) {
+                        $('#rocketslide-stat-shields').text(res.data.stats.active_shields + '/' + res.data.stats.total_shields + ' Active');
+                    }
                 } else {
-                    showNotice(res.data || 'Error saving fallback URL', true);
+                    showNotice(res.data || 'Error saving cloaking settings', true);
                 }
             });
+        });
+
+        // Geo-Firewall Country Preset Quick Buttons
+        $(document).on('click', '.rs-preset-btn', function (e) {
+            e.preventDefault();
+            var preset = $(this).data('preset');
+            var $input = $('#rocketslide-blocked-countries');
+            var $enableCheckbox = $('#rocketslide-country-block-enabled');
+
+            if (preset === 'clear') {
+                $input.val('');
+            } else if (preset === 'clickfarms') {
+                $input.val('PK, IN, BD, NG');
+                $enableCheckbox.prop('checked', true);
+            } else if (preset === 'tier3') {
+                $input.val('PK, IN, BD, NG, PH, ID, VN');
+                $enableCheckbox.prop('checked', true);
+            }
         });
 
         $('#rocketslide-save-tracking-btn').on('click', function (e) {
