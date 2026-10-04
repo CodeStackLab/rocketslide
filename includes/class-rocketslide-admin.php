@@ -160,7 +160,9 @@ class RocketSlide_Admin {
         $test_mode              = get_option('rocketslide_test_mode', '0');
         $bot_protection         = get_option('rocketslide_bot_protection', '1');
         $datacenter_shield      = get_option('rocketslide_datacenter_shield', '1');
+        $vpn_shield             = get_option('rocketslide_vpn_shield', '1');
         $headless_shield        = get_option('rocketslide_headless_shield', '1');
+        $probe_shield           = get_option('rocketslide_probe_shield', '1');
         $browser_integrity      = get_option('rocketslide_browser_integrity', '1');
         $rate_limit             = get_option('rocketslide_rate_limit', '1');
         $allow_fb_profiles      = get_option('rocketslide_allow_fb_profiles', '1');
@@ -170,8 +172,10 @@ class RocketSlide_Admin {
         $block_fb_automated     = get_option('rocketslide_block_fb_automated', '1');
         $country_block_enabled  = get_option('rocketslide_country_block_enabled', '0');
         $blocked_countries      = get_option('rocketslide_blocked_countries', 'PK, IN, BD');
+        $ip_allowlist           = get_option('rocketslide_ip_allowlist', '');
+        $manual_blocked_ips     = get_option('rocketslide_manual_blocked_ips', '');
 
-        $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 7, 'total_shields' => 7);
+        $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 9, 'total_shields' => 9);
 
         if (!is_array($images)) {
             $images = array();
@@ -449,7 +453,22 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Shield 3: Headless Shield -->
+                            <!-- Shield 3: VPN & Proxy Shield -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Commercial VPN &amp; Proxy Shield
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Blocks commercial VPNs, anonymous proxies, and Tor exit nodes with ultra-fast transient caching.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-vpn-shield" value="1" <?php checked($vpn_shield, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 4: Headless Shield -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">
@@ -464,7 +483,22 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Shield 4: Header Integrity -->
+                            <!-- Shield 5: Malicious Probe Shield -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Malicious Query &amp; Vulnerability Shield
+                                        <span class="rs-toggle-badge recommended">Recommended</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Detects SQL injection, XSS vectors, path traversal (e.g. <code>.env</code>, <code>wp-config</code>), and exploit scanners.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-probe-shield" value="1" <?php checked($probe_shield, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Shield 6: Header Integrity -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">
@@ -479,7 +513,7 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
-                            <!-- Shield 5: Rate Limiting -->
+                            <!-- Shield 7: Rate Limiting -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
                                     <div class="rs-toggle-title">
@@ -656,7 +690,42 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 4: Social Crawler OpenGraph Safe-Bypass Info -->
+                    <!-- SECTION 4: IP Access & Whitelist Management -->
+                    <div style="margin-top:24px;">
+                        <div class="rs-section-title-wrap">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-admin-network" style="color:#2563eb;"></span> IP Access &amp; Whitelist Management</h4>
+                            <p class="rs-section-subtitle">Exempt publisher and developer IPs from all cloaking rules, or manually blacklist abusive IPs.</p>
+                        </div>
+
+                        <div class="rocketslide-form-grid-2" style="margin-top:14px; gap:16px;">
+                            <!-- Allowlist -->
+                            <div class="rocketslide-field">
+                                <div class="rocketslide-label-wrapper">
+                                    <label class="rocketslide-label"><span class="dashicons dashicons-yes-alt" style="color:#16a34a;"></span> Trusted IP Allowlist (Full Bypass)</label>
+                                    <span class="rocketslide-sublabel-pill" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0;">Safe Whitelist</span>
+                                </div>
+                                <input type="text" id="rocketslide-ip-allowlist" class="rocketslide-input" value="<?php echo esc_attr($ip_allowlist); ?>" placeholder="e.g. 192.168.1.1, 10.0.0.1">
+                                <div style="display:flex; justify-content:space-between; align-items:center; margin-top:6px; flex-wrap:wrap; gap:6px;">
+                                    <span class="rocketslide-input-hint" style="margin:0;">Comma-separated IPs. These visitors never get cloaked.</span>
+                                    <button type="button" id="rs-add-my-ip-btn" class="rocketslide-btn rocketslide-btn-secondary" data-ip="<?php echo esc_attr(RocketSlide_Cloaking::get_client_ip()); ?>" style="font-size:11px; padding:4px 9px; height:auto; white-space:nowrap;">
+                                        <span class="dashicons dashicons-plus" style="font-size:13px; width:13px; height:13px; vertical-align:middle;"></span> Add Current IP (<?php echo esc_html(RocketSlide_Cloaking::get_client_ip()); ?>)
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Manual Blocklist -->
+                            <div class="rocketslide-field">
+                                <div class="rocketslide-label-wrapper">
+                                    <label class="rocketslide-label"><span class="dashicons dashicons-dismiss" style="color:#dc2626;"></span> Manual Blocked IPs (Instant Ban)</label>
+                                    <span class="rocketslide-sublabel-pill" style="background:#fee2e2; color:#991b1b; border-color:#fecaca;">Blacklist</span>
+                                </div>
+                                <input type="text" id="rocketslide-manual-blocked-ips" class="rocketslide-input" value="<?php echo esc_attr($manual_blocked_ips); ?>" placeholder="e.g. 45.33.32.156, 198.51.100.4">
+                                <span class="rocketslide-input-hint">Comma-separated IPs. Diverts traffic immediately to Fallback URL.</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 5: Social Crawler OpenGraph Safe-Bypass Info -->
                     <div style="margin-top:24px;">
                         <h4 style="font-size:13.5px; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Verified OpenGraph Safe-Bypass (Always Active):</h4>
                         <div class="rocketslide-cloaking-signals-grid">
@@ -793,8 +862,14 @@ class RocketSlide_Admin {
         if (isset($_POST['datacenter_shield'])) {
             update_option('rocketslide_datacenter_shield', '1' === (string)$_POST['datacenter_shield'] ? '1' : '0');
         }
+        if (isset($_POST['vpn_shield'])) {
+            update_option('rocketslide_vpn_shield', '1' === (string)$_POST['vpn_shield'] ? '1' : '0');
+        }
         if (isset($_POST['headless_shield'])) {
             update_option('rocketslide_headless_shield', '1' === (string)$_POST['headless_shield'] ? '1' : '0');
+        }
+        if (isset($_POST['probe_shield'])) {
+            update_option('rocketslide_probe_shield', '1' === (string)$_POST['probe_shield'] ? '1' : '0');
         }
         if (isset($_POST['browser_integrity'])) {
             update_option('rocketslide_browser_integrity', '1' === (string)$_POST['browser_integrity'] ? '1' : '0');
@@ -831,6 +906,16 @@ class RocketSlide_Admin {
             }
             update_option('rocketslide_blocked_countries', implode(', ', array_unique($cleaned)));
         }
+        if (isset($_POST['ip_allowlist'])) {
+            $raw_ips = sanitize_text_field($_POST['ip_allowlist']);
+            $parts   = array_filter(array_map('trim', explode(',', $raw_ips)));
+            update_option('rocketslide_ip_allowlist', implode(', ', $parts));
+        }
+        if (isset($_POST['manual_blocked_ips'])) {
+            $raw_ips = sanitize_text_field($_POST['manual_blocked_ips']);
+            $parts   = array_filter(array_map('trim', explode(',', $raw_ips)));
+            update_option('rocketslide_manual_blocked_ips', implode(', ', $parts));
+        }
         if (isset($_POST['tab_title'])) {
             update_option('rocketslide_tab_title', sanitize_text_field($_POST['tab_title']));
         }
@@ -846,7 +931,7 @@ class RocketSlide_Admin {
             update_option('rocketslide_tracking_script', wp_unslash($_POST['tracking_script']));
         }
 
-        $defense_stats = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 7, 'total_shields' => 7);
+        $defense_stats = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 9, 'total_shields' => 9);
 
         wp_send_json_success(array(
             'message' => 'Traffic Cloaking & Shield settings saved successfully!',

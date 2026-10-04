@@ -3,7 +3,7 @@
 Plugin Name: RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
 Plugin URI: https://rocketslide.com
 Description: Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard. 100% self-contained - no custom theme or external pages required.
-Version: 3.8.0
+Version: 3.9.0
 Author: RocketSlide Engine
 Author URI: https://rocketslide.com
 Text Domain: rocketslide-lp
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================
 if ( ! defined( 'ROCKETSLIDE_VERSION' ) ) {
-	define( 'ROCKETSLIDE_VERSION',     '3.8.0' );
+	define( 'ROCKETSLIDE_VERSION',     '3.9.0' );
 }
 if ( ! defined( 'ROCKETSLIDE_PLUGIN_FILE' ) ) {
 	define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
@@ -142,7 +142,9 @@ final class RocketSlide_Landing_Page {
 				'rocketslide_test_mode'             => '0',
 				'rocketslide_bot_protection'        => '1',
 				'rocketslide_datacenter_shield'     => '1',
+				'rocketslide_vpn_shield'            => '1',
 				'rocketslide_headless_shield'       => '1',
+				'rocketslide_probe_shield'          => '1',
 				'rocketslide_browser_integrity'     => '1',
 				'rocketslide_rate_limit'            => '1',
 				'rocketslide_allow_fb_profiles'     => '1',
@@ -152,6 +154,8 @@ final class RocketSlide_Landing_Page {
 				'rocketslide_block_fb_automated'    => '1',
 				'rocketslide_country_block_enabled' => '0',
 				'rocketslide_blocked_countries'     => 'PK, IN, BD',
+				'rocketslide_ip_allowlist'          => '',
+				'rocketslide_manual_blocked_ips'    => '',
 			);
 
 			foreach ( $defaults as $key => $value ) {

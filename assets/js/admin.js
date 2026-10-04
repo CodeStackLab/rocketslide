@@ -101,7 +101,9 @@
                 test_mode: $('#rocketslide-test-mode').is(':checked') ? '1' : '0',
                 bot_protection: $('#rocketslide-bot-protection').is(':checked') ? '1' : '0',
                 datacenter_shield: $('#rocketslide-datacenter-shield').is(':checked') ? '1' : '0',
+                vpn_shield: $('#rocketslide-vpn-shield').is(':checked') ? '1' : '0',
                 headless_shield: $('#rocketslide-headless-shield').is(':checked') ? '1' : '0',
+                probe_shield: $('#rocketslide-probe-shield').is(':checked') ? '1' : '0',
                 browser_integrity: $('#rocketslide-browser-integrity').is(':checked') ? '1' : '0',
                 rate_limit: $('#rocketslide-rate-limit').is(':checked') ? '1' : '0',
                 allow_fb_profiles: $('#rocketslide-allow-fb-profiles').is(':checked') ? '1' : '0',
@@ -110,7 +112,9 @@
                 allow_fb_stories: $('#rocketslide-allow-fb-stories').is(':checked') ? '1' : '0',
                 block_fb_automated: $('#rocketslide-block-fb-automated').is(':checked') ? '1' : '0',
                 country_block_enabled: $('#rocketslide-country-block-enabled').is(':checked') ? '1' : '0',
-                blocked_countries: $('#rocketslide-blocked-countries').val()
+                blocked_countries: $('#rocketslide-blocked-countries').val(),
+                ip_allowlist: $('#rocketslide-ip-allowlist').val(),
+                manual_blocked_ips: $('#rocketslide-manual-blocked-ips').val()
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {
@@ -124,6 +128,28 @@
                     showNotice(res.data || 'Error saving cloaking settings', true);
                 }
             });
+        });
+
+        // Add Current IP to Allowlist Button
+        $('#rs-add-my-ip-btn').on('click', function (e) {
+            e.preventDefault();
+            var myIp = $(this).data('ip');
+            if (!myIp) return;
+            var $input = $('#rocketslide-ip-allowlist');
+            var current = ($input.val() || '').trim();
+            if (current) {
+                var ips = current.split(',').map(function (s) { return s.trim(); });
+                if (ips.indexOf(myIp) === -1) {
+                    ips.push(myIp);
+                    $input.val(ips.join(', '));
+                    showNotice('Your IP (' + myIp + ') added to whitelist!', false);
+                } else {
+                    showNotice('Your IP (' + myIp + ') is already in whitelist.', false);
+                }
+            } else {
+                $input.val(myIp);
+                showNotice('Your IP (' + myIp + ') added to whitelist!', false);
+            }
         });
 
         // -------------------------------------------------------------

@@ -516,7 +516,166 @@ class RocketSlide_Cloaking {
 	}
 
 	// -----------------------------------------------------------
-	// 8. FACEBOOK SUB-SOURCE CLASSIFICATION
+	// 8. COMMERCIAL VPN & PROXY EXIT NODE SHIELD
+	// -----------------------------------------------------------
+
+	/**
+	 * Detect commercial VPNs, Tor exit nodes, and anonymous proxies.
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_vpn_or_proxy( $ip = null ) {
+		if ( '1' !== (string) get_option( 'rocketslide_vpn_shield', '1' ) ) {
+			return false;
+		}
+
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		if ( empty( $ip ) || '127.0.0.1' === $ip || '::1' === $ip ) {
+			return false;
+		}
+
+		// Proxy headers check
+		if ( ! empty( $_SERVER['HTTP_VIA'] ) || ! empty( $_SERVER['HTTP_X_FORWARDED_FOR_ORIG'] ) || ! empty( $_SERVER['HTTP_PROXY_CONNECTION'] ) ) {
+			return true;
+		}
+
+		$cache_key = 'rs_vpn_' . md5( $ip );
+		$cached    = get_transient( $cache_key );
+		if ( false !== $cached ) {
+			return '1' === (string) $cached;
+		}
+
+		$url      = 'http://ip-api.com/json/' . urlencode( $ip ) . '?fields=status,proxy,hosting';
+		$response = wp_remote_get( $url, array( 'timeout' => 1.2 ) );
+		$is_vpn   = false;
+
+		if ( ! is_wp_error( $response ) && 200 === wp_remote_retrieve_response_code( $response ) ) {
+			$data = json_decode( wp_remote_retrieve_body( $response ), true );
+			if ( is_array( $data ) && ( ! empty( $data['proxy'] ) || ! empty( $data['hosting'] ) ) ) {
+				$is_vpn = true;
+			}
+		}
+
+		set_transient( $cache_key, $is_vpn ? '1' : '0', 43200 );
+		return $is_vpn;
+	}
+
+	// -----------------------------------------------------------
+	// 9. MALICIOUS QUERY & VULNERABILITY PROBE SHIELD
+	// -----------------------------------------------------------
+
+	/**
+	 * Detect malicious query parameters, SQL injection, XSS, or vulnerability probes.
+	 *
+	 * @return bool
+	 */
+	public static function is_malicious_probe() {
+		if ( '1' !== (string) get_option( 'rocketslide_probe_shield', '1' ) ) {
+			return false;
+		}
+
+		$req_uri  = isset( $_SERVER['REQUEST_URI'] ) ? strtolower( $_SERVER['REQUEST_URI'] ) : '';
+		$query    = isset( $_SERVER['QUERY_STRING'] ) ? strtolower( $_SERVER['QUERY_STRING'] ) : '';
+		$combined = $req_uri . ' ' . $query;
+
+		$patterns = array(
+			'eval(', 'base64_decode', '<script', 'union+select', 'select+from',
+			'benchmark(', 'sleep(', 'etc/passwd', 'wp-config', '.env',
+			'phpinfo', 'concat(', 'load_file', 'shell_exec', 'system(',
+		);
+
+		foreach ( $patterns as $pat ) {
+			if ( false !== strpos( $combined, $pat ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	// -----------------------------------------------------------
+	// 10. IP ACCESS & HONEYPOT CONTROLS
+	// -----------------------------------------------------------
+
+	/**
+	 * Check if visitor IP is explicitly on the trusted allowlist.
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_ip_allowlisted( $ip = null ) {
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		if ( empty( $ip ) ) {
+			return false;
+		}
+
+		$allowlist_raw = get_option( 'rocketslide_ip_allowlist', '' );
+		if ( empty( $allowlist_raw ) ) {
+			return false;
+		}
+
+		$list = array_map( 'trim', explode( ',', $allowlist_raw ) );
+		return in_array( $ip, $list, true );
+	}
+
+	/**
+	 * Check if visitor IP is manually blacklisted or triggered the crawler honeypot.
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_ip_manually_blocked( $ip = null ) {
+		if ( null === $ip ) {
+			$ip = self::get_client_ip();
+		}
+
+		if ( empty( $ip ) || '127.0.0.1' === $ip || '::1' === $ip ) {
+			return false;
+		}
+
+		// Check Honeypot soft-block
+		if ( false !== get_transient( 'rs_hp_block_' . md5( $ip ) ) ) {
+			return true;
+		}
+
+		$blocklist_raw = get_option( 'rocketslide_manual_blocked_ips', '' );
+		if ( empty( $blocklist_raw ) ) {
+			return false;
+		}
+
+		$list = array_map( 'trim', explode( ',', $blocklist_raw ) );
+		return in_array( $ip, $list, true );
+	}
+
+	/**
+	 * Check if request triggered the invisible crawler honeypot link.
+	 *
+	 * @param string|null $ip
+	 * @return bool
+	 */
+	public static function is_honeypot_triggered( $ip = null ) {
+		if ( isset( $_GET['rs_trap'] ) || isset( $_GET['honeypot'] ) ) {
+			if ( null === $ip ) {
+				$ip = self::get_client_ip();
+			}
+			if ( ! empty( $ip ) && '127.0.0.1' !== $ip && '::1' !== $ip ) {
+				// Soft-block for 24 hours (86400s)
+				set_transient( 'rs_hp_block_' . md5( $ip ), '1', 86400 );
+			}
+			return true;
+		}
+		return false;
+	}
+
+	// -----------------------------------------------------------
+	// 11. FACEBOOK SUB-SOURCE CLASSIFICATION
 	// -----------------------------------------------------------
 
 	/**
@@ -644,37 +803,62 @@ class RocketSlide_Cloaking {
 
 		$client_ip = self::get_client_ip();
 
-		// 3. Rate Limiting Check (Anti-Click Flood)
+		// 3. Admin Trusted IP Allowlist (Instant Full Bypass for Publisher)
+		if ( self::is_ip_allowlisted( $client_ip ) ) {
+			return false;
+		}
+
+		// 4. Honeypot Trap Trigger Check
+		if ( self::is_honeypot_triggered( $client_ip ) ) {
+			return true;
+		}
+
+		// 5. Permanent & Temporary Manual IP Blocks
+		if ( self::is_ip_manually_blocked( $client_ip ) ) {
+			return true;
+		}
+
+		// 6. Malicious Query & Vulnerability Probing (SQLi, XSS, Path Traversal)
+		if ( self::is_malicious_probe() ) {
+			return true;
+		}
+
+		// 7. Rate Limiting Check (Anti-Click Flood)
 		if ( self::is_rate_limited( $client_ip ) ) {
 			return true;
 		}
 
-		// 4. Spam Bots & Scrapers
+		// 8. Spam Bots & Scrapers
 		if ( self::is_spam_bot() ) {
 			return true;
 		}
 
-		// 5. Headless Browsers & Automation
+		// 9. Headless Browsers & Automation
 		if ( self::is_headless_browser() ) {
 			return true;
 		}
 
-		// 6. Datacenter / Cloud IP Shield (AWS, Hetzner, DigitalOcean, etc.)
+		// 10. Datacenter / Cloud IP Shield (AWS, Hetzner, DigitalOcean, etc.)
 		if ( self::is_datacenter_ip( $client_ip ) ) {
 			return true;
 		}
 
-		// 7. Passive Browser Header Integrity (Missing Accept-Language, etc.)
+		// 11. Commercial VPN & Proxy Exit Node Shield
+		if ( self::is_vpn_or_proxy( $client_ip ) ) {
+			return true;
+		}
+
+		// 12. Passive Browser Header Integrity (Missing Accept-Language, etc.)
 		if ( ! self::evaluate_browser_integrity() ) {
 			return true;
 		}
 
-		// 8. Geo Firewall / Country Block
+		// 13. Geo Firewall / Country Block
 		if ( self::is_country_blocked( $client_ip ) ) {
 			return true;
 		}
 
-		// 9. Facebook Traffic & Sub-Source Filters
+		// 14. Facebook Traffic & Sub-Source Filters
 		$fb = self::classify_facebook_traffic();
 
 		// If not Facebook traffic at all (direct visit, organic Google search, desktop browser) -> Redirect to Fallback
@@ -734,7 +918,9 @@ class RocketSlide_Cloaking {
 		$active_shields = 0;
 		if ( '1' === (string) get_option( 'rocketslide_bot_protection', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_datacenter_shield', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_vpn_shield', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_headless_shield', '1' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_probe_shield', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_browser_integrity', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_rate_limit', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) $active_shields++;
@@ -742,7 +928,7 @@ class RocketSlide_Cloaking {
 
 		return array(
 			'active_shields' => $active_shields,
-			'total_shields'  => 7,
+			'total_shields'  => 9,
 		);
 	}
 }

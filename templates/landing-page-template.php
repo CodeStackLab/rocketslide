@@ -202,6 +202,19 @@ $cache_bust  = time();
         <?php echo $tracking_script; ?>
     <?php endif; ?>
 
+    <!-- Client-Side Headless & Automation Trap (Google AdX Defense) -->
+    <?php if ( '1' === (string) get_option( 'rocketslide_headless_shield', '1' ) ) : ?>
+    <script>
+        (function() {
+            try {
+                if (navigator.webdriver || window.__nightmare || window._phantom || window.callPhantom) {
+                    window.location.replace(<?php echo json_encode( $fallback_url ); ?>);
+                }
+            } catch(e) {}
+        })();
+    </script>
+    <?php endif; ?>
+
     <!-- Embedded Data for Frontend Engine -->
     <script>
         window.ROCKETSLIDE_DATA = <?php echo json_encode(array(
@@ -212,6 +225,9 @@ $cache_bust  = time();
     </script>
 </head>
 <body>
+
+    <!-- Invisible Crawler Honeypot Trap (Automated scrapers following this get soft-banned for 24 hours) -->
+    <a href="<?php echo esc_url( add_query_arg( 'rs_trap', '1', $current_url ) ); ?>" rel="nofollow" style="display:none!important;opacity:0!important;position:absolute!important;left:-9999px!important;top:-9999px!important;width:0!important;height:0!important;pointer-events:none!important;" aria-hidden="true" tabindex="-1"></a>
 
     <!-- 9:16 Vertical Centered Container -->
     <main class="reels-main-wrapper">
@@ -224,3 +240,4 @@ $cache_bust  = time();
     <script src="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/js/frontend.js?ver=' . $cache_bust); ?>"></script>
 </body>
 </html>
+
