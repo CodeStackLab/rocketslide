@@ -771,29 +771,45 @@
     transform: translateX(20px);
 }
 
-/* Geo-Presets Row */
-.rs-geo-presets-row {
+/* Clear All Blocked Countries Row */
+.rs-clear-countries-row {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     align-items: center;
 }
 
-.rs-preset-btn {
-    background: var(--surface-2);
-    border: 1px solid var(--border);
-    padding: 5px 11px;
-    font-size: 11.5px;
-    font-weight: 600;
-    border-radius: 6px;
+.rs-clear-all-btn {
+    background: #fef2f2 !important;
+    border: 1.5px solid #fecaca !important;
+    color: #b91c1c !important;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 7px 14px;
+    border-radius: 8px;
     cursor: pointer;
-    color: var(--text-main);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
     transition: all 0.15s ease;
 }
 
-.rs-preset-btn:hover {
-    background: #e2e8f0;
-    border-color: #94a3b8;
+.rs-clear-all-btn:hover {
+    background: #fee2e2 !important;
+    border-color: #f87171 !important;
+    color: #991b1b !important;
+}
+
+.rs-clear-all-btn.rs-clear-save-btn {
+    background: #eff6ff !important;
+    border-color: #bfdbfe !important;
+    color: #1d4ed8 !important;
+}
+
+.rs-clear-all-btn.rs-clear-save-btn:hover {
+    background: #dbeafe !important;
+    border-color: #93c5fd !important;
+    color: #1e40af !important;
 }
 
 /* ============================================================

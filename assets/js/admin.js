@@ -299,25 +299,24 @@
             }
         });
 
-        // Presets Buttons
-        $(document).on('click', '.rs-preset-btn', function (e) {
+        // Clear All Blocked Countries Button Handlers
+        $('#rs-clear-all-countries-btn').on('click', function (e) {
             e.preventDefault();
-            var preset = $(this).data('preset');
-            var $enableCheckbox = $('#rocketslide-country-block-enabled');
-
-            if (preset === 'clear') {
-                blockedCountries.clear();
-                showNotice('All blocked countries cleared.', false);
-            } else if (preset === 'clickfarms') {
-                ['PK', 'IN', 'BD', 'NG'].forEach(function (c) { blockedCountries.add(c); });
-                $enableCheckbox.prop('checked', true);
-                showNotice('Click Farms preset (PK, IN, BD, NG) applied!', false);
-            } else if (preset === 'tier3') {
-                ['PK', 'IN', 'BD', 'NG', 'PH', 'ID', 'VN'].forEach(function (c) { blockedCountries.add(c); });
-                $enableCheckbox.prop('checked', true);
-                showNotice('Tier 3 preset applied!', false);
+            if (blockedCountries.size === 0) {
+                showNotice('No blocked countries to clear.', false);
+                return;
             }
+            blockedCountries.clear();
             renderBlockedCountriesTags();
+            showNotice('All blocked countries cleared! Click Save to persist.', false);
+        });
+
+        $('#rs-clear-save-all-countries-btn').on('click', function (e) {
+            e.preventDefault();
+            blockedCountries.clear();
+            renderBlockedCountriesTags();
+            showNotice('All blocked countries cleared! Saving now...', false);
+            $('#rocketslide-save-fallback-btn').trigger('click');
         });
 
         $('#rocketslide-save-tracking-btn').on('click', function (e) {

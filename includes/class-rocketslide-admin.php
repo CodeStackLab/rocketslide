@@ -729,12 +729,14 @@ class RocketSlide_Admin {
                             </div>
                         </div>
 
-                        <!-- Presets Row -->
-                        <div class="rs-geo-presets-row" style="margin-top:8px;">
-                            <span style="font-size:12px; font-weight:700; color:var(--text-muted); align-self:center;">Presets:</span>
-                            <button type="button" class="rs-preset-btn" data-preset="clickfarms">+ Block Click Farms (PK, IN, BD, NG)</button>
-                            <button type="button" class="rs-preset-btn" data-preset="tier3">+ Block Tier 3 (PK, IN, BD, NG, PH, ID, VN)</button>
-                            <button type="button" class="rs-preset-btn" data-preset="clear">Clear All</button>
+                        <!-- Clear All Blocked Countries Row -->
+                        <div class="rs-clear-countries-row" style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+                            <button type="button" id="rs-clear-all-countries-btn" class="rs-clear-all-btn">
+                                <span class="dashicons dashicons-trash"></span> Clear All
+                            </button>
+                            <button type="button" id="rs-clear-save-all-countries-btn" class="rs-clear-all-btn rs-clear-save-btn">
+                                <span class="dashicons dashicons-saved"></span> Clear &amp; Save Now
+                            </button>
                         </div>
                     </div>
 
