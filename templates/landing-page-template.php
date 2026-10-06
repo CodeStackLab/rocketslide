@@ -37,8 +37,9 @@ $og_image = !empty($images) ? $images[0]['url'] : '';
 $is_ssl      = is_ssl() || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && 'https' === $_SERVER['HTTP_X_FORWARDED_PROTO']);
 $protocol    = $is_ssl ? 'https://' : 'http://';
 $current_url = $protocol . (isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '') . (isset($_SERVER['REQUEST_URI']) ? $_SERVER['REQUEST_URI'] : '');
-$is_bot      = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
-$cache_bust  = time();
+$is_bot            = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_bot() : false;
+$is_verified_human = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::is_verified_human_for_tracking() : true;
+$cache_bust        = time();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -208,11 +209,6 @@ $cache_bust  = time();
     <!-- CSS Stylesheet with Cache Busting -->
     <link rel="stylesheet" href="<?php echo esc_url(ROCKETSLIDE_PLUGIN_URL . 'assets/css/frontend-reels.css?ver=' . $cache_bust); ?>">
 
-    <!-- Tracking Script Tag Injection (Publytics / GA / Pixels) -->
-    <?php if (!empty($tracking_script)) : ?>
-        <?php echo $tracking_script; ?>
-    <?php endif; ?>
-
     <!-- Client-Side Headless & Automation Trap (Google AdX Defense) -->
     <?php if ( '1' === (string) get_option( 'rocketslide_headless_shield', '1' ) ) : ?>
     <script>
@@ -222,6 +218,64 @@ $cache_bust  = time();
                     window.location.replace(<?php echo json_encode( $fallback_url ); ?>);
                 }
             } catch(e) {}
+        })();
+    </script>
+    <?php endif; ?>
+
+    <!-- Shielded Analytics Loader: Guaranteed Human-Only Activation (Blocks Fake Visits/Clicks in Publytics) -->
+    <?php if (!empty($tracking_script) && $is_verified_human) : ?>
+    <script id="rs-analytics-guard">
+        (function() {
+            // Client-Side Automation & Headless Bot Trap
+            var isBot = false;
+            try {
+                if (navigator.webdriver) isBot = true;
+                if (window.__nightmare || window._phantom || window.callPhantom || window.__selenium_unwrapped) isBot = true;
+                if (!navigator.languages || navigator.languages.length === 0) isBot = true;
+                if (window.outerWidth === 0 && window.outerHeight === 0) isBot = true;
+                if (screen.width === 0 || screen.height === 0) isBot = true;
+            } catch(e) {}
+
+            if (isBot) {
+                // Automation detected: Completely suppress tracking to prevent fake analytics clicks/visits
+                return;
+            }
+
+            // Clean Human Execution: Safely inject tracking script
+            function activateTracking() {
+                if (window.__rs_tracking_activated) return;
+                window.__rs_tracking_activated = true;
+
+                var rawSnippet = <?php echo json_encode( $tracking_script ); ?>;
+                var wrapper = document.createElement('div');
+                wrapper.innerHTML = rawSnippet;
+                var scriptTags = wrapper.querySelectorAll('script');
+
+                if (scriptTags.length > 0) {
+                    scriptTags.forEach(function(orig) {
+                        var sc = document.createElement('script');
+                        for (var i = 0; i < orig.attributes.length; i++) {
+                            sc.setAttribute(orig.attributes[i].name, orig.attributes[i].value);
+                        }
+                        if (orig.innerHTML) {
+                            sc.innerHTML = orig.innerHTML;
+                        }
+                        document.head.appendChild(sc);
+                    });
+                } else {
+                    var holder = document.createElement('div');
+                    holder.innerHTML = rawSnippet;
+                    document.body.appendChild(holder);
+                }
+            }
+
+            if (document.readyState === 'complete' || document.readyState === 'interactive') {
+                setTimeout(activateTracking, 50);
+            } else {
+                document.addEventListener('DOMContentLoaded', function() {
+                    setTimeout(activateTracking, 50);
+                });
+            }
         })();
     </script>
     <?php endif; ?>

@@ -3,7 +3,7 @@
 Plugin Name: RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
 Plugin URI: https://rocketslide.com
 Description: Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard. 100% self-contained - no custom theme or external pages required.
-Version: 3.12.0
+Version: 3.13.0
 Author: RocketSlide Engine
 Author URI: https://rocketslide.com
 Text Domain: rocketslide-lp
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================
 if ( ! defined( 'ROCKETSLIDE_VERSION' ) ) {
-	define( 'ROCKETSLIDE_VERSION',     '3.12.0' );
+	define( 'ROCKETSLIDE_VERSION',     '3.13.0' );
 }
 if ( ! defined( 'ROCKETSLIDE_PLUGIN_FILE' ) ) {
 	define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );

@@ -379,6 +379,15 @@ class RocketSlide_Admin {
                         <span class="rocketslide-input-hint">Supports Publytics, Google Analytics 4, Meta Pixel, TikTok Pixel, or any custom tracker.</span>
                     </div>
 
+                    <!-- Bot Filter Notice -->
+                    <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:10px; padding:12px 16px; margin-top:14px; display:flex; align-items:flex-start; gap:12px;">
+                        <span class="dashicons dashicons-shield-alt" style="color:#16a34a; font-size:24px; width:24px; height:24px; margin-top:2px;"></span>
+                        <div>
+                            <div style="font-weight:700; color:#15803d; font-size:13px;">🛡️ Anti-Bot &amp; Fake Traffic Analytics Shield (Active)</div>
+                            <div style="color:#166534; font-size:12px; margin-top:3px; line-height:1.5;">All detected bots, scrapers, headless tools, click farms, and datacenter traffic are automatically blocked from triggering Publytics. Only verified, genuine human visitors are recorded in your analytics.</div>
+                        </div>
+                    </div>
+
                     <div class="rocketslide-actions">
                         <button type="button" id="rocketslide-save-tracking-btn" class="rocketslide-btn rocketslide-btn-primary">
                             <span class="dashicons dashicons-saved"></span> Save Script Tag

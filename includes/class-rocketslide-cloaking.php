@@ -965,6 +965,91 @@ class RocketSlide_Cloaking {
 	}
 
 	/**
+	 * Verify if current visitor is clean, genuine human traffic eligible for analytics tracking.
+	 *
+	 * Guaranteed to return FALSE (DO NOT TRIGGER ANALYTICS / PUBLYTICS) for:
+	 * - Search engine crawlers and social preview bots
+	 * - CLI tools, scrapers, and spam bots (curl, python, wget, etc.)
+	 * - Datacenters and cloud computing IPs (AWS, Hetzner, DO, OVH, etc.)
+	 * - Headless browser automation (Puppeteer, Playwright, Selenium, etc.)
+	 * - Malicious exploit probes and scanners
+	 * - Rate-limited click flooding (>30 req/min)
+	 * - Honeypot triggers and manually blacklisted IPs
+	 * - Blocked countries (Geo-Firewall)
+	 * - Automated / Fake Facebook traffic
+	 * - Blocked Boosted traffic (if Boosted is set to OFF)
+	 *
+	 * @return bool True if genuine human visitor; False if fake/bot.
+	 */
+	public static function is_verified_human_for_tracking() {
+		$client_ip = self::get_client_ip();
+
+		// 1. IP Whitelist: Publisher always tracked
+		if ( self::is_ip_allowlisted( $client_ip ) ) {
+			return true;
+		}
+
+		// 2. Any bot or crawler (Googlebot, Facebook preview, Bing, etc.)
+		if ( self::is_bot() || self::is_social_crawler() ) {
+			return false;
+		}
+
+		// 3. Spam bots, scrapers, curl, python, CLI tools
+		if ( self::is_spam_bot() ) {
+			return false;
+		}
+
+		// 4. Headless browser automation in User-Agent
+		if ( self::is_headless_browser() ) {
+			return false;
+		}
+
+		// 5. Cloud hosting / Datacenter IP (AWS, Hetzner, DigitalOcean, OVH, etc.)
+		if ( self::is_datacenter_ip( $client_ip ) ) {
+			return false;
+		}
+
+		// 6. Honeypot trap or manually blocked IP
+		if ( self::is_honeypot_triggered( $client_ip ) || self::is_ip_manually_blocked( $client_ip ) ) {
+			return false;
+		}
+
+		// 7. Exploit scanners & malicious query probing
+		if ( self::is_malicious_probe() ) {
+			return false;
+		}
+
+		// 8. Rate limited (click flooding spam)
+		if ( self::is_rate_limited( $client_ip ) ) {
+			return false;
+		}
+
+		// 9. Geo-Firewall blocked country
+		if ( self::is_country_blocked( $client_ip ) ) {
+			return false;
+		}
+
+		// 10. Automated Facebook traffic (claiming FB from datacenter/bot)
+		$fb = self::classify_facebook_traffic();
+		if ( 'automated' === $fb['category'] ) {
+			return false;
+		}
+
+		// 11. If Boosted Traffic is turned OFF and visitor is Boosted traffic
+		if ( 'boosted' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_boosted', '1' ) ) {
+			return false;
+		}
+
+		// 12. Evaluate Browser Header Integrity (if shield is enabled)
+		if ( '1' === (string) get_option( 'rocketslide_browser_integrity', '1' ) && ! self::evaluate_browser_integrity() ) {
+			return false;
+		}
+
+		// Passed all server-side verification filters -> Genuine human visitor!
+		return true;
+	}
+
+	/**
 	 * Build client-side configuration array for secondary JS verification.
 	 *
 	 * @return array
