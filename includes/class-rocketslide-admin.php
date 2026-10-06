@@ -157,7 +157,7 @@ class RocketSlide_Admin {
         $images          = get_option('rocketslide_images', array());
 
         // Anti-Bot & Cloaking Engine Options
-        $test_mode              = get_option('rocketslide_test_mode', '0');
+        $fallback_enabled       = get_option('rocketslide_fallback_enabled', '1');
         $bot_protection         = get_option('rocketslide_bot_protection', '1');
         $datacenter_shield      = get_option('rocketslide_datacenter_shield', '1');
         $vpn_shield             = get_option('rocketslide_vpn_shield', '1');
@@ -407,16 +407,21 @@ class RocketSlide_Admin {
 
                         <div class="rocketslide-field">
                             <div class="rocketslide-label-wrapper">
-                                <label class="rocketslide-label"><span class="dashicons dashicons-visibility"></span> Bypass Cloaking (Testing Mode)</label>
-                                <span class="rocketslide-sublabel-pill">Dev / Preview</span>
+                                <label class="rocketslide-label"><span class="dashicons dashicons-randomize"></span> Fallback Traffic Control</label>
+                                <span class="rocketslide-sublabel-pill">Master Switch</span>
                             </div>
                             <div class="rs-toggle-card" style="margin-top:2px;">
                                 <div class="rs-toggle-info">
-                                    <div class="rs-toggle-title">Developer Direct Preview</div>
-                                    <p class="rs-toggle-desc">Allows any desktop or direct browser visit to view the reels without spoofing FB user-agent. (Keep OFF in production).</p>
+                                    <div class="rs-toggle-title">
+                                        Fallback Redirection
+                                        <span id="rs-fallback-status-badge" class="rs-toggle-badge" style="<?php echo $fallback_enabled === '1' ? 'background:#dcfce7; color:#15803d; border-color:#bbf7d0;' : 'background:#fee2e2; color:#b91c1c; border-color:#fecaca;'; ?>">
+                                            <?php echo $fallback_enabled === '1' ? 'ON' : 'OFF'; ?>
+                                        </span>
+                                    </div>
+                                    <p class="rs-toggle-desc"><strong>ON:</strong> Non-allowed or suspicious visitors redirect to Fallback URL.<br><strong>OFF:</strong> Disables fallback completely so other traffic sources can access reels normally.</p>
                                 </div>
                                 <label class="rs-switch">
-                                    <input type="checkbox" id="rocketslide-test-mode" value="1" <?php checked($test_mode, '1'); ?>>
+                                    <input type="checkbox" id="rocketslide-fallback-enabled" value="1" <?php checked($fallback_enabled, '1'); ?>>
                                     <span class="rs-slider"></span>
                                 </label>
                             </div>
@@ -996,6 +1001,9 @@ class RocketSlide_Admin {
 
         if (isset($_POST['fallback_url'])) {
             update_option('rocketslide_fallback_url', esc_url_raw($_POST['fallback_url']));
+        }
+        if (isset($_POST['fallback_enabled'])) {
+            update_option('rocketslide_fallback_enabled', '1' === (string)$_POST['fallback_enabled'] ? '1' : '0');
         }
         if (isset($_POST['test_mode'])) {
             update_option('rocketslide_test_mode', '1' === (string)$_POST['test_mode'] ? '1' : '0');

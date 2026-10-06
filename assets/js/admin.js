@@ -99,7 +99,7 @@
                 action: 'rocketslide_save_settings',
                 nonce: rocketslide_admin_vars.nonce,
                 fallback_url: $('#rocketslide-fallback-url').val(),
-                test_mode: $('#rocketslide-test-mode').is(':checked') ? '1' : '0',
+                fallback_enabled: $('#rocketslide-fallback-enabled').is(':checked') ? '1' : '0',
                 bot_protection: $('#rocketslide-bot-protection').is(':checked') ? '1' : '0',
                 datacenter_shield: $('#rocketslide-datacenter-shield').is(':checked') ? '1' : '0',
                 vpn_shield: $('#rocketslide-vpn-shield').is(':checked') ? '1' : '0',
@@ -136,6 +136,17 @@
                     showNotice(res.data || 'Error saving cloaking settings', true);
                 }
             });
+        });
+
+        // Live status pill for Fallback switch
+        $('#rocketslide-fallback-enabled').on('change', function () {
+            var isOn = $(this).is(':checked');
+            var $badge = $('#rs-fallback-status-badge');
+            if (isOn) {
+                $badge.text('ON').attr('style', 'background:#dcfce7 !important; color:#15803d !important; border-color:#bbf7d0 !important;');
+            } else {
+                $badge.text('OFF').attr('style', 'background:#fee2e2 !important; color:#b91c1c !important; border-color:#fecaca !important;');
+            }
         });
 
         // Add Current IP to Allowlist Button

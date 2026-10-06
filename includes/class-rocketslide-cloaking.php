@@ -780,6 +780,7 @@ class RocketSlide_Cloaking {
 	 * to the Custom Fallback URL (e.g. Google) to protect Google AdX?
 	 *
 	 * Decision Tree:
+	 *   0. Fallback Master Switch OFF ('0')                   -> FALSE (Disable Fallback Entirely)
 	 *   1. Test Mode Active (?test_mode=1)                   -> FALSE (Allow Reels)
 	 *   2. Social Preview Bot (Facebook/Twitter/WhatsApp)   -> FALSE (Render Clean OG Tags)
 	 *   3. Rate Limit Exceeded (>30 req/min)                 -> TRUE  (REDIRECT TO FALLBACK)
@@ -800,7 +801,13 @@ class RocketSlide_Cloaking {
 	 * @return bool
 	 */
 	public static function should_redirect_to_fallback() {
-		// 1. Test Mode setting enabled in admin panel or URL
+		// 0. Fallback Master Switch: If turned OFF ('0') by admin, completely disable fallback redirection.
+		// All visitors from other websites, ad campaigns, or direct links can access the landing page normally.
+		if ( '0' === (string) get_option( 'rocketslide_fallback_enabled', '1' ) ) {
+			return false;
+		}
+
+		// 1. Test Mode / Developer URL parameter bypass
 		if ( '1' === (string) get_option( 'rocketslide_test_mode', '0' ) ) {
 			return false;
 		}
