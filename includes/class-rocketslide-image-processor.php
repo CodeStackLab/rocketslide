@@ -38,17 +38,162 @@ class RocketSlide_Image_Processor {
 	const JPEG_FALLBACK_QUALITY = 85;
 
 	/**
-	 * Ensure the upload directory exists.
+	 * Initialize WordPress hooks to prevent Google crawlers from indexing reel images.
+	 */
+	public static function init_hooks() {
+		// Ensure upload dir and .htaccess exist
+		self::ensure_upload_dir();
+
+		// 1. Robots.txt disallow rules for Googlebot-Image
+		add_filter( 'robots_txt', array( __CLASS__, 'filter_robots_txt' ), 10, 2 );
+
+		// 2. Prevent image URLs in XML Sitemaps (Yoast, Rank Math, AIOSEO, SEOPress, Core WP)
+		add_filter( 'wpseo_sitemap_urlimages', array( __CLASS__, 'filter_sitemap_images' ), 10, 2 );
+		add_filter( 'rank_math/sitemap/urlimages', array( __CLASS__, 'filter_sitemap_images' ), 10, 2 );
+		add_filter( 'aioseo_sitemap_images', array( __CLASS__, 'filter_sitemap_images' ), 10, 2 );
+		add_filter( 'seopress_sitemaps_images_filter', array( __CLASS__, 'filter_sitemap_images' ), 10, 2 );
+		add_filter( 'wp_sitemaps_posts_entry', array( __CLASS__, 'filter_wp_sitemaps_posts_entry' ), 10, 3 );
+
+		// 3. Prevent image leakage in RSS/Atom feeds
+		add_filter( 'the_content_feed', array( __CLASS__, 'filter_feed_content' ), 10, 2 );
+		add_filter( 'the_excerpt_rss', array( __CLASS__, 'filter_feed_content' ), 10, 1 );
+
+		// 4. Send X-Robots-Tag header on PHP-handled image/media requests
+		add_action( 'send_headers', array( __CLASS__, 'send_image_security_headers' ) );
+	}
+
+	/**
+	 * Ensure the upload directory and security .htaccess file exist.
+	 * Configures X-Robots-Tag: noindex, noimageindex on all image files
+	 * to prevent Googlebot-Image and search crawlers from indexing reel images.
 	 */
 	public static function ensure_upload_dir() {
 		$dir = rocketslide_uploads_dir();
 		if ( ! file_exists( $dir ) ) {
 			wp_mkdir_p( $dir );
+		}
 
-			$htaccess = $dir . '.htaccess';
-			if ( ! file_exists( $htaccess ) ) {
-				@file_put_contents( $htaccess, "Options -Indexes\n" );
+		$htaccess_file    = trailingslashit( $dir ) . '.htaccess';
+		$htaccess_content = "# RocketSlide: Prevent directory listing\n"
+			. "Options -Indexes\n\n"
+			. "# Google Search Central: Prevent images from being indexed or previewed in Google Images\n"
+			. "<IfModule mod_headers.c>\n"
+			. "    <FilesMatch \"\\.(jpe?g|png|gif|webp|avif|svg)$\">\n"
+			. "        Header set X-Robots-Tag \"noindex, noimageindex\"\n"
+			. "    </FilesMatch>\n"
+			. "</IfModule>\n";
+
+		// Write or refresh .htaccess
+		if ( ! file_exists( $htaccess_file ) || false === strpos( (string) @file_get_contents( $htaccess_file ), 'X-Robots-Tag' ) ) {
+			@file_put_contents( $htaccess_file, $htaccess_content );
+		}
+	}
+
+	/**
+	 * Append Googlebot-Image disallow directives to robots.txt.
+	 *
+	 * @param  string $output Robots.txt contents
+	 * @param  bool   $public Whether site is considered public
+	 * @return string
+	 */
+	public static function filter_robots_txt( $output, $public ) {
+		if ( '1' !== (string) get_option( 'rocketslide_block_image_indexing', '1' ) ) {
+			return $output;
+		}
+
+		$upload_url  = rocketslide_uploads_url();
+		$upload_path = wp_parse_url( $upload_url, PHP_URL_PATH );
+		if ( empty( $upload_path ) ) {
+			$upload_path = '/wp-content/uploads/rocketslide/';
+		}
+		$upload_path = trailingslashit( $upload_path );
+
+		$rules  = "\n# RocketSlide: Disallow Googlebot-Image from crawling and indexing reel images\n";
+		$rules .= "User-agent: Googlebot-Image\n";
+		$rules .= "Disallow: " . $upload_path . "\n\n";
+		$rules .= "User-agent: *\n";
+		$rules .= "Disallow: " . $upload_path . "\n";
+
+		return $output . $rules;
+	}
+
+	/**
+	 * Remove RocketSlide reel images from SEO plugin XML sitemaps.
+	 *
+	 * @param  array $images List of images for a sitemap entry
+	 * @param  int   $post_id Post ID
+	 * @return array
+	 */
+	public static function filter_sitemap_images( $images, $post_id = 0 ) {
+		if ( '1' !== (string) get_option( 'rocketslide_block_image_indexing', '1' ) || ! is_array( $images ) ) {
+			return $images;
+		}
+
+		$clean = array();
+		foreach ( $images as $img ) {
+			$src = '';
+			if ( is_array( $img ) ) {
+				$src = isset( $img['src'] ) ? $img['src'] : ( isset( $img['image:loc'] ) ? $img['image:loc'] : '' );
+			} elseif ( is_string( $img ) ) {
+				$src = $img;
 			}
+
+			// Exclude images residing in the rocketslide folder
+			if ( false === strpos( $src, '/rocketslide/' ) ) {
+				$clean[] = $img;
+			}
+		}
+
+		return array_values( $clean );
+	}
+
+	/**
+	 * Exclude RocketSlide landing page entries from exposing media in WP core sitemaps.
+	 *
+	 * @param  array   $entry     Sitemap entry array
+	 * @param  WP_Post $post      Post object
+	 * @param  string  $post_type Post type
+	 * @return array
+	 */
+	public static function filter_wp_sitemaps_posts_entry( $entry, $post, $post_type ) {
+		if ( '1' !== (string) get_option( 'rocketslide_block_image_indexing', '1' ) || empty( $entry['loc'] ) ) {
+			return $entry;
+		}
+
+		$slug = function_exists( 'get_option' ) ? get_option( 'rocketslide_slug', 'v' ) : 'v';
+		if ( false !== strpos( $entry['loc'], '/' . trim( $slug, '/' ) . '/' ) ) {
+			// Ensure no image tags are appended to the landing page entry
+			unset( $entry['images'] );
+		}
+
+		return $entry;
+	}
+
+	/**
+	 * Remove any RocketSlide images from RSS and feed content.
+	 *
+	 * @param  string $content Feed content
+	 * @return string
+	 */
+	public static function filter_feed_content( $content ) {
+		if ( '1' !== (string) get_option( 'rocketslide_block_image_indexing', '1' ) || empty( $content ) ) {
+			return $content;
+		}
+
+		return preg_replace( '/<img[^>]+src=[\'"][^\'"]*\/rocketslide\/[^\'"]*[\'"][^>]*>/i', '', $content );
+	}
+
+	/**
+	 * Send X-Robots-Tag: noindex, noimageindex if the current request is for a RocketSlide image.
+	 */
+	public static function send_image_security_headers() {
+		if ( '1' !== (string) get_option( 'rocketslide_block_image_indexing', '1' ) ) {
+			return;
+		}
+
+		$req_uri = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+		if ( false !== strpos( $req_uri, '/rocketslide/' ) ) {
+			header( 'X-Robots-Tag: noindex, noimageindex', false );
 		}
 	}
 

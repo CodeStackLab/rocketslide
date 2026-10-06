@@ -76,7 +76,8 @@
                 action: 'rocketslide_save_settings',
                 nonce: rocketslide_admin_vars.nonce,
                 tab_title: $('#rocketslide-tab-title').val(),
-                slug: $('#rocketslide-slug').val()
+                slug: $('#rocketslide-slug').val(),
+                block_image_indexing: $('#rocketslide-block-image-indexing').is(':checked') ? '1' : '0'
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {

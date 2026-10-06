@@ -286,6 +286,12 @@ class RocketSlide_Frontend {
 		header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
 		header( 'Pragma: no-cache' );
 
+		// Google Search Central: Prevent images on this page from being indexed or previewed in Google Images
+		// While allowing the rest of the landing page URL and text to remain indexable
+		if ( '1' === (string) get_option( 'rocketslide_block_image_indexing', '1' ) ) {
+			header( 'X-Robots-Tag: noimageindex', false );
+		}
+
 		$template = ROCKETSLIDE_PLUGIN_DIR . 'templates/landing-page-template.php';
 
 		if ( ! file_exists( $template ) ) {

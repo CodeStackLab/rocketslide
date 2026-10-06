@@ -181,6 +181,7 @@ class RocketSlide_Admin {
         $inject_social_utm      = get_option('rocketslide_inject_social_utm', '1');
         $social_network_source  = get_option('rocketslide_social_network_source', 'auto');
         $auto_fbclid            = get_option('rocketslide_auto_fbclid', '1');
+        $block_image_indexing   = get_option('rocketslide_block_image_indexing', '1');
 
         $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 10, 'total_shields' => 10);
 
@@ -937,6 +938,28 @@ class RocketSlide_Admin {
                         <span class="rocketslide-input-hint">Default slug is <code>v</code>. When you change the slug (e.g. <code>ghh</code>), the landing page immediately opens at that route.</span>
                     </div>
 
+                    <!-- Google Crawlers Image Indexing Protection -->
+                    <div style="margin-top:20px; border-top:1px solid var(--border); padding-top:16px;">
+                        <div class="rs-section-title-wrap" style="margin-bottom:12px;">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-format-image" style="color:#2563eb;"></span> Google Crawlers Image Indexing Protection</h4>
+                            <p class="rs-section-subtitle">Excludes 9:16 reel images from Google Images, search preview snippets, XML sitemaps, and RSS feeds. Normal human visitors view all images normally with full speed.</p>
+                        </div>
+
+                        <div class="rs-toggle-card">
+                            <div class="rs-toggle-info">
+                                <div class="rs-toggle-title">
+                                    Block Google Images Indexing (<code>noimageindex</code>)
+                                    <span class="rs-toggle-badge recommended" style="background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe;">Google Safe</span>
+                                </div>
+                                <p class="rs-toggle-desc">Injects <code>noimageindex</code> meta tags &amp; <code>X-Robots-Tag</code> headers, adds <code>robots.txt</code> disallow for <code>Googlebot-Image</code>, and excludes images from all XML sitemaps. The landing page URL itself remains indexable.</p>
+                            </div>
+                            <label class="rs-switch">
+                                <input type="checkbox" id="rocketslide-block-image-indexing" value="1" <?php checked($block_image_indexing, '1'); ?>>
+                                <span class="rs-slider"></span>
+                            </label>
+                        </div>
+                    </div>
+
                     <div class="rocketslide-actions" style="margin-top:16px;">
                         <button type="button" id="rocketslide-save-settings-btn" class="rocketslide-btn rocketslide-btn-primary">
                             <span class="dashicons dashicons-saved"></span> Save All Settings
@@ -1068,6 +1091,12 @@ class RocketSlide_Admin {
         }
         if (isset($_POST['auto_fbclid'])) {
             update_option('rocketslide_auto_fbclid', '1' === (string)$_POST['auto_fbclid'] ? '1' : '0');
+        }
+        if (isset($_POST['block_image_indexing'])) {
+            update_option('rocketslide_block_image_indexing', '1' === (string)$_POST['block_image_indexing'] ? '1' : '0');
+            if (class_exists('RocketSlide_Image_Processor')) {
+                RocketSlide_Image_Processor::ensure_upload_dir();
+            }
         }
         if (isset($_POST['tab_title'])) {
             update_option('rocketslide_tab_title', sanitize_text_field($_POST['tab_title']));

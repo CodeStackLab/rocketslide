@@ -3,7 +3,7 @@
 Plugin Name: RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
 Plugin URI: https://rocketslide.com
 Description: Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard. 100% self-contained - no custom theme or external pages required.
-Version: 3.10.0
+Version: 3.10.1
 Author: RocketSlide Engine
 Author URI: https://rocketslide.com
 Text Domain: rocketslide-lp
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================
 if ( ! defined( 'ROCKETSLIDE_VERSION' ) ) {
-	define( 'ROCKETSLIDE_VERSION',     '3.10.0' );
+	define( 'ROCKETSLIDE_VERSION',     '3.10.1' );
 }
 if ( ! defined( 'ROCKETSLIDE_PLUGIN_FILE' ) ) {
 	define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
@@ -163,6 +163,7 @@ final class RocketSlide_Landing_Page {
 				'rocketslide_inject_social_utm'     => '1',
 				'rocketslide_social_network_source' => 'auto',
 				'rocketslide_auto_fbclid'           => '1',
+				'rocketslide_block_image_indexing'  => '1',
 			);
 
 			foreach ( $defaults as $key => $value ) {
@@ -177,6 +178,7 @@ final class RocketSlide_Landing_Page {
 	 * Instantiate every component class.
 	 */
 	private function boot_components() {
+		RocketSlide_Image_Processor::init_hooks();
 		new RocketSlide_Frontend();
 		new RocketSlide_Admin();
 	}
@@ -189,15 +191,7 @@ final class RocketSlide_Landing_Page {
 	 * Runs once when the plugin is activated.
 	 */
 	public function on_activate() {
-		$upload_dir = rocketslide_uploads_dir();
-		if ( ! file_exists( $upload_dir ) ) {
-			wp_mkdir_p( $upload_dir );
-
-			$htaccess = $upload_dir . '.htaccess';
-			if ( ! file_exists( $htaccess ) ) {
-				file_put_contents( $htaccess, "Options -Indexes\n" );
-			}
-		}
+		RocketSlide_Image_Processor::ensure_upload_dir();
 
 		$defaults = array(
 			'rocketslide_slug'                  => 'v',
@@ -209,6 +203,7 @@ final class RocketSlide_Landing_Page {
 			'rocketslide_inject_social_utm'     => '1',
 			'rocketslide_social_network_source' => 'auto',
 			'rocketslide_auto_fbclid'           => '1',
+			'rocketslide_block_image_indexing'  => '1',
 		);
 		foreach ( $defaults as $key => $value ) {
 			if ( false === get_option( $key ) ) {

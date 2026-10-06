@@ -59,7 +59,14 @@ $cache_bust  = time();
         <meta property="og:image:height" content="1920" />
     <?php endif; ?>
     <meta name="twitter:card" content="summary_large_image">
+    <?php if ( '1' === (string) get_option( 'rocketslide_block_image_indexing', '1' ) ) : ?>
+    <!-- Google Search Central: Block Google Images from indexing or previewing images while keeping page indexed -->
+    <meta name="robots" content="index, follow, noimageindex">
+    <meta name="googlebot" content="index, follow, noimageindex">
+    <meta name="googlebot-image" content="noindex, noimageindex">
+    <?php else : ?>
     <meta name="robots" content="index, follow">
+    <?php endif; ?>
     <?php if ( '1' === (string) get_option( 'rocketslide_mask_referrer', '1' ) ) : ?>
     <!-- Google AdSense Stealth Cloaking: Strip HTTP Referrer so landing page (/v/) is 100% invisible -->
     <meta name="referrer" content="no-referrer">
