@@ -287,14 +287,10 @@
             return true;
         }
 
+        // 1. + Add Country Button
         $('#rs-add-single-country-btn').on('click', function (e) {
             e.preventDefault();
             addSingleCountry(false);
-        });
-
-        $('#rs-add-save-single-country-btn').on('click', function (e) {
-            e.preventDefault();
-            addSingleCountry(true);
         });
 
         $('#rs-single-country-input').on('keydown', function (e) {
@@ -304,7 +300,28 @@
             }
         });
 
-        // Clear All Blocked Countries Button Handlers
+        // 2. Save Now Button (Immediately persists blocklist; auto-adds typed country code if present)
+        $('#rs-save-countries-btn').on('click', function (e) {
+            e.preventDefault();
+            var $input = $('#rs-single-country-input');
+            var raw = ($input.val() || '').trim().toUpperCase();
+            if (raw) {
+                if (/^[A-Z]{2}$/.test(raw)) {
+                    blockedCountries.add(raw);
+                    $('#rocketslide-country-block-enabled').prop('checked', true);
+                    $input.val('');
+                    renderBlockedCountriesTags();
+                } else {
+                    showNotice('Please enter a valid 2-letter ISO country code (e.g. PK, US, SA, DE).', true);
+                    $input.focus();
+                    return;
+                }
+            }
+            showNotice('Saving country blocklist & cloaking settings...', false);
+            $('#rocketslide-save-fallback-btn').trigger('click');
+        });
+
+        // 3. Clear All Button
         $('#rs-clear-all-countries-btn').on('click', function (e) {
             e.preventDefault();
             if (blockedCountries.size === 0) {
@@ -313,15 +330,7 @@
             }
             blockedCountries.clear();
             renderBlockedCountriesTags();
-            showNotice('All blocked countries cleared! Click Save to persist.', false);
-        });
-
-        $('#rs-clear-save-all-countries-btn').on('click', function (e) {
-            e.preventDefault();
-            blockedCountries.clear();
-            renderBlockedCountriesTags();
-            showNotice('All blocked countries cleared! Saving now...', false);
-            $('#rocketslide-save-fallback-btn').trigger('click');
+            showNotice('All blocked countries cleared! Click Save Now to persist.', false);
         });
 
         $('#rocketslide-save-tracking-btn').on('click', function (e) {

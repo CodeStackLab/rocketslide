@@ -790,7 +790,7 @@ class RocketSlide_Admin {
                             <input type="hidden" id="rocketslide-blocked-countries" value="<?php echo esc_attr($blocked_countries); ?>">
                         </div>
 
-                        <!-- Single Country Custom Add Bar -->
+                        <!-- Single Country Custom Add Bar (3 Buttons: Add Country, Save Now, Clear All) -->
                         <div style="margin-bottom:14px;">
                             <label class="rocketslide-label" style="font-size:12px; margin-bottom:6px; display:block;">
                                 <span class="dashicons dashicons-plus-alt2"></span> Add Any Single Country Code (e.g. SA, AE, FR, DE, ZA):
@@ -802,20 +802,13 @@ class RocketSlide_Admin {
                                 <button type="button" id="rs-add-single-country-btn" class="rocketslide-btn rocketslide-btn-secondary">
                                     <span class="dashicons dashicons-plus"></span> Add Country
                                 </button>
-                                <button type="button" id="rs-add-save-single-country-btn" class="rocketslide-btn rocketslide-btn-primary">
-                                    <span class="dashicons dashicons-saved"></span> Add &amp; Save Now
+                                <button type="button" id="rs-save-countries-btn" class="rocketslide-btn rocketslide-btn-primary">
+                                    <span class="dashicons dashicons-saved"></span> Save Now
+                                </button>
+                                <button type="button" id="rs-clear-all-countries-btn" class="rs-clear-all-btn">
+                                    <span class="dashicons dashicons-trash"></span> Clear All
                                 </button>
                             </div>
-                        </div>
-
-                        <!-- Clear All Blocked Countries Row -->
-                        <div class="rs-clear-countries-row" style="margin-top:10px; display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-                            <button type="button" id="rs-clear-all-countries-btn" class="rs-clear-all-btn">
-                                <span class="dashicons dashicons-trash"></span> Clear All
-                            </button>
-                            <button type="button" id="rs-clear-save-all-countries-btn" class="rs-clear-all-btn rs-clear-save-btn">
-                                <span class="dashicons dashicons-saved"></span> Clear &amp; Save Now
-                            </button>
                         </div>
                     </div>
 
