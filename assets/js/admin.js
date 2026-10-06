@@ -117,7 +117,11 @@
                 country_block_enabled: $('#rocketslide-country-block-enabled').is(':checked') ? '1' : '0',
                 blocked_countries: $('#rocketslide-blocked-countries').val(),
                 ip_allowlist: $('#rocketslide-ip-allowlist').val(),
-                manual_blocked_ips: $('#rocketslide-manual-blocked-ips').val()
+                manual_blocked_ips: $('#rocketslide-manual-blocked-ips').val(),
+                mask_referrer: $('#rocketslide-mask-referrer').is(':checked') ? '1' : '0',
+                inject_social_utm: $('#rocketslide-inject-social-utm').is(':checked') ? '1' : '0',
+                social_network_source: $('#rocketslide-social-network-source').val() || 'auto',
+                auto_fbclid: $('#rocketslide-auto-fbclid').is(':checked') ? '1' : '0'
             };
 
             $.post(rocketslide_admin_vars.ajax_url, data, function (res) {

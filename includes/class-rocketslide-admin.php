@@ -177,8 +177,12 @@ class RocketSlide_Admin {
         $blocked_countries      = get_option('rocketslide_blocked_countries', 'PK, IN, BD');
         $ip_allowlist           = get_option('rocketslide_ip_allowlist', '');
         $manual_blocked_ips     = get_option('rocketslide_manual_blocked_ips', '');
+        $mask_referrer          = get_option('rocketslide_mask_referrer', '1');
+        $inject_social_utm      = get_option('rocketslide_inject_social_utm', '1');
+        $social_network_source  = get_option('rocketslide_social_network_source', 'auto');
+        $auto_fbclid            = get_option('rocketslide_auto_fbclid', '1');
 
-        $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 9, 'total_shields' => 9);
+        $defense_stats          = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 10, 'total_shields' => 10);
 
         if (!is_array($images)) {
             $images = array();
@@ -418,7 +422,81 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 1: Core Anti-Bot & Datacenter Shields -->
+                    <!-- SECTION 1: Google AdSense Social Masking & Referrer Cloaking (Stealth Defense) -->
+                    <div style="margin-top:24px;">
+                        <div class="rs-section-title-wrap">
+                            <h4 class="rs-section-title"><span class="dashicons dashicons-hidden" style="color:#7c3aed;"></span> Google AdSense Social Masking &amp; Referrer Cloaking (Stealth Protection)</h4>
+                            <p class="rs-section-subtitle">Completely eliminates the intermediate landing page (<code>/v/</code>) from Google's view. Destination AdSense sites and GA4 receive 100% verified social traffic (Facebook, Instagram, TikTok) with zero bridge-page referral traces, preventing AdSense arbitrage suspensions.</p>
+                        </div>
+
+                        <div class="rs-toggles-grid">
+                            <!-- Toggle: Referrer Masking -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Mask Landing Page Referrer (<code>no-referrer</code>)
+                                        <span class="rs-toggle-badge recommended" style="background:#f3e8ff; color:#7e22ce; border-color:#e9d5ff;">AdSense Stealth</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Strips the HTTP Referrer header completely (<code>document.referrer = ""</code>). Google AdSense crawlers and destination analytics will NEVER detect your landing page or domain.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-mask-referrer" value="1" <?php checked($mask_referrer, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle: Auto Social UTM Injection -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Auto-Inject Social UTM Tracking
+                                        <span class="rs-toggle-badge recommended" style="background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe;">GA4 Attribution</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Auto-injects <code>utm_source</code>, <code>utm_medium=social</code>, and <code>utm_campaign=reels_social</code> so Google Analytics attributes 100% of visits to direct Social Media.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-inject-social-utm" value="1" <?php checked($inject_social_utm, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Toggle: Auto Social Click ID (fbclid/ttclid/igshid) -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Generate Authentic Social Click IDs (<code>fbclid</code>)
+                                        <span class="rs-toggle-badge recommended" style="background:#dcfce7; color:#15803d; border-color:#bbf7d0;">Proof of Social</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Generates realistic Facebook/TikTok/Instagram mobile click identifiers (e.g. <code>fbclid=IwAR...</code>) if absent, providing Google AdSense verifiable proof of direct social origin.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-auto-fbclid" value="1" <?php checked($auto_fbclid, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
+                            <!-- Select: Primary Social Network Source -->
+                            <div class="rs-toggle-card" style="display:flex; flex-direction:column; justify-content:space-between;">
+                                <div class="rs-toggle-info" style="margin-bottom:10px;">
+                                    <div class="rs-toggle-title">
+                                        Primary Social Network Identity
+                                        <span class="rs-toggle-badge" style="background:#fef3c7; color:#b45309; border-color:#fde68a;">Traffic Channel</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">The social platform reported to Google AdSense and Google Analytics if visitor doesn't have explicit UTMs.</p>
+                                </div>
+                                <div>
+                                    <select id="rocketslide-social-network-source" class="rocketslide-input" style="height:38px; font-weight:600;">
+                                        <option value="auto" <?php selected($social_network_source, 'auto'); ?>>⚡ Auto-Detect (Facebook / Instagram / TikTok)</option>
+                                        <option value="facebook" <?php selected($social_network_source, 'facebook'); ?>>Facebook (Reels, Feeds, In-App WebView)</option>
+                                        <option value="instagram" <?php selected($social_network_source, 'instagram'); ?>>Instagram (Reels, Stories, Bio)</option>
+                                        <option value="tiktok" <?php selected($social_network_source, 'tiktok'); ?>>TikTok (Short Videos, Bio Links)</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- SECTION 2: Core Anti-Bot & Datacenter Shields -->
                     <div style="margin-top:24px;">
                         <div class="rs-section-title-wrap">
                             <h4 class="rs-section-title"><span class="dashicons dashicons-shield-alt" style="color:#16a34a;"></span> Core Anti-Bot &amp; Datacenter Shields (Google AdX Protection)</h4>
@@ -533,7 +611,7 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 2: Facebook Sub-Source Routing -->
+                    <!-- SECTION 3: Facebook Sub-Source Routing -->
                     <div style="margin-top:24px;">
                         <div class="rs-section-title-wrap">
                             <h4 class="rs-section-title"><span class="dashicons dashicons-networking" style="color:#2563eb;"></span> Facebook Sub-Source Traffic Routing</h4>
@@ -654,7 +732,7 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 3: Geo Firewall / Country Block -->
+                    <!-- SECTION 4: Geo Firewall / Country Block -->
                     <div style="margin-top:24px;">
                         <div class="rs-section-title-wrap">
                             <h4 class="rs-section-title"><span class="dashicons dashicons-admin-site-alt3" style="color:#d97706;"></span> Geo Firewall &amp; Country Block (Google AdX Protection)</h4>
@@ -740,7 +818,7 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 4: IP Access & Whitelist Management -->
+                    <!-- SECTION 5: IP Access & Whitelist Management -->
                     <div style="margin-top:24px;">
                         <div class="rs-section-title-wrap">
                             <h4 class="rs-section-title"><span class="dashicons dashicons-admin-network" style="color:#2563eb;"></span> IP Access &amp; Whitelist Management</h4>
@@ -775,7 +853,7 @@ class RocketSlide_Admin {
                         </div>
                     </div>
 
-                    <!-- SECTION 5: Social Crawler OpenGraph Safe-Bypass Info -->
+                    <!-- SECTION 6: Social Crawler OpenGraph Safe-Bypass Info -->
                     <div style="margin-top:24px;">
                         <h4 style="font-size:13.5px; font-weight:700; margin:0 0 8px 0; color:var(--text-main);">Verified OpenGraph Safe-Bypass (Always Active):</h4>
                         <div class="rocketslide-cloaking-signals-grid">
@@ -975,6 +1053,22 @@ class RocketSlide_Admin {
             $parts   = array_filter(array_map('trim', explode(',', $raw_ips)));
             update_option('rocketslide_manual_blocked_ips', implode(', ', $parts));
         }
+        if (isset($_POST['mask_referrer'])) {
+            update_option('rocketslide_mask_referrer', '1' === (string)$_POST['mask_referrer'] ? '1' : '0');
+        }
+        if (isset($_POST['inject_social_utm'])) {
+            update_option('rocketslide_inject_social_utm', '1' === (string)$_POST['inject_social_utm'] ? '1' : '0');
+        }
+        if (isset($_POST['social_network_source'])) {
+            $allowed_sources = array('auto', 'facebook', 'instagram', 'tiktok');
+            $source          = sanitize_key($_POST['social_network_source']);
+            if (in_array($source, $allowed_sources, true)) {
+                update_option('rocketslide_social_network_source', $source);
+            }
+        }
+        if (isset($_POST['auto_fbclid'])) {
+            update_option('rocketslide_auto_fbclid', '1' === (string)$_POST['auto_fbclid'] ? '1' : '0');
+        }
         if (isset($_POST['tab_title'])) {
             update_option('rocketslide_tab_title', sanitize_text_field($_POST['tab_title']));
         }
@@ -990,7 +1084,7 @@ class RocketSlide_Admin {
             update_option('rocketslide_tracking_script', wp_unslash($_POST['tracking_script']));
         }
 
-        $defense_stats = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 9, 'total_shields' => 9);
+        $defense_stats = class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_defense_stats() : array('active_shields' => 10, 'total_shields' => 10);
 
         wp_send_json_success(array(
             'message' => 'Traffic Cloaking & Shield settings saved successfully!',

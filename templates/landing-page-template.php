@@ -60,6 +60,10 @@ $cache_bust  = time();
     <?php endif; ?>
     <meta name="twitter:card" content="summary_large_image">
     <meta name="robots" content="index, follow">
+    <?php if ( '1' === (string) get_option( 'rocketslide_mask_referrer', '1' ) ) : ?>
+    <!-- Google AdSense Stealth Cloaking: Strip HTTP Referrer so landing page (/v/) is 100% invisible -->
+    <meta name="referrer" content="no-referrer">
+    <?php endif; ?>
 
     <!-- High-Performance Image Preloading for 0ms Instant LCP -->
     <?php if (!empty($images[0]['url'])) : ?>
@@ -218,9 +222,15 @@ $cache_bust  = time();
     <!-- Embedded Data for Frontend Engine -->
     <script>
         window.ROCKETSLIDE_DATA = <?php echo json_encode(array(
-            'images'       => array_values($images),
-            'fallback_url' => $fallback_url,
-            'is_bot'       => $is_bot
+            'images'          => array_values($images),
+            'fallback_url'    => $fallback_url,
+            'is_bot'          => $is_bot,
+            'social_handover' => class_exists('RocketSlide_Cloaking') ? RocketSlide_Cloaking::get_social_handover_config() : array(
+                'mask_referrer'     => true,
+                'inject_social_utm' => true,
+                'social_platform'   => 'facebook',
+                'auto_fbclid'       => true,
+            ),
         )); ?>;
     </script>
 </head>

@@ -940,6 +940,55 @@ class RocketSlide_Cloaking {
 	}
 
 	/**
+	 * Detect social platform origin from referrer, user agent, or query parameters.
+	 *
+	 * @return string 'facebook'|'instagram'|'tiktok'|'twitter'|'youtube'
+	 */
+	public static function detect_social_platform() {
+		$ref = isset( $_SERVER['HTTP_REFERER'] ) ? strtolower( trim( $_SERVER['HTTP_REFERER'] ) ) : '';
+		$ua  = isset( $_SERVER['HTTP_USER_AGENT'] ) ? strtolower( trim( $_SERVER['HTTP_USER_AGENT'] ) ) : '';
+
+		if ( false !== strpos( $ref, 'tiktok.com' ) || false !== strpos( $ua, 'musical_ly' ) || false !== strpos( $ua, 'bytedance' ) || isset( $_GET['ttclid'] ) ) {
+			return 'tiktok';
+		}
+
+		if ( false !== strpos( $ref, 'instagram.com' ) || false !== strpos( $ua, 'instagram' ) || isset( $_GET['igshid'] ) ) {
+			return 'instagram';
+		}
+
+		if ( false !== strpos( $ref, 't.co' ) || false !== strpos( $ref, 'twitter.com' ) || false !== strpos( $ref, 'x.com' ) || false !== strpos( $ua, 'twitter' ) ) {
+			return 'twitter';
+		}
+
+		if ( false !== strpos( $ref, 'youtube.com' ) || false !== strpos( $ref, 'youtu.be' ) ) {
+			return 'youtube';
+		}
+
+		return 'facebook';
+	}
+
+	/**
+	 * Get configuration for Social Referrer Masking & Handover engine.
+	 *
+	 * @return array
+	 */
+	public static function get_social_handover_config() {
+		$pref_platform = get_option( 'rocketslide_social_network_source', 'auto' );
+		if ( 'auto' === $pref_platform || empty( $pref_platform ) ) {
+			$detected = self::detect_social_platform();
+		} else {
+			$detected = sanitize_key( $pref_platform );
+		}
+
+		return array(
+			'mask_referrer'     => '1' === (string) get_option( 'rocketslide_mask_referrer', '1' ),
+			'inject_social_utm' => '1' === (string) get_option( 'rocketslide_inject_social_utm', '1' ),
+			'social_platform'   => $detected,
+			'auto_fbclid'       => '1' === (string) get_option( 'rocketslide_auto_fbclid', '1' ),
+		);
+	}
+
+	/**
 	 * Return summary stats for admin dashboard display.
 	 *
 	 * @return array
@@ -955,10 +1004,11 @@ class RocketSlide_Cloaking {
 		if ( '1' === (string) get_option( 'rocketslide_rate_limit', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) $active_shields++;
 		if ( '1' === (string) get_option( 'rocketslide_country_block_enabled', '0' ) ) $active_shields++;
+		if ( '1' === (string) get_option( 'rocketslide_mask_referrer', '1' ) ) $active_shields++;
 
 		return array(
 			'active_shields' => $active_shields,
-			'total_shields'  => 9,
+			'total_shields'  => 10,
 		);
 	}
 }
