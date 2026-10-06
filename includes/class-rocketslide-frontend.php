@@ -282,9 +282,27 @@ class RocketSlide_Frontend {
 		status_header( 200 );
 		header( 'Content-Type: text/html; charset=UTF-8' );
 
-		// Prevent browser/CDN caching so images shuffle on every visit
-		header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
-		header( 'Pragma: no-cache' );
+		// 1. Universal WordPress No-Cache Protocol for all caching plugins (WP Rocket, LiteSpeed, W3TC, FastCGI)
+		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
+			define( 'DONOTCACHEPAGE', true );
+		}
+		if ( ! defined( 'DONOTCACHEOBJECT' ) ) {
+			define( 'DONOTCACHEOBJECT', true );
+		}
+		if ( ! defined( 'DONOTCACHEDB' ) ) {
+			define( 'DONOTCACHEDB', true );
+		}
+
+		if ( function_exists( 'nocache_headers' ) ) {
+			nocache_headers();
+		} else {
+			header( 'Cache-Control: no-store, no-cache, must-revalidate, max-age=0' );
+			header( 'Pragma: no-cache' );
+			header( 'Expires: Wed, 11 Jan 1984 05:00:00 GMT' );
+		}
+
+		// Explicit LiteSpeed Cache & Nginx FastCGI cache bypass headers
+		header( 'X-LiteSpeed-Cache-Control: no-cache' );
 
 		// Google Search Central: Prevent images on this page from being indexed or previewed in Google Images
 		// While allowing the rest of the landing page URL and text to remain indexable
