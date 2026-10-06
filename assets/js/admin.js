@@ -107,6 +107,7 @@
                 probe_shield: $('#rocketslide-probe-shield').is(':checked') ? '1' : '0',
                 browser_integrity: $('#rocketslide-browser-integrity').is(':checked') ? '1' : '0',
                 rate_limit: $('#rocketslide-rate-limit').is(':checked') ? '1' : '0',
+                allow_fb_boosted: $('#rocketslide-allow-fb-boosted').is(':checked') ? '1' : '0',
                 allow_fb_profiles: $('#rocketslide-allow-fb-profiles').is(':checked') ? '1' : '0',
                 allow_fb_reels: $('#rocketslide-allow-fb-reels').is(':checked') ? '1' : '0',
                 allow_fb_events: $('#rocketslide-allow-fb-events').is(':checked') ? '1' : '0',

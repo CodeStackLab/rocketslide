@@ -165,6 +165,7 @@ class RocketSlide_Admin {
         $probe_shield           = get_option('rocketslide_probe_shield', '1');
         $browser_integrity      = get_option('rocketslide_browser_integrity', '1');
         $rate_limit             = get_option('rocketslide_rate_limit', '1');
+        $allow_fb_boosted       = get_option('rocketslide_allow_fb_boosted', '1');
         $allow_fb_profiles      = get_option('rocketslide_allow_fb_profiles', '1');
         $allow_fb_reels         = get_option('rocketslide_allow_fb_reels', '1');
         $allow_fb_events        = get_option('rocketslide_allow_fb_events', '1');
@@ -655,6 +656,21 @@ class RocketSlide_Admin {
                                 </label>
                             </div>
 
+                            <!-- Toggle: Allow Boosted / Ads Traffic -->
+                            <div class="rs-toggle-card">
+                                <div class="rs-toggle-info">
+                                    <div class="rs-toggle-title">
+                                        Allow Facebook Boosted &amp; Ads Traffic
+                                        <span class="rs-toggle-badge recommended" style="background:#fef3c7; color:#b45309; border-color:#fde68a;">Boost / Ads</span>
+                                    </div>
+                                    <p class="rs-toggle-desc">Allow visitors arriving from Facebook boosted posts, paid Meta Ads, and sponsored campaigns.</p>
+                                </div>
+                                <label class="rs-switch">
+                                    <input type="checkbox" id="rocketslide-allow-fb-boosted" value="1" <?php checked($allow_fb_boosted, '1'); ?>>
+                                    <span class="rs-slider"></span>
+                                </label>
+                            </div>
+
                             <!-- Toggle 8: Allow Reels -->
                             <div class="rs-toggle-card">
                                 <div class="rs-toggle-info">
@@ -1028,6 +1044,9 @@ class RocketSlide_Admin {
         }
         if (isset($_POST['rate_limit'])) {
             update_option('rocketslide_rate_limit', '1' === (string)$_POST['rate_limit'] ? '1' : '0');
+        }
+        if (isset($_POST['allow_fb_boosted'])) {
+            update_option('rocketslide_allow_fb_boosted', '1' === (string)$_POST['allow_fb_boosted'] ? '1' : '0');
         }
         if (isset($_POST['allow_fb_profiles'])) {
             update_option('rocketslide_allow_fb_profiles', '1' === (string)$_POST['allow_fb_profiles'] ? '1' : '0');

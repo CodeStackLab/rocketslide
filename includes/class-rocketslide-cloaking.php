@@ -719,7 +719,34 @@ class RocketSlide_Cloaking {
 		$src_val    = strtolower( (string) ( $_GET['src'] ?? $_GET['source'] ?? $_GET['sub'] ?? '' ) );
 		$mibextid   = strtolower( (string) ( $_GET['mibextid'] ?? '' ) );
 
-		// 2. Comments & Post Replies
+		// 2. Boosted Posts & Paid Meta Ads Traffic
+		if ( in_array( 'ad_id', $query_keys, true ) ||
+			in_array( 'campaign_id', $query_keys, true ) ||
+			in_array( 'adset_id', $query_keys, true ) ||
+			in_array( 'fbadid', $query_keys, true ) ||
+			in_array( 'fb_ad', $query_keys, true ) ||
+			in_array( 'fb_adid', $query_keys, true ) ||
+			in_array( 'fb_campaign_id', $query_keys, true ) ||
+			in_array( 'boost', $query_keys, true ) ||
+			in_array( 'boosted', $query_keys, true ) ||
+			in_array( 'is_boosted', $query_keys, true ) ||
+			in_array( 'hsa_acc', $query_keys, true ) ||
+			in_array( 'hsa_cam', $query_keys, true ) ||
+			in_array( 'hsa_grp', $query_keys, true ) ||
+			in_array( 'hsa_ad', $query_keys, true ) ||
+			in_array( 'hsa_src', $query_keys, true ) ||
+			false !== strpos( $src_val, 'boost' ) ||
+			false !== strpos( $src_val, 'ad' ) ||
+			false !== strpos( $src_val, 'sponsor' ) ||
+			( isset( $_GET['utm_medium'] ) && in_array( strtolower( (string) $_GET['utm_medium'] ), array( 'cpc', 'paid', 'paidsocial', 'boost', 'ads' ), true ) ) ||
+			false !== strpos( $ref, '/ads/' ) ||
+			false !== strpos( $ref, 'ad_id' ) ||
+			false !== strpos( $mibextid, 'boost' ) ||
+			false !== strpos( $mibextid, 'sponsor' ) ) {
+			return array( 'is_fb' => true, 'category' => 'boosted' );
+		}
+
+		// 3. Comments & Post Replies
 		if ( in_array( 'comment_id', $query_keys, true ) || in_array( 'reply_comment_id', $query_keys, true ) || in_array( 'comment', $query_keys, true ) || in_array( 'comments', $query_keys, true ) || in_array( 'c', $query_keys, true ) || in_array( 'comm', $query_keys, true ) || in_array( 'cid', $query_keys, true ) || in_array( 'reply_id', $query_keys, true ) || in_array( 'fb_comment', $query_keys, true ) || in_array( 'fbc', $query_keys, true ) || in_array( 'comment_tracking', $query_keys, true ) || false !== strpos( $ref, 'comment_id' ) || false !== strpos( $ref, 'reply_comment_id' ) || false !== strpos( $ref, '/comments/' ) || false !== strpos( $ref, 'ufi' ) || false !== strpos( $src_val, 'comment' ) || false !== strpos( $src_val, 'reply' ) || 'fbc' === $src_val || 'comm' === $src_val || false !== strpos( $mibextid, 'comment' ) || false !== strpos( $mibextid, 'reply' ) ) {
 			return array( 'is_fb' => true, 'category' => 'comment' );
 		}
@@ -890,6 +917,11 @@ class RocketSlide_Cloaking {
 
 		// Check Automated / Fake FB Traffic
 		if ( 'automated' === $fb['category'] && '1' === (string) get_option( 'rocketslide_block_fb_automated', '1' ) ) {
+			return true;
+		}
+
+		// Check Boosted / Ads Traffic Filter
+		if ( 'boosted' === $fb['category'] && '0' === (string) get_option( 'rocketslide_allow_fb_boosted', '1' ) ) {
 			return true;
 		}
 

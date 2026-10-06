@@ -3,7 +3,7 @@
 Plugin Name: RocketSlide - 9:16 Vertical Landing Page & Traffic Cloaker
 Plugin URI: https://rocketslide.com
 Description: Ultra-fast, fully isolated 9:16 mobile-first vertical reels landing page with dual-layer cloaking engine, dynamic image shuffling, infinite scroll, Publytics integration, automatic 540x960 WebP conversion, and a modern light-mode admin dashboard. 100% self-contained - no custom theme or external pages required.
-Version: 3.11.0
+Version: 3.12.0
 Author: RocketSlide Engine
 Author URI: https://rocketslide.com
 Text Domain: rocketslide-lp
@@ -25,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 // PLUGIN CONSTANTS
 // ============================================================
 if ( ! defined( 'ROCKETSLIDE_VERSION' ) ) {
-	define( 'ROCKETSLIDE_VERSION',     '3.11.0' );
+	define( 'ROCKETSLIDE_VERSION',     '3.12.0' );
 }
 if ( ! defined( 'ROCKETSLIDE_PLUGIN_FILE' ) ) {
 	define( 'ROCKETSLIDE_PLUGIN_FILE', __FILE__ );
@@ -148,6 +148,7 @@ final class RocketSlide_Landing_Page {
 				'rocketslide_probe_shield'          => '1',
 				'rocketslide_browser_integrity'     => '1',
 				'rocketslide_rate_limit'            => '1',
+				'rocketslide_allow_fb_boosted'      => '1',
 				'rocketslide_allow_fb_profiles'     => '1',
 				'rocketslide_allow_fb_reels'        => '1',
 				'rocketslide_allow_fb_events'       => '1',
@@ -199,6 +200,7 @@ final class RocketSlide_Landing_Page {
 			'rocketslide_tab_title'             => '',
 			'rocketslide_fallback_url'          => 'https://google.com',
 			'rocketslide_fallback_enabled'      => '1',
+			'rocketslide_allow_fb_boosted'      => '1',
 			'rocketslide_tracking_script'       => '',
 			'rocketslide_images'                => array(),
 			'rocketslide_mask_referrer'         => '1',
